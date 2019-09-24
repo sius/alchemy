@@ -4,7 +4,7 @@
     - Deep cloning and convert almost any type into an other
 - JSON 
     - parse and write JSON
-- Crypto
+- Cryptography
     - Crypto Limericks
     - SigV4
     - Sign and verify JWT Tokens and XML Documents
