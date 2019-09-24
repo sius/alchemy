@@ -7,12 +7,15 @@
 - Cryptography
     - Crypto Limericks
     - SigV4
-    - Sign and verify JWT Tokens and XML Documents
+    - Sign and verify JWT Tokens
+    - Sign and verify XML Documents
     - SAML2 Token Validation
 
 ## Cryptography
 
-### Create Signed Xml
+###  Sign and verify XML Documents
+
+#### Create Signed Xml
 
 Example:
 ```java
@@ -40,7 +43,7 @@ public class XmlSignerApp {
   }
 }
 ```
-### Verify Signed Xml
+#### Verify Signed Xml
 
 Example:
 ```java
@@ -74,7 +77,7 @@ public class XmlVerifierApp {
 }
 ``` 
 
-### SAML2 Validation 
+### SAML2 Token Validation 
 
 Example:
 ```java
