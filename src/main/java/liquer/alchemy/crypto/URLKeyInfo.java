@@ -1,6 +1,5 @@
 package liquer.alchemy.crypto;
 
-import liquer.alchemy.util.IOUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Node;
@@ -22,7 +21,7 @@ public class URLKeyInfo implements KeyInfo {
     @Override
     public String getKey(List<Node> keyInfo) {
         try {
-            return IOUtil.toString(key.openStream());
+            return liquer.alchemy.util.IOUtil.toString(key.openStream());
         } catch (IOException e) {
             LOG.error("Cannot retrieve key", e);
             return null;

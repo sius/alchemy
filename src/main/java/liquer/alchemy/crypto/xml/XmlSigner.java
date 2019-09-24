@@ -35,11 +35,13 @@ public final class XmlSigner extends SafeNodeReader {
     private final String idMode;
     private final XmlSignerOptions options;
     private final List<XmlReference> references;
+    private final NamespaceContext namespaceContext;
+    private final BiFunction<Node, String, Stream<Node>> select;
+    private final EOL eol;
+
     private int id;
     private String signingKey;
-    private String signatureAlgorithm;
     private KeyInfo keyInfoProvider;
-    private String canonicalizationAlgorithm;
     private String signedXml;
     private String signatureXml;
     private Node signatureNode;
@@ -49,14 +51,14 @@ public final class XmlSigner extends SafeNodeReader {
     private List<Node> keyInfo;
     private Set<String> idAttributes;
     private List<String> implicitTransforms;
-    private NamespaceContext namespaceContext;
-    private BiFunction<Node, String, Stream<Node>> select;
+    private String signatureAlgorithm;
+    private String canonicalizationAlgorithm;
 
     /**
      *
      */
     public XmlSigner() {
-        this(null);
+        this(new XmlSignerOptions());
     }
 
 
@@ -66,22 +68,25 @@ public final class XmlSigner extends SafeNodeReader {
      * @param options Initial configurations
      */
     public XmlSigner(XmlSignerOptions options) {
-        this.options = options == null ? new XmlSignerOptions() : options;
+        this.options = (options == null) ? new XmlSignerOptions() : options;
+
         this.namespaceContext = this.options.getNamespaceContext();
         this.select = XPathSelector.getSelectStreamClosure(this.namespaceContext);
+        this.eol = this.options.getEol();
         this.idMode = this.options.getIdMode();
         this.references = new ArrayList<>();
+        this.validationErrors = new ArrayList<>();
+
         this.id = 0;
         this.signingKey = null;
-        this.signatureAlgorithm = this.options.getSignatureAlgorithm();
         this.keyInfoProvider = null;
-        this.canonicalizationAlgorithm = this.options.getCanonicalizationAlgorithm();
         this.signedXml = "";
         this.signatureXml = "";
         this.signatureNode = null;
         this.signatureValue = "";
         this.originalXmlWithIds = "";
-        this.validationErrors = new ArrayList<>();
+        this.signatureAlgorithm = this.options.getSignatureAlgorithm();
+        this.canonicalizationAlgorithm = this.options.getCanonicalizationAlgorithm();
         this.keyInfo = null;
         this.idAttributes = new HashSet<>(Arrays.asList("Id", "ID", "id"));
         if (this.options.getIdAttributes() != null) {
@@ -755,7 +760,7 @@ public final class XmlSigner extends SafeNodeReader {
             copy = transform.apply(copy, options);
         }
 
-        return XmlUtil.stringify(copy, true);
+        return XmlUtil.stringify(copy, true, this.eol);
     }
 
     /*

@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static liquer.alchemy.crypto.xml.EOL.LF;
 import static liquer.alchemy.util.Pedantic.notNullOrEmpty;
 
 public class XmlUtil {
@@ -78,12 +79,12 @@ public class XmlUtil {
     }
 
     public static String stringify(Node node) {
-        return stringify(node, false);
+        return stringify(node, false, LF);
     }
 
-    public static String stringify(Node node, boolean ensureEmptyTags) {
+    public static String stringify(Node node, boolean ensureEmptyTags, EOL eol) {
 
-        StringWriter sw = new StringWriter();
+        StringWriter sw = new EOLStringWriter(eol);
         try {
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer t = factory.newTransformer();
@@ -95,7 +96,6 @@ public class XmlUtil {
         }
         return sw.toString();
     }
-
 
     public static Document toDocument(String xml) {
         try {

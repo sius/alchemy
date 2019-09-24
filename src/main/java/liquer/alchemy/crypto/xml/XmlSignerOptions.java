@@ -8,8 +8,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static liquer.alchemy.crypto.xml.EOL.LF;
+
 /**
- * The XmlSignerOptions to customize tzhe XmlSigner behaviour
+ * The XmlSignerOptions to customize the XmlSigner behaviour
  */
 public class XmlSignerOptions {
 
@@ -19,6 +21,7 @@ public class XmlSignerOptions {
     private Set<String> idAttributes;
     private List<String> implicitTransforms;
     private NamespaceContext namespaceContext;
+    private EOL eol;
 
     public XmlSignerOptions() {
         setIdMode(null);
@@ -27,8 +30,16 @@ public class XmlSignerOptions {
         setIdAttributes(null);
         setImplicitTransforms(null);
         setNamespaceContext(new NamespaceContextMap());
+        setEol(LF);
     }
 
+    public EOL getEol() {
+        return eol;
+    }
+
+    public void setEol(EOL eol) {
+        this.eol = eol;
+    }
     public String getSignatureAlgorithm() {
         return signatureAlgorithm;
     }

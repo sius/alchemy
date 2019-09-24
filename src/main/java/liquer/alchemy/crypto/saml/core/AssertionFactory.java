@@ -1,10 +1,7 @@
 package liquer.alchemy.crypto.saml.core;
 
 import liquer.alchemy.crypto.saml.*;
-import liquer.alchemy.crypto.xml.SafeNodeReader;
-import liquer.alchemy.crypto.xml.XPathSelector;
-import liquer.alchemy.crypto.xml.XmlSigner;
-import liquer.alchemy.crypto.xml.XmlUtil;
+import liquer.alchemy.crypto.xml.*;
 import liquer.alchemy.util.IOUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -32,19 +29,22 @@ public class AssertionFactory extends SafeNodeReader implements Assertion {
     }
 
     public static Assertion of(String xml) {
-        return of(xml, null);
+        return of(xml, new DefaultNamespaceContextMap());
     }
 
     public static Assertion of(String xml, NamespaceContext context) {
-        return of(XmlUtil.toDocument(xml), context);
+        EOL eol = (xml != null && xml.contains("\r\n"))
+                ? EOL.CRLF
+                : EOL.LF;
+        return of(XmlUtil.toDocument(xml), context, eol);
     }
 
-    public static Assertion of(Document doc) {
-        return of(doc, null);
+    public static Assertion of(Document doc, EOL eol) {
+        return of(doc, new DefaultNamespaceContextMap(), eol);
     }
 
-    public static Assertion of(Document doc, NamespaceContext namespaceContext) {
-        return new AssertionFactory(doc, namespaceContext);
+    public static Assertion of(Document doc, NamespaceContext namespaceContext, EOL eol) {
+        return new AssertionFactory(doc, namespaceContext, eol);
     }
 
     private final DateTime issueInstant;
@@ -55,15 +55,12 @@ public class AssertionFactory extends SafeNodeReader implements Assertion {
     private final XmlSigner xmlSigner;
     private final Signature signature;
 
-    private AssertionFactory(Document doc) {
-        this(doc, new DefaultNamespaceContextMap());
-    }
-
-    private AssertionFactory(Document doc, NamespaceContext namespaceContext) {
+    private AssertionFactory(Document doc, NamespaceContext namespaceContext, EOL eol) {
 
         final NamespaceContext finalNamespaceContext = (namespaceContext == null)
             ? new DefaultNamespaceContextMap()
             : namespaceContext;
+
         final Element docElem = doc.getDocumentElement();
         final BiFunction<Node, String, Stream<Node>> select =
                 XPathSelector.getSelectStreamClosure(finalNamespaceContext);
@@ -91,7 +88,11 @@ public class AssertionFactory extends SafeNodeReader implements Assertion {
                 .findFirst()
                 .orElseThrow( () -> new RuntimeException("No Signature fount"));
 
-        xmlSigner = new XmlSigner();
+        XmlSignerOptions options = new XmlSignerOptions();
+        options.setNamespaceContext(namespaceContext);
+        options.setEol(eol);
+
+        xmlSigner = new XmlSigner(options);
         xmlSigner.setKeyInfoProvider(new EmbeddedKeyInfo());
         xmlSigner.loadSignature(signatureNode);
         signature = new SignatureImpl(xmlSigner.getKeyInfoProvider());

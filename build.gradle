@@ -39,6 +39,6 @@ task writeNewPom {
                     }
                 }
             }
-        }.writeTo("pom.xml")
+        }.writeTo("alchemy-pom.xml")
     }
 }

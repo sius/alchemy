@@ -3,6 +3,7 @@ package liquer.alchemy.crypto.xml;
 import liquer.alchemy.crypto.KeyInfo;
 import liquer.alchemy.crypto.URLKeyInfo;
 import liquer.alchemy.crypto.saml.Assertion;
+import liquer.alchemy.crypto.saml.DefaultNamespaceContextMap;
 import liquer.alchemy.crypto.saml.SamlVerificationResult;
 import liquer.alchemy.crypto.saml.core.AssertionFactory;
 import liquer.alchemy.util.BaseN;
@@ -73,7 +74,7 @@ public class XmlSignerTest {
             String signedXml = IOUtil.toString(in);
             // System.out.println(signedXml);
 
-            final Assertion assertion = AssertionFactory.of(signedXml);
+            final Assertion assertion = AssertionFactory.of(signedXml, new DefaultNamespaceContextMap());
 
             long start = System.currentTimeMillis();
             SamlVerificationResult result = assertion.verifySignature(signedXml);
@@ -85,6 +86,7 @@ public class XmlSignerTest {
                         Collectors.joining("\n"));
                 System.out.println(validationErrors);
             }
+
             Assert.assertTrue(result.isValidSignature());
 
         } catch (IOException e) {
