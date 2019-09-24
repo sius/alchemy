@@ -9,7 +9,6 @@
     - SigV4
     - Sign and verify JWT Tokens and XML Documents
     - SAML2 Token Validation
-- no dependencies
 
 ## Cryptography
 
