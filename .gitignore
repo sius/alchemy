@@ -23,6 +23,7 @@
 hs_err_pid*
 
 .idea/
+
 out/
 build/
 src/test/resources/assertion.xml
