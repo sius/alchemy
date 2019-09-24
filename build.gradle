@@ -1,10 +1,10 @@
 plugins {
     id 'java'
+    id 'maven'
 }
 
 group 'liquer'
 version '1.0-SNAPSHOT'
-
 sourceCompatibility = 1.8
 
 tasks.withType(JavaCompile) {
@@ -24,4 +24,21 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+task writeNewPom {
+    doLast {
+        pom {
+            project {
+                inceptionYear '2008'
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+            }
+        }.writeTo("pom.xml")
+    }
 }
