@@ -1,0 +1,12 @@
+{
+    "dateFormat": "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+  , "language": "en"
+  , "country": "US"
+  , "variant": ""
+  , "timeZone": "GMT"
+  , "binaryEncoding": "base64"
+  , "charset": "UTF-8"
+  , "defaultIndent": 2
+  , "renderDepth": 64
+  , "includeSuperClasses": false
+}
