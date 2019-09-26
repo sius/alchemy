@@ -57,6 +57,6 @@ public class SignatureOptions {
         this.existingPrefixes =
                 existingPrefixes == null
                     ? new HashMap<>()
-                    : new HashMap(existingPrefixes);
+                    : new HashMap<>(existingPrefixes);
     }
 }

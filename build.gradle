@@ -1,44 +1,55 @@
-plugins {
-    id 'java'
-    id 'maven'
-}
+def jre_lib_1_7 = '/usr/lib/jvm/java-7-openjdk/jre/lib/'
+def jre_lib_1_8 = '/usr/lib/jvm/java-8-openjdk/jre/lib/'
 
-group 'liquer'
-version '1.0-SNAPSHOT'
-sourceCompatibility = 1.8
+def jre_lib = jre_lib_1_8
 
-tasks.withType(JavaCompile) {
-    options.compilerArgs << '-Xlint:unchecked'
-    options.deprecation = true
-}
+allprojects {
 
-repositories {
-    mavenCentral()
-}
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
 
-dependencies {
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.2'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.2'
-    testCompile 'junit:junit:4.12'
-}
+    apply plugin: 'java'
+    apply plugin: 'maven'
 
-test {
-    useJUnitPlatform()
-}
+    group 'liquer.alchemy'
+    version = '1.0-SNAPSHOT'
 
-task writeNewPom {
-    doLast {
-        pom {
-            project {
-                inceptionYear '2008'
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    dependencies {
+        testImplementation 'junit:junit:4.12'
+        implementation 'org.apache.logging.log4j:log4j-api:2.4'
+        implementation 'org.apache.logging.log4j:log4j-core:2.4'
+    }
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '-Xlint:unchecked'
+        options.deprecation = true
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+/*
+    task writeNewPom {
+        doLast {
+            pom {
+                project {
+                    inceptionYear '2008'
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
                     }
                 }
-            }
-        }.writeTo("alchemy-pom.xml")
-    }
+            }.writeTo("alchemy-pom.xml")
+        }
+    }*/
+
 }
+
