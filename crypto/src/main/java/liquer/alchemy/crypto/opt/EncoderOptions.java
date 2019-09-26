@@ -1,4 +1,4 @@
-package liquer.alchemy.crypto.ext;
+package liquer.alchemy.crypto.opt;
 
 import liquer.alchemy.alembic.BaseN;
 

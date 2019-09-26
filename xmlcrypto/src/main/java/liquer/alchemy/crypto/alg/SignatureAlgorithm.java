@@ -1,8 +1,8 @@
 package liquer.alchemy.crypto.alg;
 
+import liquer.alchemy.alembic.BaseN;
 import liquer.alchemy.crypto.CryptoLimericks;
 import liquer.alchemy.crypto.opt.EncoderOptions;
-import liquer.alchemy.alembic.BaseN;
 
 import java.nio.charset.StandardCharsets;
 

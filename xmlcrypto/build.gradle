@@ -1,3 +1,4 @@
 dependencies {
-    compile project (':crypto')
+    compile project (':athanor')
+    // compile project (':crypto')
 }
