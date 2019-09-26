@@ -15,7 +15,8 @@
             <option value="$PROJECT_DIR$/alembic" />
             <option value="$PROJECT_DIR$/alkahest" />
             <option value="$PROJECT_DIR$/athanor" />
-            <option value="$PROJECT_DIR$/standalone" />
+            <option value="$PROJECT_DIR$/crypto" />
+            <option value="$PROJECT_DIR$/xmlcrypto" />
           </set>
         </option>
         <option name="useQualifiedModuleNames" value="true" />

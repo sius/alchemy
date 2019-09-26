@@ -1,7 +1,7 @@
 package liquer.alchemy.crypto.alg;
 
 import liquer.alchemy.crypto.CryptoLimericks;
-import liquer.alchemy.crypto.xml.ext.HashOptions;
+import liquer.alchemy.crypto.ext.HashOptions;
 
 public interface HashAlgorithm extends Algorithm {
 
