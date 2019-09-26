@@ -1,4 +1,3 @@
 dependencies {
-    compile project (':athanor')
-    // compile project (':crypto')
+    compile project (':alembic')
 }
