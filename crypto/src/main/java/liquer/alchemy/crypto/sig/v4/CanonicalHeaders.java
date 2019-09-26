@@ -1,7 +1,7 @@
 package liquer.alchemy.crypto.sig.v4;
 
 import liquer.alchemy.athanor.Yash;
-import liquer.alchemy.alembic.Tuple.Tuple2;
+import liquer.alchemy.athanor.Tuple.Tuple2;
 
 import java.util.Comparator;
 import java.util.Iterator;

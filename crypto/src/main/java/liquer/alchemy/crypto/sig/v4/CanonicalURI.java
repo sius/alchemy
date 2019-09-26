@@ -1,7 +1,7 @@
 package liquer.alchemy.crypto.sig.v4;
 
 import liquer.alchemy.alembic.StringSupport;
-import liquer.alchemy.alembic.Tuple.Tuple2;
+import liquer.alchemy.athanor.Tuple.Tuple2;
 
 import java.net.URI;
 import java.net.URISyntaxException;

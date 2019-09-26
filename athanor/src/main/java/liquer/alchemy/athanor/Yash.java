@@ -1,7 +1,7 @@
 package liquer.alchemy.athanor;
 
 import liquer.alchemy.athanor.json.Json;
-import liquer.alchemy.alembic.Tuple.Tuple2;
+import liquer.alchemy.athanor.json.JsonUrlCodec;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -26,11 +26,11 @@ public class Yash extends LinkedHashMap<String, Object> {
 		return ret;
 	}
 	public static Yash urlDecode(String queryString) throws IOException {
-		return RackSupport.parseNestedQuery(queryString, "&");
+		return JsonUrlCodec.parseNestedQuery(queryString, "&");
 	}
 
 	public static String urlEncode(Object o, String prefix) throws IllegalArgumentException, UnsupportedEncodingException {
-		return RackSupport.buildNestedQuery(o, prefix);
+		return JsonUrlCodec.buildNestedQuery(o, prefix);
 	}
 
 	public static Yash of(Map<?,?> map) {
@@ -119,11 +119,6 @@ public class Yash extends LinkedHashMap<String, Object> {
         return super.put(key, value);
       }
     }
-  }
-
-  /* RoR Goodies */
-  public Tuple2<String, Object> assoc(String key) {
-    return (containsKey(key)) ? new Tuple2<>(key, get(key)) : null;
   }
 
   public Map<Object, String> invert() {

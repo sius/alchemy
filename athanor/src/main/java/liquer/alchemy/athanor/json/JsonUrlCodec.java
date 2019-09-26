@@ -1,4 +1,4 @@
-package liquer.alchemy.athanor;
+package liquer.alchemy.athanor.json;
 
 import liquer.alchemy.athanor.Yash;
 
@@ -11,19 +11,21 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-public class RackSupport {
+public final class JsonUrlCodec {
+
+	private JsonUrlCodec() {
+
+	}
 
 	/**
 	* Every standard HTTP code mapped to the appropriate message.
 	* @see <a href=\"http://www.iana.org/assignments/http-status-codes\">http://www.iana.org/assignments/http-status-codes</a>
 	*/
-	public static final Map<Integer, String> HTTP_STATUS_CODES = new HashMap<>();
+	// public static final Map<Integer, String> HTTP_STATUS_CODES = new HashMap<>();
 	
 	/** Responses with HTTP status codes that should not have an entity body */
-	public static final List<Integer> STATUS_WITH_NO_ENTITY_BODY;
+	// public static final List<Integer> STATUS_WITH_NO_ENTITY_BODY;
 	
 	public static final String DEFAULT_SEP = "&";
 	/**
@@ -32,9 +34,9 @@ public class RackSupport {
 	*/
 	public static final int KEY_SPACE_LIMIT = 65536;
 
-	public static final String MODIFIED_RFC_2822 = "EEE, dd-MMM-yyyy HH:mm:ssz";
+	// public static final String MODIFIED_RFC_2822 = "EEE, dd-MMM-yyyy HH:mm:ssz";
 
-
+	/*
 	static {
 		STATUS_WITH_NO_ENTITY_BODY = IntStream.rangeClosed(100, 199).mapToObj(Integer::valueOf).collect(Collectors.toList());
 		STATUS_WITH_NO_ENTITY_BODY.add(204);
@@ -101,6 +103,8 @@ public class RackSupport {
 			ret = HTTP_STATUS_CODES.get(statusCode);
 		return ret;
 	}
+
+	 */
 	public static String encode_www_form_component(Object str, String charset) throws UnsupportedEncodingException {
 		String ret = "";
 		if (str != null) {

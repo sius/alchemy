@@ -1,4 +1,4 @@
-package liquer.alchemy.alembic;
+package liquer.alchemy.athanor;
 
 public interface Tuple {
 

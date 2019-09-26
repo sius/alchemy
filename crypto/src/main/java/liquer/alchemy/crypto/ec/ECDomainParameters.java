@@ -1,7 +1,7 @@
 package liquer.alchemy.crypto.ec;
 
 import liquer.alchemy.athanor.reflect.Attr;
-import liquer.alchemy.alembic.Tuple.Tuple2;
+import liquer.alchemy.athanor.Tuple.Tuple2;
 
 import java.math.BigInteger;
 import java.util.Arrays;
