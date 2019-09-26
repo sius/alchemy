@@ -1,6 +1,8 @@
 package liquer.alchemy.crypto.xml;
 
 import liquer.alchemy.crypto.Identifier;
+import liquer.alchemy.crypto.xml.core.NamespaceContextMap;
+import liquer.alchemy.crypto.xml.core.EOL;
 
 import javax.xml.namespace.NamespaceContext;
 import java.util.ArrayList;
@@ -8,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static liquer.alchemy.crypto.xml.EOL.LF;
+import static liquer.alchemy.crypto.xml.core.EOL.LF;
 
 /**
  * The XmlSignerOptions to customize the XmlSigner behaviour

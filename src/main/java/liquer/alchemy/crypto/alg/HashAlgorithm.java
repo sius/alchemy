@@ -1,20 +1,15 @@
 package liquer.alchemy.crypto.alg;
 
 import liquer.alchemy.crypto.CryptoLimericks;
-import liquer.alchemy.crypto.opt.HashOptions;
+import liquer.alchemy.crypto.xml.ext.HashOptions;
 
-import java.util.function.BiFunction;
-
-public interface HashAlgorithm extends Algorithm, BiFunction<String, HashOptions, String> {
+public interface HashAlgorithm extends Algorithm {
 
     default String hash(String value, HashOptions options) {
-        return apply(value, options);
-    }
 
-    default String apply(String value, HashOptions options) {
         options = options == null
                 ? new HashOptions()
                 : options;
-        return CryptoLimericks.hash(value, getAlgorithm(), options.isZeroTerminated(), options.getCharset(), options.getEncoder());
+        return CryptoLimericks.hash(value, getName(), options.isZeroTerminated(), options.getCharset(), options.getEncoder());
     }
 }

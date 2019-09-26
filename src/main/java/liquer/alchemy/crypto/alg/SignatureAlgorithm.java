@@ -1,15 +1,12 @@
 package liquer.alchemy.crypto.alg;
 
 import liquer.alchemy.crypto.CryptoLimericks;
-import liquer.alchemy.crypto.opt.EncoderOptions;
-import liquer.alchemy.fun.Func.Func4;
-import liquer.alchemy.util.BaseN;
+import liquer.alchemy.crypto.xml.ext.EncoderOptions;
+import liquer.alchemy.support.BaseN;
 
 import java.nio.charset.StandardCharsets;
 
-public interface SignatureAlgorithm
-		extends Algorithm,
-		Func4<String, String, String, EncoderOptions, Boolean>{
+public interface SignatureAlgorithm extends Algorithm {
 
 	int getBlockSize();
 
@@ -33,7 +30,7 @@ public interface SignatureAlgorithm
      */
     default String sign(String givenString, String signingKey, EncoderOptions options) {
     	final EncoderOptions finalOpts = options == null ? new EncoderOptions() : options;
-		return CryptoLimericks.sign(givenString, getAlgorithm(), signingKey.getBytes(StandardCharsets.UTF_8), finalOpts.getCharset(), finalOpts.getEncoder());
+		return CryptoLimericks.sign(givenString, getName(), signingKey.getBytes(StandardCharsets.UTF_8), finalOpts.getCharset(), finalOpts.getEncoder());
 	}
 
     /**
@@ -47,11 +44,6 @@ public interface SignatureAlgorithm
      */
     default boolean verify(String givenString, String key, String givenSignature, EncoderOptions options) {
 		final EncoderOptions finalOpts = options == null ? new EncoderOptions() : options;
-		return CryptoLimericks.verify(givenString, BaseN.base64Decode(givenSignature), getAlgorithm(), key.getBytes(StandardCharsets.UTF_8), finalOpts.getCharset());
-	}
-
-	@Override
-	default Boolean apply(String arg0, String arg1, String arg2, EncoderOptions arg3) {
-		return verify(arg0, arg1, arg2, arg3);
+		return CryptoLimericks.verify(givenString, BaseN.base64Decode(givenSignature), getName(), key.getBytes(StandardCharsets.UTF_8), finalOpts.getCharset());
 	}
 }

@@ -1,7 +1,7 @@
 package liquer.alchemy.crypto.xml.c14n;
 
 import liquer.alchemy.crypto.Identifier;
-import liquer.alchemy.crypto.xml.XPathSelector;
+import liquer.alchemy.crypto.xml.XPathSupport;
 import org.w3c.dom.Node;
 
 public class EnvelopedSignature implements CanonicalXml {
@@ -11,7 +11,7 @@ public class EnvelopedSignature implements CanonicalXml {
 
     @Override
     public Node apply(Node node, CanonicalOptions options) {
-        return XPathSelector.deleteChild(node, XPATH_EXPR);
+        return XPathSupport.deleteChild(node, XPATH_EXPR);
     }
 
     @Override

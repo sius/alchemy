@@ -6,7 +6,7 @@ public interface Algorithm {
      *
      * @return The Algorithm Name (Java Context)
      */
-    String getAlgorithm();
+    String getName();
 
     /**
      *

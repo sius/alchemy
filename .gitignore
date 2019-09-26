@@ -39,3 +39,5 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
+.attach_*
+

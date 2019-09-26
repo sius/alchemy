@@ -1,9 +1,9 @@
 package liquer.alchemy.crypto.xml.c14n;
 
 import liquer.alchemy.crypto.alg.Algorithm;
-import liquer.alchemy.crypto.xml.CharacterEncoder;
-import liquer.alchemy.crypto.xml.PrefixNamespaceTuple;
-import liquer.alchemy.crypto.xml.XmlUtil;
+import liquer.alchemy.crypto.xml.core.CharacterEncoder;
+import liquer.alchemy.crypto.xml.core.PrefixNamespaceTuple;
+import liquer.alchemy.crypto.xml.XmlSupport;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import static liquer.alchemy.util.Pedantic.isNullOrEmpty;
-import static liquer.alchemy.util.Pedantic.notNullOrEmpty;
+import static liquer.alchemy.support.StringSupport.isNullOrEmpty;
+import static liquer.alchemy.support.StringSupport.notNullOrEmpty;
 
 public interface CanonicalXml extends Algorithm, BiFunction<Node, CanonicalOptions, Node> {
 
-    default String getAlgorithm() {
+    default String getName() {
         return getIdentifier();
     }
 
@@ -92,7 +92,7 @@ public interface CanonicalXml extends Algorithm, BiFunction<Node, CanonicalOptio
         attributeList.sort(this::compareAttribute);
 
         for (Node n : attributeList) {
-            XmlUtil.buildAttribute(ret,
+            XmlSupport.buildAttribute(ret,
                     " " + n.getNodeName(),
                     CharacterEncoder.getInstance().encodeAttributeValue(n.getNodeValue()));
         }

@@ -1,6 +1,6 @@
 package liquer.alchemy.crypto.xml.c14n;
 
-import liquer.alchemy.crypto.xml.PrefixNamespaceTuple;
+import liquer.alchemy.crypto.xml.core.PrefixNamespaceTuple;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;

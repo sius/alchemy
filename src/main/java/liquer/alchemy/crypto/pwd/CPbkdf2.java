@@ -39,7 +39,7 @@ package liquer.alchemy.crypto.pwd;
  *
  */
 
-import liquer.alchemy.util.Pedantic;
+import liquer.alchemy.support.StringSupport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -62,6 +62,7 @@ import java.util.Formatter;
 public class CPbkdf2 {
 
 	private final static Logger LOG = LogManager.getLogger(CPbkdf2.class);
+	public static final String PBKDF_2_WITH_HMAC_SHA_1 = "PBKDF2WithHmacSHA1";
 	/* START RFC 2898 IMPLEMENTATION */
 
 	/**
@@ -100,7 +101,7 @@ public class CPbkdf2 {
 		byte[] U_XOR = null;
 
 
-		SecretKeySpec key = new SecretKeySpec(Pedantic.getEncodedBytes(P, StandardCharsets.UTF_8), "HmacSHA1");
+		SecretKeySpec key = new SecretKeySpec(StringSupport.getEncodedBytes(P, StandardCharsets.UTF_8), "HmacSHA1");
 		Mac mac = Mac.getInstance(key.getAlgorithm());
 		mac.init(key);
 
@@ -167,7 +168,7 @@ public class CPbkdf2 {
 	public static byte[] nativeDerive(char[] strPassword, byte[] strSalt, int nIterations, int nKeyLen) {
 		byte[] baDerived = null;
 		try {
-			SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+			SecretKeyFactory f = SecretKeyFactory.getInstance(PBKDF_2_WITH_HMAC_SHA_1);
 			KeySpec ks = new PBEKeySpec(strPassword, strSalt, nIterations, nKeyLen * 8);
 			SecretKey s = f.generateSecret(ks);
 			baDerived = s.getEncoded();

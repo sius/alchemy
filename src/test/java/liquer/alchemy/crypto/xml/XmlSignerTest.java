@@ -1,13 +1,11 @@
 package liquer.alchemy.crypto.xml;
 
-import liquer.alchemy.crypto.KeyInfo;
-import liquer.alchemy.crypto.URLKeyInfo;
-import liquer.alchemy.crypto.saml.Assertion;
-import liquer.alchemy.crypto.saml.DefaultNamespaceContextMap;
-import liquer.alchemy.crypto.saml.SamlVerificationResult;
-import liquer.alchemy.crypto.saml.core.AssertionFactory;
-import liquer.alchemy.util.BaseN;
-import liquer.alchemy.util.IOUtil;
+import liquer.alchemy.crypto.xml.saml.Assertion;
+import liquer.alchemy.crypto.xml.saml.DefaultNamespaceContextMap;
+import liquer.alchemy.crypto.xml.saml.SamlValidationResult;
+import liquer.alchemy.crypto.xml.saml.core.AssertionFactory;
+import liquer.alchemy.support.BaseN;
+import liquer.alchemy.support.IOSupport;
 import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -24,8 +22,8 @@ public class XmlSignerTest {
     public void signXml() throws IOException {
         KeyInfo info = new URLKeyInfo(getClass().getResource("/client.pem"));
 
-        String xml =  IOUtil.toString(getClass().getResource("/library.xml"));
-        String expected =  IOUtil.toString(getClass().getResource("/library_signed.xml"));
+        String xml =  IOSupport.toString(getClass().getResource("/library.xml"));
+        String expected =  IOSupport.toString(getClass().getResource("/library_signed.xml"));
 
         long start = System.currentTimeMillis();
         XmlSigner xmlSigner = new XmlSigner();
@@ -45,9 +43,9 @@ public class XmlSignerTest {
     public void verifyXml() throws IOException {
         KeyInfo publicKeyInfo = new URLKeyInfo(getClass().getResource("/client_public.pem"));
 
-        String signedXml = IOUtil.toString(getClass().getResource("/library_signed.xml"));
-        Document doc = XmlUtil.toDocument(signedXml);
-        Node signature = XPathSelector.selectFirst(doc, "/*/*[local-name(.)='Signature' and namespace-uri(.)='http://www.w3.org/2000/09/xmldsig#']");
+        String signedXml = IOSupport.toString(getClass().getResource("/library_signed.xml"));
+        Document doc = XmlSupport.toDocument(signedXml);
+        Node signature = XPathSupport.selectFirst(doc, "/*/*[local-name(.)='Signature' and namespace-uri(.)='http://www.w3.org/2000/09/xmldsig#']");
 
         XmlSigner xmlSigner = new XmlSigner();
         xmlSigner.loadSignature(signature);
@@ -71,13 +69,13 @@ public class XmlSignerTest {
     public void verifyAssertion() {
 
         try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(TestConstants.SAML_TOKEN))) ) {
-            String signedXml = IOUtil.toString(in);
+            String signedXml = IOSupport.toString(in);
             // System.out.println(signedXml);
 
             final Assertion assertion = AssertionFactory.of(signedXml, new DefaultNamespaceContextMap());
 
             long start = System.currentTimeMillis();
-            SamlVerificationResult result = assertion.verifySignature(signedXml);
+            SamlValidationResult result = assertion.verifySignature(signedXml);
 
             System.out.println("verify assertion signature: " + (System.currentTimeMillis() - start) + " ms");
 

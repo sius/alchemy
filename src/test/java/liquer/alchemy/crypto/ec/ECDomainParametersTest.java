@@ -1,6 +1,6 @@
 package liquer.alchemy.crypto.ec;
 
-import liquer.alchemy.json.Json;
+import liquer.alchemy.athanor.json.Json;
 import org.junit.Test;
 
 import java.math.BigInteger;

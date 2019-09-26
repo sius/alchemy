@@ -1,11 +1,14 @@
 package liquer.alchemy.crypto.xml;
 
-import liquer.alchemy.crypto.Algorithms;
 import liquer.alchemy.crypto.Identifier;
-import liquer.alchemy.crypto.KeyInfo;
 import liquer.alchemy.crypto.alg.HashAlgorithm;
 import liquer.alchemy.crypto.alg.SignatureAlgorithm;
-import liquer.alchemy.crypto.saml.DefaultNamespaceContextMap;
+import liquer.alchemy.crypto.xml.core.Location;
+import liquer.alchemy.crypto.xml.core.NodeReader;
+import liquer.alchemy.crypto.xml.core.PrefixNamespaceTuple;
+import liquer.alchemy.crypto.xml.core.SignatureOptions;
+import liquer.alchemy.crypto.xml.core.EOL;
+import liquer.alchemy.crypto.xml.saml.DefaultNamespaceContextMap;
 import liquer.alchemy.crypto.xml.c14n.CanonicalOptions;
 import liquer.alchemy.crypto.xml.c14n.CanonicalXml;
 import org.apache.logging.log4j.LogManager;
@@ -18,11 +21,11 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static liquer.alchemy.crypto.xml.XmlUtil.buildAttribute;
-import static liquer.alchemy.util.Pedantic.isNullOrEmpty;
-import static liquer.alchemy.util.Pedantic.notNullOrEmpty;
+import static liquer.alchemy.crypto.xml.XmlSupport.buildAttribute;
+import static liquer.alchemy.support.StringSupport.isNullOrEmpty;
+import static liquer.alchemy.support.StringSupport.notNullOrEmpty;
 
-public final class XmlSigner extends SafeNodeReader {
+public final class XmlSigner extends NodeReader {
 
     private static Logger LOG = LogManager.getLogger(XmlSigner.class);
     private static final String XPATH_EXPR_FORMAT_ALG = ".//*[local-name(.)='%1$s']/@Algorithm";
@@ -71,7 +74,7 @@ public final class XmlSigner extends SafeNodeReader {
         this.options = (options == null) ? new XmlSignerOptions() : options;
 
         this.namespaceContext = this.options.getNamespaceContext();
-        this.select = XPathSelector.getSelectStreamClosure(this.namespaceContext);
+        this.select = XPathSupport.getSelectStreamClosure(this.namespaceContext);
         this.eol = this.options.getEol();
         this.idMode = this.options.getIdMode();
         this.references = new ArrayList<>();
@@ -131,7 +134,7 @@ public final class XmlSigner extends SafeNodeReader {
             throw new IllegalArgumentException("Argument 'signatureNode' cannot be null");
         }
         this.signatureNode = signatureNode;
-        this.signatureXml = XmlUtil.stringify(signatureNode);
+        this.signatureXml = XmlSupport.stringify(signatureNode);
         this.canonicalizationAlgorithm =
             select.apply(signatureNode, XPATH_EXPR_C14N_ALG)
                 .findFirst()
@@ -176,7 +179,7 @@ public final class XmlSigner extends SafeNodeReader {
             throw new RuntimeException("Could not resolve key info: " + this.keyInfo);
         }
 
-        Document doc = XmlUtil.toDocument(xml);
+        Document doc = XmlSupport.toDocument(xml);
         return validateReferences(doc) && validateSignatureValue(doc);
     }
 
@@ -226,7 +229,7 @@ public final class XmlSigner extends SafeNodeReader {
 
         SignatureOptions finalOptions = options == null ? new SignatureOptions() : options;
 
-        Document doc = XmlUtil.toDocument(xml);
+        Document doc = XmlSupport.toDocument(xml);
         List<String> signatureAttrs = new ArrayList<>();
 
         String prefix = finalOptions.getPrefix();
@@ -269,7 +272,7 @@ public final class XmlSigner extends SafeNodeReader {
         signatureXml.append("Signature");
         signatureXml.append('>');
 
-        this.originalXmlWithIds = XmlUtil.stringify(doc); // xml; //
+        this.originalXmlWithIds = XmlSupport.stringify(doc); // xml; //
 
         StringBuilder existingPrefixesBuilder = new StringBuilder();
 
@@ -279,7 +282,7 @@ public final class XmlSigner extends SafeNodeReader {
 
         // A trick to remove the namespaces that already exist in the xml
         // This only works if the prefix and namespace match with those in the xml
-        Document wrappedDoc = XmlUtil.toWrappedDocument("Dummy", existingPrefixesBuilder.toString(), signatureXml.toString());
+        Document wrappedDoc = XmlSupport.toWrappedDocument("Dummy", existingPrefixesBuilder.toString(), signatureXml.toString());
         Node firstChild = wrappedDoc.getDocumentElement().getFirstChild().cloneNode(true);
         Node signatureDoc = doc.adoptNode(firstChild);
         Node referenceNode = this.select.apply(doc, location.getReference())
@@ -307,7 +310,7 @@ public final class XmlSigner extends SafeNodeReader {
         this.signatureNode = signatureDoc;
         this.calculateSignatureValue(doc);
 
-        NodeList signedInfoNodes = XPathSelector.findNodeChildren(this.signatureNode, "SignedInfo");
+        NodeList signedInfoNodes = XPathSupport.findNodeChildren(this.signatureNode, "SignedInfo");
         if (signedInfoNodes.getLength() == 0) {
             throw new RuntimeException("Could not find SignedInfo element in the message");
         }
@@ -315,8 +318,8 @@ public final class XmlSigner extends SafeNodeReader {
         Node signedInfoNode = signedInfoNodes.item(0);
         signatureDoc.insertBefore(doc.adoptNode(this.createSignature(prefix)), signedInfoNode.getNextSibling());
 
-        this.signatureXml = XmlUtil.stringify(signatureDoc);
-        this.signedXml = XmlUtil.stringify(doc);
+        this.signatureXml = XmlSupport.stringify(signatureDoc);
+        this.signedXml = XmlSupport.stringify(doc);
     }
 
     /*
@@ -416,7 +419,7 @@ public final class XmlSigner extends SafeNodeReader {
 
     private String getCanonicalSignedInfoXml(Document doc) {
 
-        NodeList signedInfo = XPathSelector.findNodeChildren(this.signatureNode, "SignedInfo");
+        NodeList signedInfo = XPathSupport.findNodeChildren(this.signatureNode, "SignedInfo");
         if (signedInfo.getLength() == 0) {
             throw new RuntimeException("Could not find SignedInfo element in the message");
         }
@@ -562,29 +565,29 @@ public final class XmlSigner extends SafeNodeReader {
      * Load the reference xml node to a model
      */
     private void loadReference(Node ref) {
-        NodeList nodes = XPathSelector.findNodeChildren(ref, "DigestMethod");
+        NodeList nodes = XPathSupport.findNodeChildren(ref, "DigestMethod");
         if (nodes.getLength() == 0) {
             throw new RuntimeException(
-                   "Could not find DigestMethod node in reference " + XmlUtil.stringify(ref));
+                   "Could not find DigestMethod node in reference " + XmlSupport.stringify(ref));
         }
         Node digestAlgorithmNode = nodes.item(0);
-        Node attr = XPathSelector.findAttribute(digestAlgorithmNode, "Algorithm", null);
+        Node attr = XPathSupport.findAttribute(digestAlgorithmNode, "Algorithm", null);
         if (attr == null) {
             throw new RuntimeException(
-                    "Could not find Algorithm attribute in node " + XmlUtil.stringify(digestAlgorithmNode));
+                    "Could not find Algorithm attribute in node " + XmlSupport.stringify(digestAlgorithmNode));
         }
         String digestAlgorithm = attr.getNodeValue();
 
-        NodeList digestValueNodes = XPathSelector.findNodeChildren(ref, "DigestValue");
+        NodeList digestValueNodes = XPathSupport.findNodeChildren(ref, "DigestValue");
         if (digestValueNodes.getLength() == 0) {
             throw new RuntimeException(
-                    "Could not find DigestValue node in reference " + XmlUtil.stringify(ref));
+                    "Could not find DigestValue node in reference " + XmlSupport.stringify(ref));
         }
         Node firstDigestValueNode = digestValueNodes.item(0);
         if (!firstDigestValueNode.hasChildNodes()
                 || isNullOrEmpty(firstDigestValueNode.getFirstChild().getTextContent())) {
             throw new RuntimeException(
-                    "Could not find the value of DigestValue in " + XmlUtil.stringify(firstDigestValueNode));
+                    "Could not find the value of DigestValue in " + XmlSupport.stringify(firstDigestValueNode));
         }
 
         String digestValue =  firstDigestValueNode.getFirstChild().getTextContent();
@@ -592,22 +595,22 @@ public final class XmlSigner extends SafeNodeReader {
         List<String> transforms = new ArrayList<>();
         List<String> inclusiveNamespacesPrefixList = new ArrayList<>();
 
-        NodeList transformsNodes = XPathSelector.findNodeChildren(ref, "Transforms");
+        NodeList transformsNodes = XPathSupport.findNodeChildren(ref, "Transforms");
 
         if (transformsNodes.getLength() > 0) {
             Node transformsNode = transformsNodes.item(0);
-            NodeList transformsAll = XPathSelector.findNodeChildren(transformsNode, "Transform");
+            NodeList transformsAll = XPathSupport.findNodeChildren(transformsNode, "Transform");
             Node trans = null;
             for (int i = 0; i < transformsAll.getLength(); i++) {
                 trans = transformsAll.item(i);
-                Node algorithmAttr = XPathSelector.findAttribute(trans, "Algorithm", null);
+                Node algorithmAttr = XPathSupport.findAttribute(trans, "Algorithm", null);
                 if (algorithmAttr != null) {
                     transforms.add(algorithmAttr.getNodeValue());
                 }
 
             }
 
-            NodeList inclusiveNamespaces = XPathSelector.findNodeChildren(trans, "InclusiveNamespaces");
+            NodeList inclusiveNamespaces = XPathSupport.findNodeChildren(trans, "InclusiveNamespaces");
             if (inclusiveNamespaces.getLength() > 0) {
                 //Should really only be one prefix list, but maybe there's some circumstances where more than one to lets handle it
                 for (int i = 0; i < inclusiveNamespaces.getLength(); i++) {
@@ -639,7 +642,7 @@ public final class XmlSigner extends SafeNodeReader {
             transforms.add(Identifier.CANONICAL_XML_1_0_OMIT_COMMENTS);
         }
 
-        final String uriNodeValue = readNodeValue(XPathSelector.findAttribute(ref, "URI"));
+        final String uriNodeValue = readNodeValue(XPathSupport.findAttribute(ref, "URI"));
 
         this.addReference(
             null,
@@ -660,9 +663,9 @@ public final class XmlSigner extends SafeNodeReader {
         StringBuilder b = new StringBuilder();
         if (this.keyInfoProvider != null) {
             String tagName = currentPrefix + "KeyInfo";
-            XmlUtil.buildStartTag(b, tagName);
+            XmlSupport.buildStartTag(b, tagName);
             b.append(this.keyInfoProvider.getKeyInfo(this.signingKey));
-            XmlUtil.buildEndTag(b, tagName);
+            XmlSupport.buildEndTag(b, tagName);
         }
 
         return b.toString();
@@ -760,7 +763,7 @@ public final class XmlSigner extends SafeNodeReader {
             copy = transform.apply(copy, options);
         }
 
-        return XmlUtil.stringify(copy, true, this.eol);
+        return XmlSupport.stringify(copy, true, this.eol);
     }
 
     /*
@@ -772,11 +775,11 @@ public final class XmlSigner extends SafeNodeReader {
 
         Node attr;
         if ("wssecurity".equals(this.idMode)) {
-            attr = XPathSelector.findAttribute(node,
+            attr = XPathSupport.findAttribute(node,
                     "Id", Identifier.WSU_NS_URI);
         } else {
             for (String idVariant : this.idAttributes) {
-                attr = XPathSelector.findAttribute(node, idVariant);
+                attr = XPathSupport.findAttribute(node, idVariant);
                 if (attr != null) {
                    return attr.getNodeValue();
                 }
@@ -848,7 +851,7 @@ public final class XmlSigner extends SafeNodeReader {
                 signatureValueXml +
                 "</" + prefix + "Signature>";
 
-        Document doc = XmlUtil.toDocument(dummySignatureWrapper);
+        Document doc = XmlSupport.toDocument(dummySignatureWrapper);
         return doc.getDocumentElement().getFirstChild();
     }
 }

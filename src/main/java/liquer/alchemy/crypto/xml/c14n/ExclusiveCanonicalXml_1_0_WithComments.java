@@ -1,10 +1,10 @@
 package liquer.alchemy.crypto.xml.c14n;
 
 import liquer.alchemy.crypto.Identifier;
-import liquer.alchemy.crypto.xml.CharacterEncoder;
-import liquer.alchemy.crypto.xml.PrefixNamespaceTuple;
-import liquer.alchemy.crypto.xml.XPathSelector;
-import liquer.alchemy.crypto.xml.XmlUtil;
+import liquer.alchemy.crypto.xml.core.CharacterEncoder;
+import liquer.alchemy.crypto.xml.core.PrefixNamespaceTuple;
+import liquer.alchemy.crypto.xml.XPathSupport;
+import liquer.alchemy.crypto.xml.XmlSupport;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -15,8 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static liquer.alchemy.util.Pedantic.isNullOrEmpty;
-import static liquer.alchemy.util.Pedantic.notNullOrEmpty;
+import static liquer.alchemy.support.StringSupport.isNullOrEmpty;
+import static liquer.alchemy.support.StringSupport.notNullOrEmpty;
 
 /**
  * Exclusive C14n Canonicalization with comments
@@ -45,9 +45,9 @@ public class ExclusiveCanonicalXml_1_0_WithComments implements CanonicalXml {
          * If the inclusiveNamespacesPrefixList has not been explicitly provided then look it up in CanonicalizationMethod/InclusiveNamespaces
          */
         if (inclusiveNamespacesPrefixList.size() == 0) {
-            NodeList canonicalizationMethod = XPathSelector.findNodeChildren(node, "CanonicalizationMethod");
+            NodeList canonicalizationMethod = XPathSupport.findNodeChildren(node, "CanonicalizationMethod");
             if (canonicalizationMethod.getLength() > 0) {
-                NodeList inclusiveNamespaces = XPathSelector.findNodeChildren(canonicalizationMethod.item(0), "InclusiveNamespaces");
+                NodeList inclusiveNamespaces = XPathSupport.findNodeChildren(canonicalizationMethod.item(0), "InclusiveNamespaces");
                 if (inclusiveNamespaces.getLength() > 0) {
                     Node attr = inclusiveNamespaces.item(0).getAttributes().getNamedItem("PrefixList");
                     if (attr != null) {
@@ -82,7 +82,7 @@ public class ExclusiveCanonicalXml_1_0_WithComments implements CanonicalXml {
                 o.getDefaultNsForPrefix(),
                 o.getInclusiveNamespacesPrefixList());
 
-        return XmlUtil.toDocument(res.toString());
+        return XmlSupport.toDocument(res.toString());
     }
 
     private boolean missingPrefixInScope(List<PrefixNamespaceTuple> prefixesInScope, String prefix, String namespaceURI) {
@@ -121,7 +121,7 @@ public class ExclusiveCanonicalXml_1_0_WithComments implements CanonicalXml {
                     defaultNsForPrefix,
                     inclusiveNamespacesPrefixList));
         }
-        XmlUtil.buildEndTag(ret, nodeTagName);
+        XmlSupport.buildEndTag(ret, nodeTagName);
         return ret;
     }
 
@@ -154,7 +154,7 @@ public class ExclusiveCanonicalXml_1_0_WithComments implements CanonicalXml {
             }
         } else if (!defaultNamespaceURI.equals(currentNamespaceURI)) {
             newDefaultNamespaceURI = nodeNamespaceURI;
-            XmlUtil.buildAttribute(builder, " xmlns", newDefaultNamespaceURI);
+            XmlSupport.buildAttribute(builder, " xmlns", newDefaultNamespaceURI);
         }
 
         // handle the attributes namespace
@@ -190,7 +190,7 @@ public class ExclusiveCanonicalXml_1_0_WithComments implements CanonicalXml {
         nsTupleListToBuild.sort(this::compareNamespace);
 
         for (PrefixNamespaceTuple t : nsTupleListToBuild) {
-            XmlUtil.buildAttribute(builder, " xmlns:" + t.prefix, t.namespaceURI);
+            XmlSupport.buildAttribute(builder, " xmlns:" + t.prefix, t.namespaceURI);
         }
 
         return new NamespacesTuple(builder, newDefaultNamespaceURI);

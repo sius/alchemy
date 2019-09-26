@@ -1,9 +1,9 @@
 package liquer.alchemy.crypto;
 
 import liquer.alchemy.crypto.pwd.CPbkdf2;
-import liquer.alchemy.util.BaseN;
-import liquer.alchemy.util.IOUtil;
-import liquer.alchemy.util.Pedantic;
+import liquer.alchemy.support.BaseN;
+import liquer.alchemy.support.IOSupport;
+import liquer.alchemy.support.StringSupport;
 
 import javax.crypto.*;
 import javax.crypto.spec.PBEKeySpec;
@@ -45,11 +45,11 @@ public final class CryptoLimericks {
 	private CryptoLimericks() { }
 
 
-	public static byte[] sign(String value, SignatureAlgorithms algorithm, byte[] key) {
-		return sign(value, algorithm.getAlgorithm(), key, StandardCharsets.UTF_8);
+	public static byte[] sign(String value, Signature algorithm, byte[] key) {
+		return sign(value, algorithm.getName(), key, StandardCharsets.UTF_8);
 	}
-	public static byte[] sign(String value, SignatureAlgorithms algorithm, byte[] key, Charset charset) {
-		return sign(value, algorithm.getAlgorithm(), key, charset);
+	public static byte[] sign(String value, Signature algorithm, byte[] key, Charset charset) {
+		return sign(value, algorithm.getName(), key, charset);
 	}
 	public static byte[] sign(String value, String algorithm, byte[] key) {
 		return sign(value, algorithm, key, StandardCharsets.UTF_8);
@@ -61,7 +61,7 @@ public final class CryptoLimericks {
 			Mac mac = getMac(algorithm, key);
 			return mac.doFinal(value.getBytes(finalCharset));
 		} else {
-			Signature sig = getPrivateSignature(algorithm, key);
+			java.security.Signature sig = getPrivateSignature(algorithm, key);
 			try {
 				sig.update(value.getBytes(finalCharset));
 				return sig.sign();
@@ -76,7 +76,7 @@ public final class CryptoLimericks {
 	}
 	public static byte[] sign(InputStream value, String algorithm, byte[] key) throws IOException {
 		Mac mac = getMac(algorithm, key);
-		return mac.doFinal(IOUtil.toByteArray(value));
+		return mac.doFinal(IOSupport.toByteArray(value));
 	}
 	public static String sign(InputStream value, String algorithm, byte[] key, Function<byte[], String> encoder) throws IOException {
 		final Function<byte[], String> enc = encoder == null ? BaseN::base64UfsEncode : encoder;
@@ -199,7 +199,7 @@ public final class CryptoLimericks {
 	 * @return the base64UrlEncoded digest String
 	 */
 	public static String sha384(String value, boolean zeroTerminated) {
-		return Pedantic.hexEncode(hash(value, "SHA-384", zeroTerminated));
+		return StringSupport.hexEncode(hash(value, "SHA-384", zeroTerminated));
 	}
 	/**
 	 * @param value value
@@ -264,7 +264,7 @@ public final class CryptoLimericks {
 		return ripemd160(value, false);
 	}
 	public static String ripemd160(String value, boolean zeroTerminated) {
-		return ripemd160(value, zeroTerminated, Pedantic::hexEncode);
+		return ripemd160(value, zeroTerminated, StringSupport::hexEncode);
 	}
 	public static String ripemd160(String value, boolean zeroTerminated, Function<byte[], String> encoder) {
 		return hash(value, "RIPEMD-160", zeroTerminated, StandardCharsets.UTF_8, encoder);
@@ -273,7 +273,7 @@ public final class CryptoLimericks {
 		return hmacMd5(value, key, StandardCharsets.UTF_8);
 	}
 	public static String hmacMd5(String value, byte[] key, Charset charset) {
-		return hmacMd5(value, key, charset, Pedantic::hexEncode);
+		return hmacMd5(value, key, charset, StringSupport::hexEncode);
 	}
 	public static String hmacMd5(String value, byte[] key, Charset charset, Function<byte[], String> encoder) {
 		return sign(value, "HmacMD5", key, charset, encoder);
@@ -282,7 +282,7 @@ public final class CryptoLimericks {
 		return hmacSha1(value, key, StandardCharsets.UTF_8);
 	}
 	public static String hmacSha1(String value, byte[] key, Charset charset) {
-		return hmacSha1(value, key, charset, Pedantic::hexEncode);
+		return hmacSha1(value, key, charset, StringSupport::hexEncode);
 	}
 	public static String hmacSha1(String value, byte[] key, Charset charset,  Function<byte[], String> encoder) {
 		return sign(value, "HmacSHA1", key, charset, encoder);
@@ -291,7 +291,7 @@ public final class CryptoLimericks {
 		return hmacSha256(value, key, StandardCharsets.UTF_8);
 	}
 	public static String hmacSha256(String value, byte[] key, Charset charset) {
-		return hmacSha256(value, key, charset, Pedantic::hexEncode);
+		return hmacSha256(value, key, charset, StringSupport::hexEncode);
 	}
 	public static String hmacSha256(String value, byte[] key, Charset charset, Function<byte[], String> encoder) {
 		return sign(value, "HmacSHA256", key, charset, encoder);
@@ -300,7 +300,7 @@ public final class CryptoLimericks {
 		return hmacSha384(value, key, StandardCharsets.UTF_8);
 	}
 	public static String hmacSha384(String value, byte[] key, Charset charset) {
-		return hmacSha384(value, key, charset, Pedantic::hexEncode);
+		return hmacSha384(value, key, charset, StringSupport::hexEncode);
 	}
 	public static String hmacSha384(String value, byte[] key, Charset charset,  Function<byte[], String> encoder){
 		return sign(value, "HmacSHA384", key, charset, encoder);
@@ -309,7 +309,7 @@ public final class CryptoLimericks {
 		return hmacSha512(value, key, StandardCharsets.UTF_8);
 	}
 	public static String hmacSha512(String value, byte[] key, Charset charset) {
-		return hmacSha512(value, key, charset, Pedantic::hexEncode);
+		return hmacSha512(value, key, charset, StringSupport::hexEncode);
 	}
 	public static String hmacSha512(String value, byte[] key, Charset charset, Function<byte[], String> encoder) {
 		return sign(value, "HmacSHA512", key, charset, encoder);
@@ -318,7 +318,7 @@ public final class CryptoLimericks {
 		return hmacRipemd160(value, key, StandardCharsets.UTF_8);
 	}
 	public static String hmacRipemd160(String value, byte[] key, Charset charset) {
-		return hmacRipemd160(value, key, charset, Pedantic::hexEncode);
+		return hmacRipemd160(value, key, charset, StringSupport::hexEncode);
 	}
 	public static String hmacRipemd160(String value, byte[] key, Charset charset, Function<byte[], String> encoder) {
 		return sign(value, "HmacRIPEMD160", key, charset, encoder);
@@ -356,10 +356,10 @@ public final class CryptoLimericks {
 	 * @param publicKey the public key
 	 * @return the Signature instance initialized for signature verification
 	 */
-	public static Signature getPublicSignature(String algorithm, byte[] publicKey) {
+	public static java.security.Signature getPublicSignature(String algorithm, byte[] publicKey) {
 		PublicKey pk;
 		try {
-			Signature publicSignature = Signature.getInstance(algorithm);
+			java.security.Signature publicSignature = java.security.Signature.getInstance(algorithm);
 			pk = readPublicKeyFromX509Cert(publicKey);
 			publicSignature.initVerify(pk);
 			return publicSignature;
@@ -374,10 +374,10 @@ public final class CryptoLimericks {
 	 * @param privateKey the private key
 	 * @return the Signature instance initialized for signing
 	 */
-	public static Signature getPrivateSignature(String algorithm, byte[] privateKey) {
+	public static java.security.Signature getPrivateSignature(String algorithm, byte[] privateKey) {
 		PrivateKey pk;
 		try {
-			Signature privateSignature = Signature.getInstance(algorithm);
+			java.security.Signature privateSignature = java.security.Signature.getInstance(algorithm);
 			pk = readPrivateKey(privateKey);
 			privateSignature.initSign(pk);
 			return privateSignature;
@@ -530,7 +530,7 @@ public final class CryptoLimericks {
 			}
 			return true;
 		} else {
-			Signature sig = getPublicSignature(algorithm, key);
+			java.security.Signature sig = getPublicSignature(algorithm, key);
 			try {
 				sig.update(value.getBytes(finalCharset));
 				return sig.verify(signature);

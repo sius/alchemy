@@ -1,6 +1,7 @@
 package liquer.alchemy.crypto.xml;
 
 import liquer.alchemy.crypto.Identifier;
+import liquer.alchemy.crypto.xml.core.PrefixNamespaceTuple;
 
 import java.util.ArrayList;
 import java.util.Collections;

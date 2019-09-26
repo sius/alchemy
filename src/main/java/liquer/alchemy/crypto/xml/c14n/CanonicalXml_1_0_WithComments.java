@@ -1,17 +1,17 @@
 package liquer.alchemy.crypto.xml.c14n;
 
 import liquer.alchemy.crypto.Identifier;
-import liquer.alchemy.crypto.xml.CharacterEncoder;
-import liquer.alchemy.crypto.xml.PrefixNamespaceTuple;
-import liquer.alchemy.crypto.xml.XmlUtil;
+import liquer.alchemy.crypto.xml.core.CharacterEncoder;
+import liquer.alchemy.crypto.xml.core.PrefixNamespaceTuple;
+import liquer.alchemy.crypto.xml.XmlSupport;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.*;
 
-import static liquer.alchemy.util.Pedantic.isNullOrEmpty;
-import static liquer.alchemy.util.Pedantic.notNullOrEmpty;
+import static liquer.alchemy.support.StringSupport.isNullOrEmpty;
+import static liquer.alchemy.support.StringSupport.notNullOrEmpty;
 
 public class CanonicalXml_1_0_WithComments implements CanonicalXml {
 
@@ -26,7 +26,7 @@ public class CanonicalXml_1_0_WithComments implements CanonicalXml {
     public Node apply(Node node, CanonicalOptions options) {
         final CanonicalOptions o = options == null ? new CanonicalOptions() : options;
 
-        return XmlUtil.toDocument(buildRecursively(
+        return XmlSupport.toDocument(buildRecursively(
             node,
             new HashSet<>(),
             o.getDefaultNamespaceURI(),
@@ -69,7 +69,7 @@ public class CanonicalXml_1_0_WithComments implements CanonicalXml {
                     defaultNsForPrefix,
                     new ArrayList<>()));
         }
-        return XmlUtil.buildEndTag(ret, nodeTagName);
+        return XmlSupport.buildEndTag(ret, nodeTagName);
     }
 
     /*
@@ -102,7 +102,7 @@ public class CanonicalXml_1_0_WithComments implements CanonicalXml {
             }
         } else if (!defaultNamespaceURI.equals(currentNamespaceURI)) {
             newDefaultNamespaceURI = nodeNamespaceURI;
-            XmlUtil.buildAttribute(builder, "xmlns", newDefaultNamespaceURI);
+            XmlSupport.buildAttribute(builder, "xmlns", newDefaultNamespaceURI);
         }
 
         // handle the attributes namespace
@@ -152,7 +152,7 @@ public class CanonicalXml_1_0_WithComments implements CanonicalXml {
         nsTupleListToBuild.sort(this::compareNamespace);
 
         for (PrefixNamespaceTuple t : nsTupleListToBuild) {
-            XmlUtil.buildAttribute(builder, " xmlns:" + t.prefix, t.namespaceURI);
+            XmlSupport.buildAttribute(builder, " xmlns:" + t.prefix, t.namespaceURI);
         }
 
         return new NamespacesTuple(builder, newDefaultNamespaceURI);

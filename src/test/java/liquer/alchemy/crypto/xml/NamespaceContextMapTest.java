@@ -1,5 +1,6 @@
 package liquer.alchemy.crypto.xml;
 
+import liquer.alchemy.crypto.xml.core.NamespaceContextMap;
 import org.junit.Assert;
 import org.junit.Test;
 
