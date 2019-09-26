@@ -2,7 +2,178 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9a224a91-cfee-4429-99c9-ba87175ed345" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/alembic.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/src/test/java/liquer/alchemy/alembic/StringSupportTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alkahest/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/athanor/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/standalone/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/standalone/src/main/resources/log4j2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/classAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/jarAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/jarAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/alembic/ActionParams.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/ActionParams.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/alembic/BinarySupport.java" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/src/main/java/liquer/alchemy/alembic/BinarySupport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/alembic/CaseFlavorSupport.java" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/src/main/java/liquer/alchemy/alembic/CaseFlavorSupport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/alembic/DigestInputStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/src/main/java/liquer/alchemy/alembic/DigestInputStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/alembic/Inflector.java" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/src/main/java/liquer/alchemy/alembic/Inflector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/alembic/MultiDigestInputStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/src/main/java/liquer/alchemy/alembic/MultiDigestInputStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/alembic/MultipartFormInputStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/src/main/java/liquer/alchemy/alembic/MultipartFormInputStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/alembic/RackSupport.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/RackSupport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/alembic/Tuple.java" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/src/main/java/liquer/alchemy/alembic/Tuple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/alembic/TypedMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/TypedMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/alembic/Yash.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/Yash.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/alkahest/Collectors.java" beforeDir="false" afterPath="$PROJECT_DIR$/alkahest/src/main/java/liquer/alchemy/alkahest/Collectors.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/alkahest/Func.java" beforeDir="false" afterPath="$PROJECT_DIR$/alkahest/src/main/java/liquer/alchemy/alkahest/Func.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/json/Json.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/json/Json.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/json/JsonDateFormat.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/json/JsonDateFormat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/json/JsonIndentWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/json/JsonIndentWriter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/json/JsonReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/json/JsonReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/json/JsonWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/json/JsonWriter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/reflect/Athanor.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/reflect/Athanor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/reflect/Attr.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/reflect/Attr.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/reflect/FieldDrain.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/reflect/FieldDrain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/reflect/FieldSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/reflect/FieldSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/reflect/FurnaceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/reflect/FurnaceConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/reflect/FurnaceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/reflect/FurnaceManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/reflect/IDrain.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/reflect/IDrain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/reflect/ISource.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/reflect/ISource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/reflect/MethodDrain.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/reflect/MethodDrain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/reflect/MethodSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/reflect/MethodSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/reflect/Projection.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/reflect/Projection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/athanor/reflect/TypeMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/java/liquer/alchemy/athanor/reflect/TypeMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/CryptoLimericks.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/CryptoLimericks.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/Identifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/Identifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/KeyRing.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/KeyRing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/Signature.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/Signature.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/alg/Algorithm.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/alg/Algorithm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/alg/HashAlgorithm.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/alg/HashAlgorithm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/alg/SignatureAlgorithm.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/alg/SignatureAlgorithm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/ec/BasePoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/ec/BasePoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/ec/ECDomainParameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/ec/ECDomainParameters.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/ec/ECDomainParameters.json" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/ec/ECDomainParameters.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/ec/ECNamedCurve.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/ec/ECNamedCurve.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/ec/ECNickname.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/ec/ECNickname.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/ec/NamedCurveParameterSpec.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/ec/NamedCurveParameterSpec.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwk/Jwk.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwk/Jwk.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwk/JwkParameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwk/JwkParameter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwk/KeyOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwk/KeyOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwk/KeyType.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwk/KeyType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwk/PublicKeyUse.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwk/PublicKeyUse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwk/X509CertificateChain.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwk/X509CertificateChain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwt/Jwt.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwt/Jwt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwt/JwtCheckResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwt/JwtCheckResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwt/JwtCustomParameterCheckResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwt/JwtCustomParameterCheckResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwt/JwtHeader.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwt/JwtHeader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwt/JwtParameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwt/JwtParameter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwt/JwtParameterCheckResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwt/JwtParameterCheckResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwt/JwtPayload.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwt/JwtPayload.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwt/JwtValidationResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwt/JwtValidationResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/json/jwt/NumericDate.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/json/jwt/NumericDate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/pwd/CPbkdf2.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/pwd/CPbkdf2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/pwd/PasswordHash.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/pwd/PasswordHash.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/sig/url/SimpleURLSigner.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/sig/url/SimpleURLSigner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/sig/url/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/sig/url/Token.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/sig/v4/CanonicalHeaders.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/sig/v4/CanonicalHeaders.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/sig/v4/CanonicalRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/sig/v4/CanonicalRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/sig/v4/CanonicalURI.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/sig/v4/CanonicalURI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/sig/v4/CredentialScope.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/sig/v4/CredentialScope.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/sig/v4/SignString.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/sig/v4/SignString.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/sig/v4/SignV4Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/sig/v4/SignV4Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/Algorithms.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/Algorithms.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/FileKeyInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/FileKeyInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/Hash.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/Hash.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/KeyInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/KeyInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/URLKeyInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/URLKeyInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/X509Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/X509Data.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/XPathSupport.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/XPathSupport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/XmlReference.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/XmlReference.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/XmlSigner.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/XmlSigner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/XmlSignerOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/XmlSignerOptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/XmlSupport.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/XmlSupport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalOptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_0_OmitComments.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_0_OmitComments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_0_WithComments.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_0_WithComments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_1_OmitComments.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_1_OmitComments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_1_WithComments.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_1_WithComments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/c14n/Canonicalization.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/c14n/Canonicalization.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/c14n/EnvelopedSignature.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/c14n/EnvelopedSignature.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/c14n/ExclusiveCanonicalXml_1_0_OmitComments.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/c14n/ExclusiveCanonicalXml_1_0_OmitComments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/c14n/ExclusiveCanonicalXml_1_0_WithComments.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/c14n/ExclusiveCanonicalXml_1_0_WithComments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/c14n/NamespaceTuple.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/c14n/NamespaceTuple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/core/ActionTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/core/ActionTypes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/core/CharacterEncoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/core/CharacterEncoder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/core/EOL.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/core/EOL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/core/EOLStringWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/core/EOLStringWriter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/core/Location.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/core/Location.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/core/NamespaceContextMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/core/NamespaceContextMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/core/NodeListImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/core/NodeListImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/core/NodeReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/core/NodeReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/core/PrefixNamespaceTuple.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/core/PrefixNamespaceTuple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/core/SignatureOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/core/SignatureOptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/core/X509DataImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/core/X509DataImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/ext/EncoderOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/ext/EncoderOptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/ext/HashOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/ext/HashOptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/Assertion.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/Assertion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/Attribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/Attribute.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/AttributeStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/AttributeStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/AudienceRestriction.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/AudienceRestriction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/Conditions.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/Conditions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/DateTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/DateTime.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/DefaultNamespaceContextMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/DefaultNamespaceContextMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/EnvelopedKeyInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/EnvelopedKeyInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/SamlValidationResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/SamlValidationResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/Signature.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/Signature.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/Subject.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/Subject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/core/AssertionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/core/AssertionFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/core/AttributeImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/core/AttributeImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/core/AttributeStatementImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/core/AttributeStatementImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/core/AudienceRestrictionImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/core/AudienceRestrictionImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/core/ConditionsImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/core/ConditionsImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/core/DateTimeImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/core/DateTimeImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/core/SignatureImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/core/SignatureImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/crypto/xml/saml/core/SubjectImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/xml/saml/core/SubjectImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/support/BaseN.java" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/src/main/java/liquer/alchemy/alembic/BaseN.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/support/IOSupport.java" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/src/main/java/liquer/alchemy/alembic/IOSupport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/liquer/alchemy/support/StringSupport.java" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/src/main/java/liquer/alchemy/alembic/StringSupport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/furnace.json" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/resources/furnace.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/main/resources/log4j2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/athanor/json/JsonAssignMaps.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/test/java/liquer/alchemy/athanor/json/JsonAssignMaps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/athanor/json/JsonAssignPrimitives.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/test/java/liquer/alchemy/athanor/json/JsonAssignPrimitives.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/athanor/json/JsonDateFormatTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/test/java/liquer/alchemy/athanor/json/JsonDateFormatTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/athanor/json/JsonReaderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/test/java/liquer/alchemy/athanor/json/JsonReaderTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/athanor/json/JsonTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/test/java/liquer/alchemy/athanor/json/JsonTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/athanor/json/JsonWriteTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/test/java/liquer/alchemy/athanor/json/JsonWriteTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/athanor/reflect/AthanorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/test/java/liquer/alchemy/athanor/reflect/AthanorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/athanor/reflect/FurnaceManagerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/test/java/liquer/alchemy/athanor/reflect/FurnaceManagerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/athanor/reflect/TestContract.java" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/test/java/liquer/alchemy/athanor/reflect/TestContract.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/crypto/ec/ECDomainParametersTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/test/java/liquer/alchemy/crypto/ec/ECDomainParametersTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/crypto/json/jwt/JwtTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/test/java/liquer/alchemy/crypto/json/jwt/JwtTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/crypto/sig/v4/SimpleURLSignerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/test/java/liquer/alchemy/crypto/sig/v4/SimpleURLSignerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/crypto/xml/NamespaceContextMapTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/test/java/liquer/alchemy/crypto/xml/NamespaceContextMapTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/crypto/xml/TestConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/test/java/liquer/alchemy/crypto/xml/TestConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/crypto/xml/XmlSignerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/test/java/liquer/alchemy/crypto/xml/XmlSignerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/support/BaseNTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/src/test/java/liquer/alchemy/alembic/BaseNTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/liquer/alchemy/support/StringSupportTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/client.pem" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/test/resources/client.pem" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/client_public.pem" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/test/resources/client_public.pem" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/furnace.json" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/test/resources/furnace.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/furnaceCET.json" beforeDir="false" afterPath="$PROJECT_DIR$/athanor/src/test/resources/furnaceCET.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/library.xml" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/test/resources/library.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/library_pretty.xml" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/test/resources/library_pretty.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/library_signed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/standalone/src/test/resources/library_signed.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -36,16 +207,6 @@
                 <item name="alchemy" type="f1a62948:ProjectNode" />
                 <item name="Source Sets" type="e897c970:GradleViewContributor$SourceSetsNode" />
               </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="alchemy" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="alchemy" type="f1a62948:ProjectNode" />
-                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
-              </path>
             </expand>
             <select />
           </tree_state>
@@ -68,9 +229,15 @@
     <option name="version" value="1" />
   </component>
   <component name="ProjectId" id="1RMdmSbqN8ifePU3QwaxMLcFp6W" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/athanor/src/test/java" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/athanor/src/main/resources" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.14814812" />
     <property name="project.structure.side.proportion" value="0.3051643" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
@@ -82,11 +249,23 @@
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="liquer.alchemy.alembic" />
-      <recent name="liquer.alchemy.crypto.xml.ext" />
       <recent name="liquer.alchemy.athanor" />
+      <recent name="liquer.alchemy.crypto.xml.ext" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/athanor/src/main/resources" />
+      <recent name="$PROJECT_DIR$/alembic/src/main/java" />
+      <recent name="$PROJECT_DIR$/standalone/src/test/resources" />
+      <recent name="$PROJECT_DIR$/standalone/src/test/java" />
+      <recent name="$PROJECT_DIR$/standalone/src/main/java" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="liquer.alchemy.alembic" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/athanor/src/test/resources" />
+      <recent name="$PROJECT_DIR$/standalone/src/main/resources" />
+      <recent name="$PROJECT_DIR$/standalone" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -102,48 +281,32 @@
     </option>
   </component>
   <component name="RunManager" selected="JUnit.XmlSignerTest">
-    <configuration name="Tests in 'alchemy.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="--tests *" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":cleanTest" />
-            <option value=":test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>false</GradleScriptDebugEnabled>
-      <method v="2" />
+    <configuration name="All in alchemy.alembic.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="alchemy.alembic.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration name="Tests in 'liquer.alchemy.athanor'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="--tests &quot;liquer.alchemy.athanor.*&quot;" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":cleanTest" />
-            <option value=":test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>false</GradleScriptDebugEnabled>
-      <method v="2" />
+    <configuration name="All in alchemy.alkahest.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="alchemy.alkahest.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
-    <configuration name="All in alchemy.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="alchemy.test" />
+    <configuration name="All in alchemy.athanor.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="alchemy.athanor.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in alchemy.standalone.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="alchemy.standalone.test" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
       <method v="2">
@@ -151,10 +314,10 @@
       </method>
     </configuration>
     <configuration name="XmlSignerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="alchemy.test" />
+      <module name="alchemy.standalone.test" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="liquer.alchemy.crypto.xml.core.*" />
+          <option name="PATTERN" value="liquer.alchemy.crypto.xml.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -168,9 +331,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.XmlSignerTest" />
-        <item itemvalue="JUnit.All in alchemy.test" />
-        <item itemvalue="Gradle.Tests in 'alchemy.test'" />
-        <item itemvalue="Gradle.Tests in 'liquer.alchemy.athanor'" />
+        <item itemvalue="JUnit.All in alchemy.standalone.test" />
+        <item itemvalue="JUnit.All in alchemy.athanor.test (1)" />
+        <item itemvalue="JUnit.All in alchemy.alkahest.test (1)" />
+        <item itemvalue="JUnit.All in alchemy.alembic.test (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -199,5 +363,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>

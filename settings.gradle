@@ -1,2 +1,6 @@
 rootProject.name = 'alchemy'
+include 'alkahest'
+include 'standalone'
+include 'alembic'
+include 'athanor'
 
