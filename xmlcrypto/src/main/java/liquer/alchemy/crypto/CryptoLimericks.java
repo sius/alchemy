@@ -476,7 +476,7 @@ public final class CryptoLimericks {
 	 * @return
 	 */
 	public static byte[] convertPEMToDER(final String pem) {
-		List<String> lines = new LinkedList(Arrays.asList(pem.split("\n")));
+		List<String> lines = new LinkedList<>(Arrays.asList(pem.split("\n")));
 		String header = lines.remove(0).trim();
 		String footer = lines.remove(lines.size() - 1).trim();
 		String type;
