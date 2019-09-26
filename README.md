@@ -1,9 +1,20 @@
-# Java Playground
+# Alchemy
+
+Java Playground
+
+Modules:
+- `alembic` (an alchemical stills used for distilling)
+- `alkahest` (an universal solvent)
+- `athanor` (alchemical furnace)
+- `crypto`
+- `xmlcrypto`
 
 - Dynamic Typing
     - Deep cloning and convert almost any type into an other
+
 - JSON 
     - parse and write JSON
+    
 - Cryptography
     - Crypto Limericks
     - SigV4
@@ -92,7 +103,7 @@ public class SAML2ValidatorApp {
             final Assertion assertion = AssertionFactory.of(signedXml, new DefaultNamespaceContextMap());
             
             long start = System.currentTimeMillis();
-            SamlVerificationResult result = assertion.verifySignature(signedXml);
+            SamlValidationResult result = assertion.verifySignature(signedXml);
             
             System.out.println("verify assertion signature: " + (System.currentTimeMillis() - start) + " ms");
             

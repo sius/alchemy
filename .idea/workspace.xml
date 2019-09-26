@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9a224a91-cfee-4429-99c9-ba87175ed345" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/alembic/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alkahest/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/athanor/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/crypto/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xmlcrypto/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/alkahest/Func.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/resources/log4j2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/alembic/BaseN.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/alembic/IOSupport.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/alembic/StringSupport.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" afterDir="false" />
@@ -18,12 +14,9 @@
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/xmlcrypto/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/ext/EncoderOptions.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/ext/HashOptions.java" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -106,9 +99,9 @@
       <recent name="$PROJECT_DIR$/standalone/src/main/java/liquer/alchemy/crypto/ext" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="liquer.alchemy.alembic" />
       <recent name="liquer.alchemy.alkahest" />
       <recent name="liquer.alchemy.crypto.xml.ext" />
-      <recent name="liquer.alchemy.alembic" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/crypto/src/main/resources" />
@@ -129,7 +122,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.alchemy [writeNewPom]">
+  <component name="RunManager" selected="JUnit.All in alchemy.xmlcrypto.test (1)">
     <configuration name="alchemy [properties]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -176,7 +169,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="All in alchemy.xmlcrypto.test (3)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="All in alchemy.xmlcrypto.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="alchemy.xmlcrypto.test" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
@@ -194,11 +187,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.All in alchemy.xmlcrypto.test (1)" />
         <item itemvalue="Gradle.alchemy [writeNewPom]" />
         <item itemvalue="Gradle.alchemy [properties]" />
         <item itemvalue="JUnit.All in alchemy.crypto.test" />
         <item itemvalue="JUnit.All in alchemy.xmlcrypto.test" />
-        <item itemvalue="JUnit.All in alchemy.xmlcrypto.test (3)" />
       </list>
     </recent_temporary>
   </component>
