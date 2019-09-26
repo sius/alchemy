@@ -40,5 +40,7 @@ gradle-app.setting
 .gradletasknamecache
 
 .attach_*
+src/
+test/
 /**/target/
 
