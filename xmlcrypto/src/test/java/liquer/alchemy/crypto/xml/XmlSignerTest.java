@@ -1,8 +1,8 @@
 package liquer.alchemy.crypto.xml;
 
+import liquer.alchemy.alkahest.Func.*;
 import liquer.alchemy.crypto.xml.saml.Assertion;
 import liquer.alchemy.crypto.xml.saml.DefaultNamespaceContextMap;
-import liquer.alchemy.crypto.xml.saml.SamlValidationResult;
 import liquer.alchemy.crypto.xml.saml.core.AssertionFactory;
 import liquer.alchemy.alembic.BaseN;
 import liquer.alchemy.alembic.IOSupport;
@@ -11,19 +11,20 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import javax.xml.namespace.NamespaceContext;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
 public class XmlSignerTest {
 
+
     @Test
     public void signXml() throws IOException {
-        KeyInfo info = new URLKeyInfo(getClass().getResource("/client.pem"));
 
-        String xml =  IOSupport.toString(getClass().getResource("/library.xml"));
-        String expected =  IOSupport.toString(getClass().getResource("/library_signed.xml"));
+        final KeyInfo info = new URLKeyInfo(getClass().getResource("/client.pem"));
+        final String xml =  IOSupport.toString(getClass().getResource("/library.xml"));
+        final String expected =  IOSupport.toString(getClass().getResource("/library_signed.xml"));
 
         long start = System.currentTimeMillis();
         XmlSigner xmlSigner = new XmlSigner();
@@ -31,57 +32,134 @@ public class XmlSignerTest {
         xmlSigner.addReference("//*[local-name(.)='book']");
         xmlSigner.computeSignature(xml);
         long end = System.currentTimeMillis();
-        System.out.println("sign xml: " + (end - start) + " ms");
+        System.out.println("sign xml with closure: " + (end - start) + " ms");
         final String actual = xmlSigner.getSignedXml();
 
-        // System.out.println(expected);
-        // System.out.println(actual);
         Assert.assertEquals(expected, actual);
     }
 
     @Test
-    public void verifyXml() throws IOException {
-        KeyInfo publicKeyInfo = new URLKeyInfo(getClass().getResource("/client_public.pem"));
+    public void signXmlWithClosure() throws IOException {
 
-        String signedXml = IOSupport.toString(getClass().getResource("/library_signed.xml"));
-        Document doc = XmlSupport.toDocument(signedXml);
-        Node signature = XPathSupport.selectFirst(doc, "/*/*[local-name(.)='Signature' and namespace-uri(.)='http://www.w3.org/2000/09/xmldsig#']");
+        final Func4<XmlSigner, KeyInfo, String, String, String> sign =
+            (xmlSigner, info, ref, xml) -> {
+                xmlSigner.setSigningKey(info.getKey());
+                xmlSigner.addReference(ref);
+                xmlSigner.computeSignature(xml);
+                return xmlSigner.getSignedXml();
+            };
 
-        XmlSigner xmlSigner = new XmlSigner();
-        xmlSigner.loadSignature(signature);
+        final long start = System.currentTimeMillis();
+        final String actual = sign
+            .apply(new XmlSigner())
+            .apply(new URLKeyInfo(getClass().getResource("/client.pem")))
+            .apply("//*[local-name(.)='book']")
+            .apply(IOSupport.toString(getClass().getResource("/library.xml")));
 
-        long start = System.currentTimeMillis();
-        xmlSigner.setKeyInfoProvider(publicKeyInfo);
-        boolean valid = xmlSigner.verifySignature(signedXml);
-        long end = System.currentTimeMillis();
+        System.out.println("sign xml: " + (System.currentTimeMillis() - start) + " ms");
+        final String expected =  IOSupport.toString(getClass().getResource("/library_signed.xml"));
 
-        System.out.println("verify xml: " + (end - start) + " ms");
-
-        if (!valid) {
-            String validationErrors = xmlSigner.getValidationErrors().stream().collect(
-                    Collectors.joining("\n"));
-            System.out.println(validationErrors);
-        }
-        Assert.assertTrue(valid);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    public void verifyAssertion() {
+    public void validateXml() throws IOException {
+        final KeyInfo publicKeyInfo = new URLKeyInfo(getClass().getResource("/client_public.pem"));
+
+        final String signedXml = IOSupport.toString(getClass().getResource("/library_signed.xml"));
+        final Document doc = XmlSupport.toDocument(signedXml);
+        final Node signature = XPathSupport.selectFirst(doc, "/*/*[local-name(.)='Signature' and namespace-uri(.)='http://www.w3.org/2000/09/xmldsig#']");
+
+        final long start = System.currentTimeMillis();
+        final XmlSigner xmlSigner = new XmlSigner();
+        xmlSigner.loadSignature(signature);
+        xmlSigner.setKeyInfoProvider(publicKeyInfo);
+        final ValidationResult result = xmlSigner.validateSignature(signedXml);
+
+        System.out.println("validate xml: " + (System.currentTimeMillis() - start) + " ms");
+
+        if (!result.isValidToken()) {
+            final String validationErrors =
+                    String.join("\n", result.getValidationErrors());
+            System.out.println(validationErrors);
+        }
+        Assert.assertTrue(result.isValidSignature());
+    }
+
+    @Test
+    public void validateXmlWithClosure() throws IOException {
+
+        final Func4<XmlSigner, KeyInfo, String, String, ValidationResult> validate =
+            (xmlSigner, info, signedXml, xpath) -> {
+                final Document doc = XmlSupport.toDocument(signedXml);
+                final Node signature = XPathSupport.selectFirst(doc, xpath);
+                xmlSigner.setKeyInfoProvider(info);
+                xmlSigner.loadSignature(signature);
+                return xmlSigner.validateSignature(signedXml);
+            };
+
+        final long start = System.currentTimeMillis();
+        final ValidationResult result = validate
+            .apply(new XmlSigner())
+            .apply(new URLKeyInfo(getClass().getResource("/client_public.pem")))
+            .apply(IOSupport.toString(getClass().getResource("/library_signed.xml")))
+            .apply("/*/*[local-name(.)='Signature' and namespace-uri(.)='http://www.w3.org/2000/09/xmldsig#']");
+
+        System.out.println("validate xml with closure: " + (System.currentTimeMillis() - start) + " ms");
+
+        if (!result.isValidToken()) {
+            final String validationErrors =
+                    String.join("\n", result.getValidationErrors());
+            System.out.println(validationErrors);
+        }
+        Assert.assertTrue(result.isValidSignature());
+    }
+
+    @Test
+    public void validateAssertion() {
 
         try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(TestConstants.SAML_TOKEN))) ) {
-            String signedXml = IOSupport.toString(in);
-            // System.out.println(signedXml);
 
+            final long start = System.currentTimeMillis();
+            final String signedXml = IOSupport.toString(in);
             final Assertion assertion = AssertionFactory.of(signedXml, new DefaultNamespaceContextMap());
+            final ValidationResult result = assertion.validateSignature(signedXml);
 
-            long start = System.currentTimeMillis();
-            SamlValidationResult result = assertion.verifySignature(signedXml);
-
-            System.out.println("verify assertion signature: " + (System.currentTimeMillis() - start) + " ms");
+            System.out.println("validate assertion: " + (System.currentTimeMillis() - start) + " ms");
 
             if (!result.isValidToken()) {
-                String validationErrors = assertion.getXmlSigner().getValidationErrors().stream().collect(
-                        Collectors.joining("\n"));
+                final String validationErrors =
+                    String.join("\n", result.getValidationErrors());
+                System.out.println(validationErrors);
+            }
+
+            Assert.assertTrue(result.isValidSignature());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void validateAssertionWithClosure() {
+
+        try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(TestConstants.SAML_TOKEN))) ) {
+
+            final Func2<String, NamespaceContext, ValidationResult> validate =
+                (signedXml, nsCtx) ->
+                        AssertionFactory.of(signedXml, nsCtx)
+                                .validateSignature(signedXml);
+
+            final long start = System.currentTimeMillis();
+            final ValidationResult result = validate
+                .apply(IOSupport.toString(in))
+                .apply(new DefaultNamespaceContextMap());
+
+            System.out.println("validate assertion with closure: " + (System.currentTimeMillis() - start) + " ms");
+
+            if (!result.isValidToken()) {
+                final String validationErrors =
+                    String.join("\n", result.getValidationErrors());
                 System.out.println(validationErrors);
             }
 

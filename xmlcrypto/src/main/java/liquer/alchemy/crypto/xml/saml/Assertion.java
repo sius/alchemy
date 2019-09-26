@@ -1,5 +1,6 @@
 package liquer.alchemy.crypto.xml.saml;
 
+import liquer.alchemy.crypto.xml.ValidationResult;
 import liquer.alchemy.crypto.xml.XmlSigner;
 
 import java.util.List;
@@ -20,5 +21,5 @@ public interface Assertion {
 
     XmlSigner getXmlSigner();
 
-    SamlValidationResult verifySignature(String signature);
+    ValidationResult validateSignature(String signature);
 }

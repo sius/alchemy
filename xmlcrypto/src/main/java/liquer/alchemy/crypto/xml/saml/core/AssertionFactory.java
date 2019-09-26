@@ -134,20 +134,7 @@ public class AssertionFactory extends NodeReader implements Assertion {
     }
 
     @Override
-    public SamlValidationResult verifySignature(String xml) {
-
-        final boolean validSignature = xmlSigner.verifySignature(xml);
-        final List<String> validationErrors = xmlSigner.getValidationErrors();
-        return new SamlValidationResult() {
-
-            @Override
-            public boolean isValidSignature() { return validSignature; }
-
-            @Override
-            public boolean isValidToken() { return validationErrors.isEmpty(); }
-
-            @Override
-            public List<String> getValidationErrors() { return validationErrors; }
-        };
+    public ValidationResult validateSignature(String xml) {
+        return xmlSigner.validateSignature(xml);
      }
 }

@@ -33,7 +33,7 @@ import java.util.stream.StreamSupport;
 import static liquer.alchemy.crypto.xml.core.EOL.LF;
 import static liquer.alchemy.alembic.StringSupport.notNullOrEmpty;
 
-public class XmlSupport {
+public final class XmlSupport {
 
     private static final Logger LOG = LogManager.getLogger(XmlSupport.class);
     private final static DocumentBuilderFactory DBF;
@@ -87,7 +87,7 @@ public class XmlSupport {
 
     public static String stringify(Node node, boolean ensureEmptyTags, EOL eol) {
 
-        StringWriter sw = new EOLStringWriter(eol);
+        final StringWriter sw = new EOLStringWriter(eol);
         try {
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer t = factory.newTransformer();
@@ -102,7 +102,7 @@ public class XmlSupport {
 
     public static Document toDocument(String xml) {
         try {
-            Document ret = DBF.newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
+            final Document ret = DBF.newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
             ret.normalizeDocument();
 
             return ret;
@@ -112,7 +112,7 @@ public class XmlSupport {
     }
 
     public static Document toWrappedDocument(String wrapperElementName, String prefixes, String xml) {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append('<');
         builder.append(wrapperElementName);
         if (notNullOrEmpty(prefixes)) {

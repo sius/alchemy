@@ -125,11 +125,11 @@ public final class XmlSigner extends NodeReader {
         this.keyInfoProvider = keyInfoProvider;
     }
 
-    public List<String> getValidationErrors() {
-        return validationErrors;
-    }
-
-    public synchronized void loadSignature(Node signatureNode) {
+    /**
+     * synchronized?
+     * @param signatureNode
+     */
+    public void loadSignature(Node signatureNode) {
         if (signatureNode == null) {
             throw new IllegalArgumentException("Argument 'signatureNode' cannot be null");
         }
@@ -165,7 +165,12 @@ public final class XmlSigner extends NodeReader {
         }
     }
 
-    public synchronized boolean verifySignature(String xml) {
+    /**
+     * synchronized?
+     * @param xml
+     * @return
+     */
+    public ValidationResult validateSignature(String xml) {
 
         this.validationErrors = new ArrayList<>();
         this.signedXml = xml;
@@ -179,12 +184,28 @@ public final class XmlSigner extends NodeReader {
             throw new RuntimeException("Could not resolve key info: " + this.keyInfo);
         }
 
-        Document doc = XmlSupport.toDocument(xml);
-        return validateReferences(doc) && validateSignatureValue(doc);
+        final Document doc = XmlSupport.toDocument(xml);
+
+        final boolean validSignature =
+                validateReferences(doc) && validateSignatureValue(doc);
+
+        final List<String> validationErrors = Collections.unmodifiableList(this.validationErrors);
+
+        return new ValidationResult() {
+
+            @Override
+            public boolean isValidSignature() { return validSignature; }
+
+            @Override
+            public boolean isValidToken() { return validationErrors.isEmpty(); }
+
+            @Override
+            public List<String> getValidationErrors() { return validationErrors; }
+        };
     }
 
     public void addReference(String xpathExpression) {
-        XmlReference ref = new XmlReference();
+        final XmlReference ref = new XmlReference();
         ref.setXpathExpression(xpathExpression);
         this.references.add(ref);
     }
@@ -198,7 +219,7 @@ public final class XmlSigner extends NodeReader {
             List<String> inclusiveNamespacesPrefixList,
             boolean isEmptyUri) {
 
-        XmlReference ref = new XmlReference();
+        final XmlReference ref = new XmlReference();
         ref.setXpathExpression(xpathExpression);
         ref.setTransforms(transforms);
         ref.setDigestAlgorithm(digestAlgorithm);
@@ -211,33 +232,38 @@ public final class XmlSigner extends NodeReader {
     }
 
     public void addReference(XmlReference ref) {
-        ref = ref == null ? new XmlReference() : ref;
-        this.references.add(ref);
+        final XmlReference newRef = ref == null ? new XmlReference() : ref;
+        this.references.add(newRef);
     }
 
-    public synchronized void computeSignature(String xml) {
+    /**
+     * synchronized?
+     * @param xml
+     */
+    public void computeSignature(String xml) {
         computeSignature(xml, null);
     }
 
     /**
      * Compute the signature of the given xml (usign the already defined settings)
      *
+     * synchronized?
      * @param xml The xml String
      * @param options The signature options
      */
-    public synchronized void computeSignature(String xml, SignatureOptions options) {
+    public void computeSignature(String xml, SignatureOptions options) {
 
-        SignatureOptions finalOptions = options == null ? new SignatureOptions() : options;
+        final SignatureOptions finalOptions = options == null ? new SignatureOptions() : options;
 
-        Document doc = XmlSupport.toDocument(xml);
-        List<String> signatureAttrs = new ArrayList<>();
+        final Document doc = XmlSupport.toDocument(xml);
+        final List<String> signatureAttrs = new ArrayList<>();
 
-        String prefix = finalOptions.getPrefix();
-        Map<String, String> attrs = finalOptions.getAttrs();
-        Location location = finalOptions.getLocation();
-        Map<String, String> existingPrefixes = finalOptions.getExistingPrefixes();
+        final String prefix = finalOptions.getPrefix();
+        final Map<String, String> attrs = finalOptions.getAttrs();
+        final Location location = finalOptions.getLocation();
+        final Map<String, String> existingPrefixes = finalOptions.getExistingPrefixes();
         String xmlnsAttr = "xmlns";
-        String currentPrefix;
+        final String currentPrefix;
 
         // automatic insertion of `:`
         if (notNullOrEmpty(prefix)) {
@@ -257,14 +283,14 @@ public final class XmlSigner extends NodeReader {
         // add the xml namespace attribute
         signatureAttrs.add(buildAttribute(xmlnsAttr, Identifier.DEFAULT_NS_URI).toString());
 
-        StringBuilder signatureXml = new StringBuilder();
+        final StringBuilder signatureXml = new StringBuilder();
         signatureXml.append('<');
         signatureXml.append(currentPrefix);
         signatureXml.append("Signature ");
         signatureXml.append(String.join(" ", signatureAttrs));
         signatureXml.append('>');
 
-        String signedInfo = createSignedInfo(doc, prefix);
+        final String signedInfo = createSignedInfo(doc, prefix);
         signatureXml.append(signedInfo);
         signatureXml.append(getKeyInfo(prefix));
         signatureXml.append("</");
@@ -274,7 +300,7 @@ public final class XmlSigner extends NodeReader {
 
         this.originalXmlWithIds = XmlSupport.stringify(doc); // xml; //
 
-        StringBuilder existingPrefixesBuilder = new StringBuilder();
+        final StringBuilder existingPrefixesBuilder = new StringBuilder();
 
         existingPrefixes.forEach((key, value) -> {
             buildAttribute(existingPrefixesBuilder, "xmlns:" + key, value);
@@ -282,10 +308,10 @@ public final class XmlSigner extends NodeReader {
 
         // A trick to remove the namespaces that already exist in the xml
         // This only works if the prefix and namespace match with those in the xml
-        Document wrappedDoc = XmlSupport.toWrappedDocument("Dummy", existingPrefixesBuilder.toString(), signatureXml.toString());
-        Node firstChild = wrappedDoc.getDocumentElement().getFirstChild().cloneNode(true);
-        Node signatureDoc = doc.adoptNode(firstChild);
-        Node referenceNode = this.select.apply(doc, location.getReference())
+        final Document wrappedDoc = XmlSupport.toWrappedDocument("Dummy", existingPrefixesBuilder.toString(), signatureXml.toString());
+        final Node firstChild = wrappedDoc.getDocumentElement().getFirstChild().cloneNode(true);
+        final Node signatureDoc = doc.adoptNode(firstChild);
+        final Node referenceNode = this.select.apply(doc, location.getReference())
                 .findFirst()
                 .orElseThrow(() ->
                         new RuntimeException(
@@ -310,12 +336,12 @@ public final class XmlSigner extends NodeReader {
         this.signatureNode = signatureDoc;
         this.calculateSignatureValue(doc);
 
-        NodeList signedInfoNodes = XPathSupport.findNodeChildren(this.signatureNode, "SignedInfo");
+        final NodeList signedInfoNodes = XPathSupport.findNodeChildren(this.signatureNode, "SignedInfo");
         if (signedInfoNodes.getLength() == 0) {
             throw new RuntimeException("Could not find SignedInfo element in the message");
         }
 
-        Node signedInfoNode = signedInfoNodes.item(0);
+        final Node signedInfoNode = signedInfoNodes.item(0);
         signatureDoc.insertBefore(doc.adoptNode(this.createSignature(prefix)), signedInfoNode.getNextSibling());
 
         this.signatureXml = XmlSupport.stringify(signatureDoc);
