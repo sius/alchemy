@@ -1,3 +1,4 @@
+rootProject.name = 'alchemy'
 include 'alkahest'
 include 'alembic'
 include 'athanor'
