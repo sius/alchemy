@@ -9,15 +9,15 @@ allprojects {
     apply plugin: 'maven'
 
     group 'liquer.alchemy'
-    version = '1.0-SNAPSHOT'
+    version = '1.0.0-SNAPSHOT'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
     dependencies {
         testImplementation 'junit:junit:4.12'
-        implementation 'org.apache.logging.log4j:log4j-api:2.4'
-        implementation 'org.apache.logging.log4j:log4j-core:2.4'
+        compile 'org.apache.logging.log4j:log4j-api:2.4'
+        compile 'org.apache.logging.log4j:log4j-core:2.4'
     }
 
     tasks.withType(JavaCompile) {
@@ -53,7 +53,11 @@ allprojects {
                                 target '${java.version}'
                             }
                         }
-
+                        project {
+                            build {
+                                sourceEncoding 'UTF-8'
+                            }
+                        }
 
                     }
                 }
@@ -62,4 +66,3 @@ allprojects {
         }
     }
 }
-
