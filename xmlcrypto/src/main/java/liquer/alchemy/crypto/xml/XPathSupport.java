@@ -1,7 +1,7 @@
 package liquer.alchemy.crypto.xml;
 
-import liquer.alchemy.alkahest.Func.Func3;
-import liquer.alchemy.alkahest.Func.Func2;
+import liquer.alchemy.alkahest.Func2;
+import liquer.alchemy.alkahest.Func3;
 import liquer.alchemy.crypto.xml.core.NodeListImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,6 +1,7 @@
 package liquer.alchemy.crypto.xml;
 
-import liquer.alchemy.alkahest.Func.*;
+import liquer.alchemy.alkahest.Func2;
+import liquer.alchemy.alkahest.Func4;
 import liquer.alchemy.crypto.xml.saml.Assertion;
 import liquer.alchemy.crypto.xml.saml.DefaultNamespaceContextMap;
 import liquer.alchemy.crypto.xml.saml.core.AssertionFactory;
