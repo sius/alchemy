@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9a224a91-cfee-4429-99c9-ba87175ed345" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/classAnalysis.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/jarAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/jarAnalysis.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/XmlSigner.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/XmlSigner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/Assertion.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/Assertion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/SamlValidationResult.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/core/AssertionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/core/AssertionFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/xmlcrypto/src/test/java/liquer/alchemy/crypto/xml/XmlSignerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/test/java/liquer/alchemy/crypto/xml/XmlSignerTest.java" afterDir="false" />
     </list>
@@ -136,24 +124,13 @@
     </option>
   </component>
   <component name="RunManager" selected="JUnit.XmlSignerTest">
-    <configuration name="alchemy [writeNewPom]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="writeNewPom" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
+    <configuration name="All in alchemy.xmlcrypto.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="alchemy.xmlcrypto.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration name="XmlSignerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="alchemy.xmlcrypto.test" />
@@ -221,10 +198,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.XmlSignerTest" />
+        <item itemvalue="JUnit.All in alchemy.xmlcrypto.test" />
         <item itemvalue="JUnit.XmlSignerTest.verifyXmlWithClosure" />
         <item itemvalue="JUnit.XmlSignerTest.signXmlWithClosure" />
         <item itemvalue="JUnit.XmlSignerTest.signXml" />
-        <item itemvalue="Gradle.alchemy [writeNewPom]" />
       </list>
     </recent_temporary>
   </component>

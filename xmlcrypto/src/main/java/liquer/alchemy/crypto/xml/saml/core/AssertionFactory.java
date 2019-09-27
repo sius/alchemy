@@ -1,5 +1,6 @@
 package liquer.alchemy.crypto.xml.saml.core;
 
+import liquer.alchemy.crypto.xml.ValidationResult;
 import liquer.alchemy.crypto.xml.core.NodeReader;
 import liquer.alchemy.crypto.xml.core.EOL;
 import liquer.alchemy.crypto.xml.saml.*;
