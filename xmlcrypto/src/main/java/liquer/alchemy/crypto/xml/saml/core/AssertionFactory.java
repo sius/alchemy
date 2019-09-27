@@ -22,30 +22,30 @@ import java.util.stream.Stream;
  */
 public class AssertionFactory extends NodeReader implements Assertion {
 
-    public static Assertion of(InputStream in) throws IOException {
-        return of(in, null);
+    public static Assertion newReader(InputStream in) throws IOException {
+        return newReader(in, null);
     }
 
-    public static Assertion of(InputStream in, NamespaceContext context) throws IOException {
-        return of(IOSupport.toString(in), context);
+    public static Assertion newReader(InputStream in, NamespaceContext context) throws IOException {
+        return newReader(IOSupport.toString(in), context);
     }
 
-    public static Assertion of(String xml) {
-        return of(xml, new DefaultNamespaceContextMap());
+    public static Assertion newReader(String xml) {
+        return newReader(xml, new DefaultNamespaceContextMap());
     }
 
-    public static Assertion of(String xml, NamespaceContext context) {
+    public static Assertion newReader(String xml, NamespaceContext context) {
         EOL eol = (xml != null && xml.contains("\r\n"))
                 ? EOL.CRLF
                 : EOL.LF;
-        return of(XmlSupport.toDocument(xml), context, eol);
+        return newReader(XmlSupport.toDocument(xml), context, eol);
     }
 
-    public static Assertion of(Document doc, EOL eol) {
-        return of(doc, new DefaultNamespaceContextMap(), eol);
+    public static Assertion newReader(Document doc, EOL eol) {
+        return newReader(doc, new DefaultNamespaceContextMap(), eol);
     }
 
-    public static Assertion of(Document doc, NamespaceContext namespaceContext, EOL eol) {
+    public static Assertion newReader(Document doc, NamespaceContext namespaceContext, EOL eol) {
         return new AssertionFactory(doc, namespaceContext, eol);
     }
 

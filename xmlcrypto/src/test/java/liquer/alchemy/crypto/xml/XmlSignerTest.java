@@ -122,7 +122,7 @@ public class XmlSignerTest {
 
             final long start = System.currentTimeMillis();
             final String signedXml = IOSupport.toString(in);
-            final Assertion assertion = AssertionFactory.of(signedXml, new DefaultNamespaceContextMap());
+            final Assertion assertion = AssertionFactory.newReader(signedXml, new DefaultNamespaceContextMap());
             final ValidationResult result = assertion.validateSignature(signedXml);
 
             System.out.println("validate assertion: " + (System.currentTimeMillis() - start) + " ms");
@@ -147,7 +147,7 @@ public class XmlSignerTest {
 
             final Func2<String, NamespaceContext, ValidationResult> validate =
                 (signedXml, nsCtx) ->
-                        AssertionFactory.of(signedXml, nsCtx)
+                        AssertionFactory.newReader(signedXml, nsCtx)
                                 .validateSignature(signedXml);
 
             final long start = System.currentTimeMillis();
