@@ -1,7 +1,7 @@
 package liquer.alchemy.crypto.alg;
 
 import liquer.alchemy.alembic.BaseN;
-import liquer.alchemy.crypto.CryptoLimericks;
+import liquer.alchemy.crypto.CryptoSupport;
 import liquer.alchemy.crypto.opt.EncoderOptions;
 
 import java.nio.charset.StandardCharsets;
@@ -30,7 +30,7 @@ public interface SignatureAlgorithm extends Algorithm {
      */
     default String sign(String givenString, String signingKey, EncoderOptions options) {
     	final EncoderOptions finalOpts = options == null ? new EncoderOptions() : options;
-		return CryptoLimericks.sign(givenString, getName(), signingKey.getBytes(StandardCharsets.UTF_8), finalOpts.getCharset(), finalOpts.getEncoder());
+		return CryptoSupport.sign(givenString, getName(), signingKey.getBytes(StandardCharsets.UTF_8), finalOpts.getCharset(), finalOpts.getEncoder());
 	}
 
     /**
@@ -44,6 +44,6 @@ public interface SignatureAlgorithm extends Algorithm {
      */
     default boolean verify(String givenString, String key, String givenSignature, EncoderOptions options) {
 		final EncoderOptions finalOpts = options == null ? new EncoderOptions() : options;
-		return CryptoLimericks.verify(givenString, BaseN.base64Decode(givenSignature), getName(), key.getBytes(StandardCharsets.UTF_8), finalOpts.getCharset());
+		return CryptoSupport.verify(givenString, BaseN.base64Decode(givenSignature), getName(), key.getBytes(StandardCharsets.UTF_8), finalOpts.getCharset());
 	}
 }

@@ -3,6 +3,9 @@ package liquer.alchemy.crypto.xml.c14n;
 import liquer.alchemy.crypto.Identifier;
 import org.w3c.dom.Node;
 
+/**
+ * https://www.w3.org/TR/xml-c14n/
+ */
 public class CanonicalXml_1_1_WithComments implements CanonicalXml {
 
     @Override

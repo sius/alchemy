@@ -24,6 +24,7 @@ public class XmlSignerOptions {
     private List<String> implicitTransforms;
     private NamespaceContext namespaceContext;
     private EOL eol;
+    private boolean preferSelfClosingTag;
 
     public XmlSignerOptions() {
         setIdMode(null);
@@ -33,6 +34,15 @@ public class XmlSignerOptions {
         setImplicitTransforms(null);
         setNamespaceContext(new NamespaceContextMap());
         setEol(LF);
+        setPreferSelfClosingTag(false);
+    }
+
+    public boolean isPreferSelfClosingTag() {
+        return preferSelfClosingTag;
+    }
+
+    public void setPreferSelfClosingTag(boolean preferSelfClosingTag) {
+        this.preferSelfClosingTag = preferSelfClosingTag;
     }
 
     public EOL getEol() {

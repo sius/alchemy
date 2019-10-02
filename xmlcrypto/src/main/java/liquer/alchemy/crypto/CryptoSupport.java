@@ -38,10 +38,10 @@ import java.util.stream.Collectors;
  * http://empslocal.ex.ac.uk/people/staff/mrwatkin//isoc/huxleyNYClimericks.htm
  * found at http://stackoverflow.com/questions/4319496/how-to-encrypt-and-decrypt-data-in-java
  */
-public final class CryptoLimericks {
+public final class CryptoSupport {
 
 
-	private CryptoLimericks() { }
+	private CryptoSupport() { }
 
 
 	public static byte[] sign(String value, Signature algorithm, byte[] key) {

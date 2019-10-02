@@ -13,6 +13,9 @@ import java.util.*;
 import static liquer.alchemy.alembic.StringSupport.isNullOrEmpty;
 import static liquer.alchemy.alembic.StringSupport.notNullOrEmpty;
 
+/**
+ * https://www.w3.org/TR/2001/REC-xml-c14n-20010315
+ */
 public class CanonicalXml_1_0_WithComments implements CanonicalXml {
 
     /**

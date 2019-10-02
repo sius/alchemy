@@ -19,8 +19,7 @@ import static liquer.alchemy.alembic.StringSupport.isNullOrEmpty;
 import static liquer.alchemy.alembic.StringSupport.notNullOrEmpty;
 
 /**
- * Exclusive C14n Canonicalization with comments
- * Use Exclusive C14n to create Sign Strings
+ * http://www.w3.org/TR/xml-exc-c14n/
  */
 public class ExclusiveCanonicalXml_1_0_WithComments implements CanonicalXml {
 

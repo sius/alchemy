@@ -4,17 +4,25 @@ import liquer.alchemy.alkahest.Func2;
 import liquer.alchemy.alkahest.Func4;
 import liquer.alchemy.crypto.xml.saml.Assertion;
 import liquer.alchemy.crypto.xml.saml.DefaultNamespaceContextMap;
+import liquer.alchemy.crypto.xml.saml.EnvelopedKeyInfo;
 import liquer.alchemy.crypto.xml.saml.core.AssertionFactory;
 import liquer.alchemy.alembic.BaseN;
 import liquer.alchemy.alembic.IOSupport;
+import liquer.alchemy.crypto.xml.saml.jaxb.model.AssertionType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.NamespaceContext;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.function.BiFunction;
+import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 
 public class XmlSignerTest {
@@ -59,7 +67,7 @@ public class XmlSignerTest {
 
         System.out.println("sign xml: " + (System.currentTimeMillis() - start) + " ms");
         final String expected =  IOSupport.toString(getClass().getResource("/library_signed.xml"));
-
+        System.out.println(actual);
         Assert.assertEquals(expected, actual);
     }
 
@@ -167,6 +175,53 @@ public class XmlSignerTest {
             Assert.assertTrue(result.isValidSignature());
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void validateAssertionWithJaxB() {
+
+        try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(TestConstants.SAML_TOKEN)))) {
+
+            final long start = System.currentTimeMillis();
+            final String signedXml = IOSupport.toString(in);
+            final JAXBContext jaxbContext = JAXBContext.newInstance(AssertionType.class);
+            final Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            final Document doc = XmlSupport.toDocument(signedXml);
+
+            final JAXBElement<AssertionType> elem = (JAXBElement) jaxbUnmarshaller.unmarshal(doc);
+            final AssertionType assertion = elem.getValue();
+
+            final NamespaceContext namespaceContext =
+                    new DefaultNamespaceContextMap();
+
+            final BiFunction<Node, String, Stream<Node>> select =
+                    XPathSupport.getSelectStreamClosure(namespaceContext);
+            final Node signatureNode = select.apply(doc.getDocumentElement(), "/*/*[local-name(.)='Signature' and namespace-uri(.)='http://www.w3.org/2000/09/xmldsig#']")
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("No Signature fount"));
+
+            final XmlSignerOptions options = new XmlSignerOptions();
+            options.setNamespaceContext(new DefaultNamespaceContextMap());
+
+            final XmlSigner xmlSigner = new XmlSigner(options);
+            xmlSigner.setKeyInfoProvider(new EnvelopedKeyInfo());
+            xmlSigner.loadSignature(signatureNode);
+
+            final ValidationResult result = xmlSigner.validateSignature(signedXml);
+
+            System.out.println("validate assertion: " + (System.currentTimeMillis() - start) + " ms");
+
+            if (!result.isValidToken()) {
+                final String validationErrors =
+                        String.join("\n", result.getValidationErrors());
+                System.out.println(validationErrors);
+            }
+
+            Assert.assertTrue(result.isValidSignature());
+
+        } catch (IOException | JAXBException e) {
             e.printStackTrace();
         }
     }

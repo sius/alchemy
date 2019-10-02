@@ -25,6 +25,9 @@ import static liquer.alchemy.crypto.xml.XmlSupport.buildAttribute;
 import static liquer.alchemy.alembic.StringSupport.isNullOrEmpty;
 import static liquer.alchemy.alembic.StringSupport.notNullOrEmpty;
 
+/**
+ * https://www.w3.org/TR/xmldsig-core/
+ */
 public final class XmlSigner extends NodeReader {
 
     private static Logger LOG = LogManager.getLogger(XmlSigner.class);
@@ -41,6 +44,7 @@ public final class XmlSigner extends NodeReader {
     private final NamespaceContext namespaceContext;
     private final BiFunction<Node, String, Stream<Node>> select;
     private final EOL eol;
+    private final boolean preferSelfClosingTag;
 
     private int id;
     private String signingKey;
@@ -79,6 +83,7 @@ public final class XmlSigner extends NodeReader {
         this.idMode = this.options.getIdMode();
         this.references = new ArrayList<>();
         this.validationErrors = new ArrayList<>();
+        this.preferSelfClosingTag = this.options.isPreferSelfClosingTag();
 
         this.id = 0;
         this.signingKey = null;
@@ -789,7 +794,7 @@ public final class XmlSigner extends NodeReader {
             copy = transform.apply(copy, options);
         }
 
-        return XmlSupport.stringify(copy, true, this.eol);
+        return XmlSupport.stringify(copy, preferSelfClosingTag, this.eol);
     }
 
     /*

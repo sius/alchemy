@@ -1,6 +1,6 @@
 package liquer.alchemy.crypto.alg;
 
-import liquer.alchemy.crypto.CryptoLimericks;
+import liquer.alchemy.crypto.CryptoSupport;
 import liquer.alchemy.crypto.opt.HashOptions;
 
 public interface HashAlgorithm extends Algorithm {
@@ -10,6 +10,6 @@ public interface HashAlgorithm extends Algorithm {
         options = options == null
                 ? new HashOptions()
                 : options;
-        return CryptoLimericks.hash(value, getName(), options.isZeroTerminated(), options.getCharset(), options.getEncoder());
+        return CryptoSupport.hash(value, getName(), options.isZeroTerminated(), options.getCharset(), options.getEncoder());
     }
 }

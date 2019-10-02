@@ -4,6 +4,9 @@ import liquer.alchemy.crypto.Identifier;
 import liquer.alchemy.crypto.xml.XPathSupport;
 import org.w3c.dom.Node;
 
+/**
+ *
+ */
 public class EnvelopedSignature implements CanonicalXml {
 
     private final static String XPATH_EXPR =

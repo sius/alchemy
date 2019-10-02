@@ -2,7 +2,7 @@ package liquer.alchemy.crypto.xml;
 
 import liquer.alchemy.crypto.xml.core.NodeListImpl;
 import liquer.alchemy.crypto.xml.core.EOL;
-import liquer.alchemy.crypto.xml.core.EOLStringWriter;
+import liquer.alchemy.crypto.xml.core.FragmentXMLStreamWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
@@ -13,12 +13,13 @@ import org.xml.sax.SAXException;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.*;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stax.StAXResult;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -85,16 +86,18 @@ public final class XmlSupport {
         return stringify(node, false, LF);
     }
 
-    public static String stringify(Node node, boolean ensureEmptyTags, EOL eol) {
+    public static String stringify(Node node, boolean selfClosingTag, EOL eol) {
 
-        final StringWriter sw = new EOLStringWriter(eol);
+        final StringWriter sw = new StringWriter();
         try {
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer t = factory.newTransformer();
-            t.setOutputProperty(OutputKeys.METHOD, ensureEmptyTags ? "html" : "xml");
+            t.setOutputProperty(OutputKeys.METHOD, "xml");
             t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            t.transform(new DOMSource(node), new StreamResult(sw));
-        } catch (TransformerException e) {
+            XMLStreamWriter writer = new FragmentXMLStreamWriter(XMLOutputFactory.newFactory()
+                    .createXMLStreamWriter(sw));
+            t.transform(new DOMSource(node), new StAXResult(writer));
+        } catch (TransformerException | XMLStreamException e) {
             throw new RuntimeException(e);
         }
         return sw.toString();

@@ -2,7 +2,140 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9a224a91-cfee-4429-99c9-ba87175ed345" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/binding.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-authn-context-2.0-os.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-bindings-2.0-os.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-conformance-2.0-os.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-core-2.0-os.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-glossary-2.0-os.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-metadata-2.0-os.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-profiles-2.0-os.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-assertion-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-auth-telephony-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-ip-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-ippword-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-kerberos-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-mobileonefactor-reg-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-mobileonefactor-unreg-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-mobiletwofactor-reg-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-mobiletwofactor-unreg-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-nomad-telephony-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-personal-telephony-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-pgp-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-ppt-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-pword-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-session-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-smartcard-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-smartcardpki-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-softwarepki-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-spki-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-srp-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-sslcert-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-telephony-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-timesync-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-types-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-x509-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-authn-context-xmldsig-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-dce-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-ecp-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-metadata-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-protocol-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-x500-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-schema-xacml-2.0.xsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/saml-2.0-os/saml-sec-consider-2.0-os.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/core/FragmentXMLStreamWriter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/ActionType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/AdviceType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/AgreementMethodType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/AssertionType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/AttributeStatementType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/AttributeType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/AudienceRestrictionType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/AuthnContextType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/AuthnStatementType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/AuthzDecisionStatementType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/BaseIDAbstractType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/CanonicalizationMethodType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/CipherDataType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/CipherReferenceType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/ConditionAbstractType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/ConditionsType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/DSAKeyValueType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/DecisionType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/DigestMethodType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/EncryptedDataType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/EncryptedElementType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/EncryptedKeyType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/EncryptedType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/EncryptionMethodType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/EncryptionPropertiesType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/EncryptionPropertyType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/EvidenceType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/KeyInfoConfirmationDataType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/KeyInfoType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/KeyValueType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/ManifestType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/NameIDType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/ObjectFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/ObjectType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/OneTimeUseType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/PGPDataType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/ProxyRestrictionType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/RSAKeyValueType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/ReferenceList.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/ReferenceTypeXenc.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/ReferenceTypeXmlDsigCore.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/RetrievalMethodType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/SPKIDataType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/SignatureMethodType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/SignaturePropertiesType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/SignaturePropertyType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/SignatureType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/SignatureValueType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/SignedInfoType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/StatementAbstractType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/SubjectConfirmationDataType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/SubjectConfirmationType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/SubjectLocalityType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/SubjectType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/TransformType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/TransformsTypeXenc.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/TransformsTypeXmlDsigCore.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/X509DataType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/X509IssuerSerialType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/saml/jaxb/model/package-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xmlcrypto/src/test/java/liquer/alchemy/crypto/xml/saml/jaxb/JAXBModelTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/classAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/jarAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/jarAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crypto/src/main/java/liquer/alchemy/crypto/CryptoLimericks.java" beforeDir="false" afterPath="$PROJECT_DIR$/crypto/src/main/java/liquer/alchemy/crypto/CryptoLimericks.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/CryptoLimericks.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/CryptoSupport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/alg/HashAlgorithm.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/alg/HashAlgorithm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/alg/SignatureAlgorithm.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/alg/SignatureAlgorithm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/URLKeyInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/URLKeyInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/X509Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/X509Data.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/XmlSigner.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/XmlSigner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/XmlSignerOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/XmlSignerOptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/XmlSupport.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/XmlSupport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_0_OmitComments.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_0_OmitComments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_0_WithComments.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_0_WithComments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_1_OmitComments.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_1_OmitComments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_1_WithComments.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/CanonicalXml_1_1_WithComments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/EnvelopedSignature.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/EnvelopedSignature.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/ExclusiveCanonicalXml_1_0_OmitComments.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/ExclusiveCanonicalXml_1_0_OmitComments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/ExclusiveCanonicalXml_1_0_WithComments.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/c14n/ExclusiveCanonicalXml_1_0_WithComments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/test/java/liquer/alchemy/crypto/xml/XmlSignerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/test/java/liquer/alchemy/crypto/xml/XmlSignerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xmlcrypto/src/test/resources/library_signed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/xmlcrypto/src/test/resources/library_signed.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,12 +159,7 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="alchemy" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -60,43 +188,46 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/crypto/src/main/java" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/alkahest/src/main/java/liquer/alchemy/alkahest" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/saml-2.0-os" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.14814812" />
     <property name="project.structure.side.proportion" value="0.3051643" />
-    <property name="settings.editor.selected.configurable" value="Errors" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="liquer.alchemy.crypto.xml.saml.jaxb.model" />
       <recent name="liquer.alchemy.alkahest" />
       <recent name="liquer.alchemy.crypto.xml.core" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="liquer.alchemy.crypto.xml.saml.jaxb" />
       <recent name="liquer.alchemy.athanor" />
       <recent name="liquer.alchemy.crypto" />
       <recent name="liquer.alchemy.alembic" />
       <recent name="liquer.alchemy.crypto.xml.ext" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/xmlcrypto" />
+      <recent name="$PROJECT_DIR$/saml-2.0-os" />
       <recent name="$PROJECT_DIR$/crypto/src/main/resources" />
       <recent name="$PROJECT_DIR$/athanor/src/test/resources" />
       <recent name="$PROJECT_DIR$/standalone/src/main/resources" />
-      <recent name="$PROJECT_DIR$/standalone" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="liquer.alchemy.crypto.xml.jaxb.model" />
       <recent name="liquer.alchemy.alkahest" />
       <recent name="" />
       <recent name="liquer.alchemy.athanor" />
       <recent name="liquer.alchemy.alembic" />
-      <recent name="liquer.alchemy.crypto.xml.ext" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/jaxb/model" />
       <recent name="$PROJECT_DIR$/alkahest/src/main/java/liquer/alchemy/alkahest" />
       <recent name="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/alkahest" />
       <recent name="$PROJECT_DIR$/xmlcrypto/src/main/resources" />
       <recent name="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto" />
-      <recent name="$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/opt" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -111,32 +242,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.All in alchemy.xmlcrypto.test (3)">
-    <configuration name="All in alchemy.crypto.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="alchemy.crypto.test" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.All in alchemy.xmlcrypto.test (1)">
     <configuration name="All in alchemy.xmlcrypto.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="alchemy.xmlcrypto.test" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="All in alchemy.xmlcrypto.test (2)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="alchemy.xmlcrypto.test" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="All in alchemy.xmlcrypto.test (3)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="alchemy.xmlcrypto.test" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
@@ -152,13 +259,60 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="JAXBModelTest.getKeyInfo" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="alchemy.xmlcrypto.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="liquer.alchemy.crypto.xml.saml.jaxb.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="liquer.alchemy.crypto.xml.saml.jaxb" />
+      <option name="MAIN_CLASS_NAME" value="liquer.alchemy.crypto.xml.saml.jaxb.JAXBModelTest" />
+      <option name="METHOD_NAME" value="getKeyInfo" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XmlSignerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="alchemy.xmlcrypto.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="liquer.alchemy.crypto.xml.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="liquer.alchemy.crypto.xml" />
+      <option name="MAIN_CLASS_NAME" value="liquer.alchemy.crypto.xml.XmlSignerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XmlSignerTest.signXmlWithClosure" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="alchemy.xmlcrypto.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="liquer.alchemy.crypto.xml.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="liquer.alchemy.crypto.xml" />
+      <option name="MAIN_CLASS_NAME" value="liquer.alchemy.crypto.xml.XmlSignerTest" />
+      <option name="METHOD_NAME" value="signXmlWithClosure" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.All in alchemy.xmlcrypto.test (3)" />
-        <item itemvalue="JUnit.All in alchemy.xmlcrypto.test (2)" />
         <item itemvalue="JUnit.All in alchemy.xmlcrypto.test (1)" />
+        <item itemvalue="JUnit.XmlSignerTest" />
+        <item itemvalue="JUnit.XmlSignerTest.signXmlWithClosure" />
+        <item itemvalue="JUnit.JAXBModelTest.getKeyInfo" />
         <item itemvalue="JUnit.All in alchemy.xmlcrypto.test" />
-        <item itemvalue="JUnit.All in alchemy.crypto.test" />
       </list>
     </recent_temporary>
   </component>
@@ -190,5 +344,26 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/xmlcrypto/src/test/java/liquer/alchemy/crypto/xml/saml/jaxb/JAXBModelTest.java</url>
+          <line>42</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/xmlcrypto/src/main/java/liquer/alchemy/crypto/xml/XmlSupport.java</url>
+          <line>102</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/alchemy$JAXBTest_writeXml.ic" NAME="JAXBTest.writeXml Coverage Results" MODIFIED="1569949716946" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>liquer.alchemy.crypto.xml.jaxb.*</FILTER>
+    </SUITE>
   </component>
 </project>

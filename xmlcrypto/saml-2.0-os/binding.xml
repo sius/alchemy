@@ -1,0 +1,21 @@
+<jxb:bindings
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+    version="2.1">
+    <jxb:bindings schemaLocation="http://www.w3.org/TR/2002/REC-xmldsig-core-20020212/xmldsig-core-schema.xsd">
+        <jxb:bindings node="//xs:complexType[@name='ReferenceType']">
+            <jxb:class name="ReferenceTypeXmlDsigCore"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xs:complexType[@name='TransformsType']">
+            <jxb:class name="TransformsTypeXmlDsigCore"/>
+        </jxb:bindings>
+    </jxb:bindings>
+    <jxb:bindings schemaLocation="http://www.w3.org/TR/2002/REC-xmlenc-core-20021210/xenc-schema.xsd">
+        <jxb:bindings node="//xs:complexType[@name='ReferenceType']">
+            <jxb:class name="ReferenceTypeXenc"/>
+        </jxb:bindings>
+        <jxb:bindings node="//xs:complexType[@name='TransformsType']">
+            <jxb:class name="TransformsTypeXenc"/>
+        </jxb:bindings>
+    </jxb:bindings>
+</jxb:bindings>
