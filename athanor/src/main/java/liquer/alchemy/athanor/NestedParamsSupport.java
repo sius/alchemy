@@ -1,6 +1,4 @@
-package liquer.alchemy.athanor.json;
-
-import liquer.alchemy.athanor.Yash;
+package liquer.alchemy.athanor;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
@@ -12,21 +10,12 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class JsonUrlCodec {
+public final class NestedParamsSupport {
 
-	private JsonUrlCodec() {
+	private NestedParamsSupport() {
 
 	}
 
-	/**
-	* Every standard HTTP code mapped to the appropriate message.
-	* @see <a href=\"http://www.iana.org/assignments/http-status-codes\">http://www.iana.org/assignments/http-status-codes</a>
-	*/
-	// public static final Map<Integer, String> HTTP_STATUS_CODES = new HashMap<>();
-	
-	/** Responses with HTTP status codes that should not have an entity body */
-	// public static final List<Integer> STATUS_WITH_NO_ENTITY_BODY;
-	
 	public static final String DEFAULT_SEP = "&";
 	/**
 	* The default number of bytes to allow parameter keys to take up.
@@ -34,78 +23,8 @@ public final class JsonUrlCodec {
 	*/
 	public static final int KEY_SPACE_LIMIT = 65536;
 
-	// public static final String MODIFIED_RFC_2822 = "EEE, dd-MMM-yyyy HH:mm:ssz";
 
-	/*
-	static {
-		STATUS_WITH_NO_ENTITY_BODY = IntStream.rangeClosed(100, 199).mapToObj(Integer::valueOf).collect(Collectors.toList());
-		STATUS_WITH_NO_ENTITY_BODY.add(204);
-		STATUS_WITH_NO_ENTITY_BODY.add(205);
-		STATUS_WITH_NO_ENTITY_BODY.add(304);
-
-		HTTP_STATUS_CODES.put(100, "Continue");
-		HTTP_STATUS_CODES.put(101, "Switching Protocols");
-		HTTP_STATUS_CODES.put(102, "Processing");
-		HTTP_STATUS_CODES.put(200, "OK");
-		HTTP_STATUS_CODES.put(201, "Created");
-		HTTP_STATUS_CODES.put(202, "Accepted");
-		HTTP_STATUS_CODES.put(203, "Non-Authoritative Information");
-		HTTP_STATUS_CODES.put(204, "No Content");
-		HTTP_STATUS_CODES.put(205, "Reset Content");
-		HTTP_STATUS_CODES.put(206, "Partial Content");
-		HTTP_STATUS_CODES.put(207, "Multi-Status");
-		HTTP_STATUS_CODES.put(226, "IM Used");
-		HTTP_STATUS_CODES.put(300, "Multiple Choices");
-		HTTP_STATUS_CODES.put(301, "Moved Permanently");
-		HTTP_STATUS_CODES.put(302, "Found");
-		HTTP_STATUS_CODES.put(303, "See Other");
-		HTTP_STATUS_CODES.put(304, "Not Modified");
-		HTTP_STATUS_CODES.put(305, "Use Proxy");
-		HTTP_STATUS_CODES.put(306, "Reserved");
-		HTTP_STATUS_CODES.put(307, "Temporary Redirect");
-		HTTP_STATUS_CODES.put(400, "Bad Request");
-		HTTP_STATUS_CODES.put(401, "Unauthorized");
-		HTTP_STATUS_CODES.put(402, "Payment Required");
-		HTTP_STATUS_CODES.put(403, "Forbidden");
-		HTTP_STATUS_CODES.put(404, "Not Found");
-		HTTP_STATUS_CODES.put(405, "Method Not Allowed");
-		HTTP_STATUS_CODES.put(406, "Not Acceptable");
-		HTTP_STATUS_CODES.put(407, "Proxy Authentication Required");
-		HTTP_STATUS_CODES.put(408, "Request Timeout");
-		HTTP_STATUS_CODES.put(409, "Conflict");
-		HTTP_STATUS_CODES.put(410, "Gone");
-		HTTP_STATUS_CODES.put(411, "Length Required");
-		HTTP_STATUS_CODES.put(412, "Precondition Failed");
-		HTTP_STATUS_CODES.put(413, "Request Entity Too Large");
-		HTTP_STATUS_CODES.put(414, "Request-URI Too Long");
-		HTTP_STATUS_CODES.put(415, "Unsupported Media Type");
-		HTTP_STATUS_CODES.put(416, "Requested Range Not Satisfiable");
-		HTTP_STATUS_CODES.put(417, "Expectation Failed");
-		HTTP_STATUS_CODES.put(418, "I'm a Teapot");
-		HTTP_STATUS_CODES.put(422, "Unprocessable Entity");
-		HTTP_STATUS_CODES.put(423, "Locked");
-		HTTP_STATUS_CODES.put(424, "Failed Dependency");
-		HTTP_STATUS_CODES.put(426, "Upgrade Required");
-		HTTP_STATUS_CODES.put(500, "Internal Server Error");
-		HTTP_STATUS_CODES.put(501, "Not Implemented");
-		HTTP_STATUS_CODES.put(502, "Bad Gateway");
-		HTTP_STATUS_CODES.put(503, "Service Unavailable");
-		HTTP_STATUS_CODES.put(504, "Gateway Timeout");
-		HTTP_STATUS_CODES.put(505, "HTTP Version Not Supported");
-		HTTP_STATUS_CODES.put(506, "Variant Also Negotiates");
-		HTTP_STATUS_CODES.put(507, "Insufficient Storage");
-		HTTP_STATUS_CODES.put(510, "Not Extended");
-    }
-
-	public static String getStatusMessage(int statusCode) {
-		String ret = "Internal Server Error";
-		if (HTTP_STATUS_CODES.containsKey(statusCode))
-			ret = HTTP_STATUS_CODES.get(statusCode);
-		return ret;
-	}
-
-	 */
-	public static String encode_www_form_component(Object str, String charset) throws UnsupportedEncodingException {
+	public static String encodeWwwFormComponent(Object str, String charset) throws UnsupportedEncodingException {
 		String ret = "";
 		if (str != null) {
 			if (charset == null) {
@@ -115,7 +34,8 @@ public final class JsonUrlCodec {
 		}
 		return ret;
 	}
-	public static String decode_www_form_component(Object str, String enc) throws UnsupportedEncodingException {
+
+	public static String decodeWwwFormComponent(Object str, String enc) throws UnsupportedEncodingException {
 		String ret = "";
 		if (str != null) {
 			if (enc == null) {
@@ -131,11 +51,13 @@ public final class JsonUrlCodec {
 	 * @throws UnsupportedEncodingException UnsupportedEncodingException
 	 */
 	public static String escape(Object o, String enc) throws UnsupportedEncodingException {
-		return encode_www_form_component(o, enc);
+		return encodeWwwFormComponent(o, enc);
 	}
+
 	public static String escape(Object o) throws UnsupportedEncodingException {
 		return escape(o, null);
 	}
+
 	/**
 	 * Like URI escaping, but with %20 instead of +. Strictly speaking this is
 	 * true URI escaping.
@@ -151,8 +73,9 @@ public final class JsonUrlCodec {
 	 * @throws UnsupportedEncodingException UnsupportedEncodingException
 	 */
 	public static String unescape(Object o, String charset) throws UnsupportedEncodingException {
-		return decode_www_form_component(o, charset);
+		return decodeWwwFormComponent(o, charset);
 	}
+
 	public static String unescape(Object o) throws UnsupportedEncodingException {
 		return unescape(o , null);
 	}
@@ -174,6 +97,7 @@ public final class JsonUrlCodec {
 		}
 		return Yash.of(params);
 	}
+
 	private static final Pattern np_pattern0 = Pattern.compile("\\A[\\[\\]]*([^\\[\\]]+)\\]*");
 	private static final Pattern np_pattern1 = Pattern.compile("^\\[\\]\\[([^\\[\\]]+)\\]$");
 	private static final Pattern np_pattern2 = Pattern.compile("^\\[\\](.+)$");
@@ -216,7 +140,7 @@ public final class JsonUrlCodec {
 				throw new IllegalArgumentException("expected Array (got "+ o.getClass().getName()+") for param '" + k +"'");
 			}
 			Object[] params_arr = (Object[])o;
-			if ( params_arr.length > 0 && ismap(params_arr[params_arr.length-1]) && !((Map<?, ?>)params_arr[params_arr.length-1]).containsKey(child_key)) {
+			if ( params_arr.length > 0 && isMap(params_arr[params_arr.length-1]) && !((Map<?, ?>)params_arr[params_arr.length-1]).containsKey(child_key)) {
 				normalizeParams(Yash.of((Map<?, ?>)params_arr[params_arr.length-1]), child_key, v);
 			} else {
 				Object[] new_params_arr = new Object[params_arr.length+1];
@@ -230,7 +154,7 @@ public final class JsonUrlCodec {
 				o = new KeySpaceConstrainedParams();
 				params.put(k, o);
 			}
-			if (!ismap(o)) {
+			if (!isMap(o)) {
 				throw new IllegalArgumentException("expected 'Map' (got "+ o.getClass().getName()+") for param '" + k +"'");
 			}
 		
@@ -239,7 +163,7 @@ public final class JsonUrlCodec {
 		return params;
 	}
 	
-	private static boolean ismap(Object obj) {
+	private static boolean isMap(Object obj) {
 		return (obj instanceof Map);
 	}
 	

@@ -88,7 +88,17 @@ public final class Athanor {
 //					}
 				}
 			} else if (attributes instanceof List) {
-				ret = loopSeq(projection, projection.getClass(), null, (List<?>)attributes, maxDepth - 1);
+				if (projection.getClass().isArray()) {
+					final List<?> attributesList = (List)attributes;
+					final int lenProjection = Array.getLength(projection);
+					final int totalLen = (lenProjection + attributesList.size());
+					ret = Array.newInstance(projection.getClass().getComponentType(), totalLen);
+					for (int i = lenProjection; i < totalLen; i++) {
+						Array.set(ret, i, attributesList.get(i));
+					}
+				} else {
+					ret = loopSeq(projection, projection.getClass(), null, (List<?>) attributes, maxDepth - 1);
+				}
 			} else if (attributes != null && projection != null) {
 				ret = typeMapper.changeType(attributes, projection.getClass());
 			}

@@ -2,14 +2,22 @@ package liquer.alchemy.athanor;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.stream.Stream;
 
 
 @SuppressWarnings("unchecked")
 public class TypedMap extends Yash {
 
-    public TypedMap() { }
+    public static TypedMap unmodifiable(Map<String, Object> other) {
+        return new TypedMap(other, true);
+    }
+
+    public TypedMap() { super(); }
     public TypedMap(Map<String, Object> map) {
-        super(map);
+        this(map, false);
+    }
+    private TypedMap(Map<String, Object> map, boolean unmodifiable) {
+        super(map, unmodifiable);
     }
 
 	public TypedMap require(String... keys) {
@@ -34,6 +42,7 @@ public class TypedMap extends Yash {
     public void putWithObjectKey(Object key, Object value) {
         put(key == null ? null : key.toString(), value);
     }
+
     @Override
 	public Object get(Object key) {
 		return super.get(key == null ? null : key.toString());
@@ -134,13 +143,48 @@ public class TypedMap extends Yash {
 	}
 
     public String stringValue(String key) { return stringValue(key, null); }
-	public <T extends Enum<T>> T enumValue(Class<T> clazz, String key) { return enumValue(clazz, key, null); }
+    public Optional<String> tryStringValue(String... keys) {
+        return availableKeys(keys).map(this::stringValue).findFirst();
+    }
+
+    public <T extends Enum<T>> T enumValue(Class<T> clazz, String key) { return enumValue(clazz, key, null); }
+    public <T extends Enum<T>> Optional<T> tryEnumValue(Class<T> clazz, String... keys) {
+        return availableKeys(keys).map(s -> enumValue(clazz, s)).findFirst();
+    }
+
     public Long longValue(String key) { return longValue(key, null); }
+    public Optional<Long> tryLongValue(String... keys) {
+        return availableKeys(keys).map(this::longValue).findFirst();
+    }
+
     public Integer integerValue(String key) { return integerValue(key, null); }
+    public Optional<Integer> tryIntegerValue(String... keys) {
+        return availableKeys(keys).map(this::integerValue).findFirst();
+    }
+
     public Short shortValue(String key) { return shortValue(key, null); }
+    public Optional<Short> tryShortValue(String... keys) {
+        return availableKeys(keys).map(this::shortValue).findFirst();
+    }
+
     public Double doubleValue(String key) { return doubleValue(key, null); }
+    public Optional<Double> tryDoubleValue(String... keys) {
+        return availableKeys(keys).map(this::doubleValue).findFirst();
+    }
+
     public Float floatValue(String key) { return floatValue(key, null); }
+    public Optional<Float> tryFloatValue(String... keys) {
+        return availableKeys(keys).map(this::floatValue).findFirst();
+    }
+
     public Boolean booleanValue(String key) { return booleanValue(key, null); }
+    public Optional<Boolean> tryBooleanValue(String... keys) {
+        return availableKeys(keys).map(this::booleanValue).findFirst();
+    }
+
+    public Stream<String> availableKeys(String... keys) {
+        return Arrays.asList(keys).stream().filter(s -> get(s) != null);
+    }
 
     public String stringValue(String key, String defaultValue) { return stringValue(this, key, defaultValue); }
 	public <T extends Enum<T>> T enumValue(Class<T> clazz, String key, Enum<T> defaultValue) { return enumValue(clazz, this, key, null); }
@@ -152,20 +196,73 @@ public class TypedMap extends Yash {
     public Boolean booleanValue(String key, Boolean defaultValue) { return booleanValue(this, key, defaultValue); }
 
     public String[] stringArray(String key) { return stringArray(key, null); }
+    public Optional<String[]> tryStringArray(String... keys) {
+        return availableKeys(keys).map(this::stringArray).findFirst();
+    }
     public Long[] longArray(String key) { return longArray(key, null); }
+    public Optional<Long[]> tryLongArray(String... keys) {
+        return availableKeys(keys).map(this::longArray).findFirst();
+    }
+
     public Integer[] integerArray(String key) { return integerArray(key, null); }
+    public Optional<Integer[]> tryIntegerArray(String... keys) {
+        return availableKeys(keys).map(this::integerArray).findFirst();
+    }
+
     public Short[] shortArray(String key) { return shortArray(key, null); }
+    public Optional<Short[]> tryShortArray(String... keys) {
+        return availableKeys(keys).map(this::shortArray).findFirst();
+    }
+
     public Double[] doubleArray(String key) { return doubleArray(key, null); }
+    public Optional<Double[]> tryDoubleArray(String... keys) {
+        return availableKeys(keys).map(this::doubleArray).findFirst();
+    }
+
     public Float[] floatArray(String key) { return floatArray(key, null); }
+    public Optional<Float[]> tryFloatArray(String... keys) {
+        return availableKeys(keys).map(this::floatArray).findFirst();
+    }
+
     public Boolean[] booleanArray(String key) { return booleanArray(key, null); }
+    public Optional<Boolean[]> tryBooleanArray(String... keys) {
+        return availableKeys(keys).map(this::booleanArray).findFirst();
+    }
 
 	public List<String> stringList(String key) { return Arrays.asList(stringArray(this, key, null)); }
+    public Optional<List<String>> tryStringList(String... keys) {
+        return availableKeys(keys).map(this::stringList).findFirst();
+    }
+
 	public List<Long> longList(String key) { return Arrays.asList(longArray(this, key, null)); }
+    public Optional<List<Long>> tryLongList(String... keys) {
+        return availableKeys(keys).map(this::longList).findFirst();
+    }
+
 	public List<Integer> integerList(String key) { return Arrays.asList(integerArray(this, key, null)); }
+    public Optional<List<Integer>> tryIntegerList(String... keys) {
+        return availableKeys(keys).map(this::integerList).findFirst();
+    }
+
 	public List<Short> shortList(String key) { return Arrays.asList(shortArray(this, key, null)); }
+    public Optional<List<Short>> tryShortList(String... keys) {
+        return availableKeys(keys).map(this::shortList).findFirst();
+    }
+
 	public List<Double> doubleList(String key) { return Arrays.asList(doubleArray(this, key, null)); }
+    public Optional<List<Double>> tryDoubleList(String... keys) {
+        return availableKeys(keys).map(this::doubleList).findFirst();
+    }
+
 	public List<Float> floatList(String key) { return Arrays.asList(floatArray(this, key, null)); }
+    public Optional<List<Float>> tryFloatList(String... keys) {
+        return availableKeys(keys).map(this::floatList).findFirst();
+    }
+
 	public List<Boolean> booleanList(String key) { return Arrays.asList(booleanArray(this, key, null)); }
+    public Optional<List<Boolean>> tryBooleanList(String... keys) {
+        return availableKeys(keys).map(this::booleanList).findFirst();
+    }
 
 	public String[] stringArray(String key, String[] defaultValue) { return stringArray(this, key, defaultValue); }
 	public <T extends Enum<T>> T[] enumArray(Class<T> clazz, String key, T[] defaultValue) { return enumArray(clazz, this, key, null); }
@@ -179,6 +276,7 @@ public class TypedMap extends Yash {
 	public List<TypedMap> listOf(String key, List<TypedMap> defaultValue) { return listOf(this, key, defaultValue); }
 
 	public List<String> stringList(String key, String[] defaultValue) { return Arrays.asList(stringArray(this, key, defaultValue)); }
+
 	public <T extends Enum<T>> List<T> enumList(Class<T> clazz, String key, T[] defaultValue) { return Arrays.asList(enumArray(clazz, this, key, null)); }
 	public List<Long> longList(String key, Long[] defaultValue) { return Arrays.asList(longArray(this, key, defaultValue)); }
 	public List<Integer> integerList(String key, Integer[] defaultValue) { return Arrays.asList(integerArray(this, key, defaultValue)); }

@@ -4,6 +4,7 @@ import liquer.alchemy.athanor.json.Json;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -40,6 +41,8 @@ public final class TypeMapper {
 			return (P) TypeMapper.implType(projection).getDeclaredConstructor().newInstance();
 		} else if (DEFAULT_INSTANCES.containsKey(projection)){
 			return (P) DEFAULT_INSTANCES.get(projection);
+		} else if (projection.isArray()) {
+			return (P) Array.newInstance(projection.getComponentType(), 0);
 		} else {
 			return projection.getDeclaredConstructor().newInstance();
 		}
