@@ -43,11 +43,11 @@ Exemplary Usage:
 
 ```bash
 mvn clean package
-mkdir /d/dev/test
-cp src/test/resources/*.pem /d/dev/test
-cp src/test/resources/*.cer /d/dev/test
-cp src/test/resources/*.xml /d/dev/test
-TEST_PATH=/d:/dev/test
+mkdir ~/dev/test
+cp src/test/resources/*.pem ~/dev/test
+cp src/test/resources/*.cer ~/dev/test
+cp src/test/resources/*.xml ~/dev/test
+TEST_PATH=~/dev/test
 TEST_APP_CLASSPATH="target/xmlcrypto-1.0.0-SNAPSHOT.jar;ext/log4j-api-2.4.jar;ext/log4j-core-2.4.jar;ext/hamcrest-core-1.3.jar"
 java --class-path $TEST_APP_CLASSPATH \
     liquer.alchemy.xmlcrypto.app.XmlSignerApp \
@@ -65,11 +65,11 @@ Exemplary Usage:
 
 ```bash
 # mvn clean package
-# mkdir /d/dev/test
-# cp src/test/resources/*.pem /d/dev/test
-# cp src/test/resources/*.cer /d/dev/test
-# cp src/test/resources/*.xml /d/dev/test
-# TEST_PATH=/d:/dev/test
+# mkdir ~/dev/test
+# cp src/test/resources/*.pem ~/dev/test
+# cp src/test/resources/*.cer ~/dev/test
+# cp src/test/resources/*.xml ~/dev/test
+# TEST_PATH=~/dev/test
 # TEST_APP_CLASSPATH="target/xmlcrypto-1.0.0-SNAPSHOT.jar;ext/log4j-api-2.4.jar;ext/log4j-core-2.4.jar;ext/hamcrest-core-1.3.jar"
 java --class-path $TEST_APP_CLASSPATH \
     liquer.alchemy.xmlcrypto.app.XmlVerifierApp \
