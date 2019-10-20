@@ -1,8 +1,8 @@
 # Alchemy
 
-Java Playground
+## Java Playground
 
-Modules:
+### Modules:
 - [`alembic`](alembic/README.md)
 - [`alkahest`](alkahest/README.md)
 - [`athanor`](athanor/README.md)
