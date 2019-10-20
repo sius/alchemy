@@ -36,7 +36,7 @@ public class JsonReaderTest {
 	@Test
 	public void escapedSeq() {
 		assertJson(Arrays.asList("\"", "\\", "/", "\b", "\f", "\n", "\r", "\t"), "[\"\\\"\",\"\\\\\",\"\\/\",\"\\b\",\"\\f\",\"\\n\",\"\\r\",\"\\t\"]");
-		assertJson(Arrays.asList("©","© DATEV eG."), "[\"\u00A9\",\"\u00A9 DATEV eG.\"]");
+		assertJson(Arrays.asList("©","© Test test."), "[\"\u00A9\",\"\u00A9 Test terst.\"]");
 	}
 	
 	@Test

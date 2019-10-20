@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+      </profile>
+    </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="alchemy.alembic.main" target="1.8" />
+      <module name="alchemy.alembic.test" target="1.8" />
+      <module name="alchemy.alkahest.main" target="1.8" />
+      <module name="alchemy.alkahest.test" target="1.8" />
+      <module name="alchemy.athanor.main" target="1.8" />
+      <module name="alchemy.athanor.test" target="1.8" />
+      <module name="alchemy.crypto.main" target="1.8" />
+      <module name="alchemy.crypto.test" target="1.8" />
       <module name="alchemy.standalone.main" target="1.8" />
       <module name="alchemy.standalone.test" target="1.8" />
+      <module name="alchemy.xmlcrypto.main" target="1.8" />
+      <module name="alchemy.xmlcrypto.test" target="1.8" />
+      <module name="liquer.alchemy.alchemy.main" target="1.8" />
+      <module name="liquer.alchemy.alchemy.test" target="1.8" />
+      <module name="xmlcrypto" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
