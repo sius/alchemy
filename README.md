@@ -1,6 +1,6 @@
 # Alchemy
 
-## Java Playground
+Java Playground - Not for production
 
 ### Modules:
 - [`alembic`](alembic/README.md)
