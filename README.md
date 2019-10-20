@@ -5,7 +5,7 @@ Java Playground
 Modules:
 - `alembic`
 - [`alkahest`](alkahest/README.md)
-- [`athanor`](alchemical furnace)
+- [`athanor`](athanor/README.md)
 - `crypto`
 - [`xmlcrypto`](xmlcrypto/README.md)
 
