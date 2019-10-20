@@ -6,14 +6,5 @@ Modules:
 - [`alembic`](alembic/README.md)
 - [`alkahest`](alkahest/README.md)
 - [`athanor`](athanor/README.md)
-- `crypto`
+- [`crypto`](crypto/README.md)
 - [`xmlcrypto`](xmlcrypto/README.md)
-
-
-    
-- Cryptography
-    - Crypto Limericks
-    - SigV4
-    - Sign and verify JWT Tokens
-    - Sign and verify XML Documents
-    - SAML2 Token Validation
