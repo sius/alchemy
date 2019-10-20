@@ -3,7 +3,7 @@
 Java Playground
 
 Modules:
-- `alembic`
+- [`alembic`](alembic/README.md)
 - [`alkahest`](alkahest/README.md)
 - [`athanor`](athanor/README.md)
 - `crypto`
