@@ -1,6 +1,9 @@
 package liquer.alchemy.xmlcrypto.crypto.xml.saml.jaxb;
 
-import liquer.alchemy.xmlcrypto.crypto.xml.saml.TestAssertion;
+import liquer.alchemy.xmlcrypto.crypto.xml.URLKeyInfo;
+import liquer.alchemy.xmlcrypto.crypto.xml.XmlSignerOptions;
+import liquer.alchemy.xmlcrypto.crypto.xml.saml.AssertionReaderTest;
+import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.AssertionFactory;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.jaxb.model.AssertionType;
 import liquer.alchemy.xmlcrypto.support.BaseN;
 import org.junit.BeforeClass;
@@ -12,20 +15,34 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.function.Supplier;
 import java.util.zip.GZIPInputStream;
 
 public class JAXBModelTest {
 
-    private static String TEST_TOKEN;
+    private final static Supplier<String> TOKEN = () ->
+        AssertionFactory.newBuilder()
+            .issuer("liquer")
+            .conditionsMinutes(10, "http://liquer.io")
+            .addStatement("http://liquer.io/7k/user",
+                Arrays.asList(
+                        "john.snow@winterfell.7k"
+                )).buildBase64GZippedToken(
+            new XmlSignerOptions(),
+            new URLKeyInfo(AssertionReaderTest.class.getResource("/publickey.cer")),
+            new URLKeyInfo(AssertionReaderTest.class.getResource("/private-pkcs8.pem")));
+
+    private static String SAML_TOKEN;
 
     @BeforeClass
-    public static void init() {
-        TEST_TOKEN = TestAssertion.TOKEN.get();
+    public static void beforeAll() {
+        SAML_TOKEN = TOKEN.get();
     }
 
     @Test
     public void testReadAssertion() {
-        try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(TEST_TOKEN)))) {
+        try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(SAML_TOKEN)))) {
 
             JAXBContext jaxbContext = JAXBContext.newInstance(AssertionType.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -46,7 +63,7 @@ public class JAXBModelTest {
 
     @Test
     public void testWriteAssertion() {
-        try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(TEST_TOKEN)))) {
+        try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(SAML_TOKEN)))) {
 
             JAXBContext jaxbContext = JAXBContext.newInstance(AssertionType.class );
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

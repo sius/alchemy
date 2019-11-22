@@ -2,9 +2,8 @@ package liquer.alchemy.xmlcrypto.crypto.xml;
 
 import liquer.alchemy.xmlcrypto.crypto.xml.core.FragmentXMLStreamWriter;
 import liquer.alchemy.xmlcrypto.crypto.xml.core.NodeListImpl;
-import liquer.alchemy.xmlcrypto.support.StringSupport;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -34,9 +33,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static liquer.alchemy.xmlcrypto.support.StringSupport.notNullOrEmpty;
+
 public final class XmlSupport {
 
-    private static final Logger LOG = LogManager.getLogger(XmlSupport.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XmlSupport.class);
 
     private static final ThreadLocal<DocumentBuilder> DOCUMENT_BUILDER_THREAD_LOCAL;
     private static final ThreadLocal<Transformer> TRANSFORMER_THREAD_LOCAL;
@@ -53,6 +54,8 @@ public final class XmlSupport {
                 documentBuilderFactory.setNamespaceAware(true);
                 documentBuilderFactory.setExpandEntityReferences(false);
                 documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+                documentBuilderFactory.setIgnoringComments(false);
+                documentBuilderFactory.setIgnoringElementContentWhitespace(false);
                 return documentBuilderFactory.newDocumentBuilder();
             } catch (ParserConfigurationException e) {
                 LOG.error(e.getMessage() ,e);
@@ -75,6 +78,8 @@ public final class XmlSupport {
             TRANSFORMER_THREAD_LOCAL.remove();
         }));
     }
+
+    private XmlSupport() { }
 
     public static NodeList toNodeList(final Stream<Node> nodeStream) {
         return (nodeStream == null)
@@ -100,7 +105,7 @@ public final class XmlSupport {
                     public Node next() {
                         try {
                             return nodeList.item(index++);
-                        } catch (NullPointerException | IndexOutOfBoundsException e) {
+                        } catch (IndexOutOfBoundsException e) {
                             LOG.error(e.getMessage() ,e);
                             throw new NoSuchElementException(e.getMessage());
                         }
@@ -156,12 +161,12 @@ public final class XmlSupport {
         final StringBuilder builder = new StringBuilder();
         builder.append('<');
         builder.append(wrapperElementName);
-        if (StringSupport.notNullOrEmpty(prefixes)) {
+        if (notNullOrEmpty(prefixes)) {
             builder.append(' ');
             builder.append(prefixes);
         }
         builder.append('>');
-        if (StringSupport.notNullOrEmpty(xml)) {
+        if (notNullOrEmpty(xml)) {
             builder.append(xml);
         }
         builder.append("</");

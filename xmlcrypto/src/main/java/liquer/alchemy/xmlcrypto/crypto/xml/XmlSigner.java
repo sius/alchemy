@@ -6,35 +6,32 @@ import liquer.alchemy.xmlcrypto.crypto.alg.SignatureAlgorithm;
 import liquer.alchemy.xmlcrypto.crypto.xml.c14n.CanonicalOptions;
 import liquer.alchemy.xmlcrypto.crypto.xml.c14n.CanonicalXml;
 import liquer.alchemy.xmlcrypto.crypto.xml.c14n.CanonicalizationException;
-import liquer.alchemy.xmlcrypto.crypto.xml.core.*;
+import liquer.alchemy.xmlcrypto.crypto.xml.core.Location;
+import liquer.alchemy.xmlcrypto.crypto.xml.core.PrefixNamespaceTuple;
+import liquer.alchemy.xmlcrypto.crypto.xml.core.SignatureOptions;
+import liquer.alchemy.xmlcrypto.crypto.xml.core.XmlValidationResult;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.Assertion;
-import liquer.alchemy.xmlcrypto.crypto.xml.saml.DefaultNamespaceContextMap;
+import liquer.alchemy.xmlcrypto.crypto.xml.saml.SamlNamespaceContext;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.Signature;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.AssertionFactory;
+import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.AssertionQNames;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.SAXIdAttributeReader;
-import liquer.alchemy.xmlcrypto.support.StringSupport;
-import liquer.alchemy.xmlcrypto.support.Timer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.namespace.NamespaceContext;
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SignatureException;
 import java.util.*;
 import java.util.function.BiFunction;
 
-public final class XmlSigner extends NodeReader {
+import static liquer.alchemy.xmlcrypto.crypto.xml.XmlSupport.buildAttribute;
+import static liquer.alchemy.xmlcrypto.support.StringSupport.notNullOrEmpty;
 
-    private static final Logger LOG = LogManager.getLogger(XmlSigner.class);
+public final class XmlSigner {
+
+    private static final Logger LOG = LoggerFactory.getLogger(XmlSigner.class);
 
     private final String idMode;
     private final XmlSignerOptions options;
@@ -42,8 +39,6 @@ public final class XmlSigner extends NodeReader {
     private final NamespaceContext namespaceContext;
     private final BiFunction<Node, String, NodeList> select;
     private final BiFunction<Node, String, Node> selectNode;
-
-    private final boolean preferSelfClosingTag;
 
     private int id;
     private String signingKey;
@@ -62,7 +57,6 @@ public final class XmlSigner extends NodeReader {
     private String signatureAlgorithm;
     private String canonicalizationAlgorithm;
     private Signature signature;
-    private Timer timer;
 
     /**
      * Xml signer implementation
@@ -97,7 +91,6 @@ public final class XmlSigner extends NodeReader {
         this.idMode = this.options.getIdMode();
         this.references = new ArrayList<>();
         this.errors = new ArrayList<>();
-        this.preferSelfClosingTag = this.options.isPreferSelfClosingTag();
 
         this.id = 0;
         this.signingKey = null;
@@ -115,7 +108,6 @@ public final class XmlSigner extends NodeReader {
             this.idAttributes.addAll(this.options.getIdAttributes());
         }
         this.implicitTransforms = this.options.getImplicitTransforms();
-        this.timer = this.options.getTimer();
     }
 
     public List<String> getErrors() { return new ArrayList<>(errors); }
@@ -152,43 +144,51 @@ public final class XmlSigner extends NodeReader {
     }
 
     public void loadSignature(Signature signature) {
-        if (signature == null) {
-            throw new IllegalArgumentException("Argument 'signature' cannot be null");
-        }
         try {
+            if (signature == null) {
+                throw addLogThrow(
+                    "Argument 'signature' cannot be null",
+                    null,
+                    XmlSignerException::new);
+            }
+
             this.signature = signature;
             this.signatureXml = signature.toString();
             this.signatureNode = XmlSupport.toWrappedDocument(
                 "Tmp",
-                "xmlns=\"" + Identifier.DEFAULT_NS_URI + "\"",
+                Identifier.XMLNS + "=\"" + Identifier.DEFAULT_NS_URI + "\"",
                 this.signatureXml).getDocumentElement().getFirstChild();
             initSignatureValues(this.signature);
         } catch (SAXException | IOException e) {
-            LOG.error(e.getMessage(), e);
-            throw new IllegalStateException(e);
+            throw addLogThrow(e.getMessage(), e, XmlSignerException::new);
         }
     }
     public void loadSignature(String signatureXml) {
-        if (signatureXml == null) {
-            throw new IllegalArgumentException("Argument 'signatureXml' cannot be null");
-        }
         try {
+            if (signatureXml == null) {
+                throw addLogThrow(
+                    "Argument 'signatureXml' cannot be null",
+                    null, XmlSignerException::new);
+            }
+
             this.signatureNode = XmlSupport.toWrappedDocument(
                 "Tmp",
-                "xmlns=\"" + Identifier.DEFAULT_NS_URI + "\"",
+                Identifier.XMLNS + "=\"" + Identifier.DEFAULT_NS_URI + "\"",
                 signatureXml).getDocumentElement().getFirstChild();
             this.signatureXml = signatureXml;
             this.signature = AssertionFactory.newSignatureBuilder(this.signatureXml, this.namespaceContext);
             initSignatureValues(this.signature);
         } catch (SAXException | IOException e) {
-            LOG.error(e.getMessage(), e);
-            throw new IllegalStateException(e);
+            throw addLogThrow( e.getMessage(), e, XmlSignerException::new);
         }
     }
 
     public void loadSignature(Node signatureNode) {
         if (signatureNode == null) {
-            throw new IllegalArgumentException("Argument 'signatureNode' cannot be null");
+            throw addLogThrow(
+                "Argument 'signatureNode' cannot be null",
+                null, XmlSignerException::new);
+
         }
         this.signatureNode = signatureNode;
         this.signatureXml = XmlSupport.stringify(signatureNode);
@@ -205,7 +205,7 @@ public final class XmlSigner extends NodeReader {
 
         if (keyInfoProvider == null) {
             keyInfoProvider = signature.getKeyInfo();
-        }
+    }
 
         signingKey = keyInfoProvider.getKey(this.keyInfo);
 
@@ -227,13 +227,17 @@ public final class XmlSigner extends NodeReader {
         errors = new ArrayList<>();
         try {
             if (keyInfoProvider == null) {
-                throw new NullPointerException("Cannot validate signature: no key info resolver was provided");
+                throw addLogThrow(
+                    "Cannot validate signature: no key info resolver was provided",
+                    null, XmlSignerException::new);
             }
 
             signingKey = keyInfoProvider.getKey(keyInfo);
 
             if (signingKey == null) {
-                throw new NullPointerException("Could not resolve key info: " + keyInfo);
+                throw addLogThrow(
+                    "Cannot resolve key info: " + keyInfo,
+                    null, XmlSignerException::new);
             }
 
             final Document doc = XmlSupport.toDocument(xml);
@@ -242,29 +246,20 @@ public final class XmlSigner extends NodeReader {
 
             return new XmlValidationResult(
                 validSignature,
-                Collections.unmodifiableList(this.errors));
+                Collections.unmodifiableList(errors));
 
-        } catch (SignatureException
-            | NoSuchAlgorithmException
-            | InvalidKeyException
-            | NoSuchProviderException
-            | SAXException
-            | IOException
-            | NullPointerException
-            | CanonicalizationException e) {
-            LOG.error(e.getMessage(), e);
-            errors.add(e.getMessage());
+        } catch (IOException | SAXException e) {
             return new XmlValidationResult(
-                false,
-                Collections.unmodifiableList(this.errors));
+                addLogGet(e.getMessage(), e, false),
+                Collections.unmodifiableList(errors));
         }
     }
 
     /**
-     * Validates the references and signature of a Assertion Document
+     * Validates the references and signature of an Assertion Document
      * with an enveloped Signature element.
-     *
-     * small attack surface
+     * The Assertion structure itself has already been validated by the SAXParser
+     * that has been configured with the associated Schema.
      *
      * @param assertion
      * @return
@@ -279,8 +274,7 @@ public final class XmlSigner extends NodeReader {
             final Document assertionDoc =
                 XmlSupport.toDocument(assertion.toString());
 
-
-            CanonicalOptions options =
+            CanonicalOptions canonicalOptions =
                 new CanonicalOptions()
                 .inclusiveNamespacesPrefixList(assertionReference.getInclusiveNamespacesPrefixList())
                 .ancestorNamespaces(assertionReference.getAncestorNamespaces());
@@ -289,7 +283,7 @@ public final class XmlSigner extends NodeReader {
                 this.getCanonicalXml(
                     assertionReference.getTransforms(),
                     assertionDoc.getDocumentElement(),
-                    options);
+                    canonicalOptions);
 
             HashAlgorithm hash = this.findHashAlgorithm(assertionReference.getDigestAlgorithm());
             String digest = hash.hash(canonicalXml, null);
@@ -297,25 +291,24 @@ public final class XmlSigner extends NodeReader {
             boolean validDigest = digest.equals(assertionReference.getDigestValue());
 
             if (!validDigest) {
-                this.errors.add(
-                    "invalid signature: for uri " + assertionReference.getUri() +
+                final String message = "invalid signature: for uri " + assertionReference.getUri() +
                     " calculated digest is " + digest +
-                    " but the xml to validate supplies digest " + assertionReference.getDigestValue());
-
+                    " but the xml to validate supplies digest " + assertionReference.getDigestValue();
+                addLogGet(message, null, false);
             }
 
             final boolean validSignature =
                 validDigest && validateSignatureValue(assertionDoc);
             return new XmlValidationResult(
                 validSignature,
-                Collections.unmodifiableList(this.errors));
+                Collections.unmodifiableList(errors));
 
-        } catch (SignatureException | NoSuchAlgorithmException | InvalidKeyException | NoSuchProviderException | IOException | SAXException | CanonicalizationException e) {
-            LOG.error(e.getMessage(), e);
-            this.errors.add(e.getMessage());
+        } catch ( IOException
+            | SAXException
+            | CanonicalizationException e) {
             return new XmlValidationResult(
-                false,
-                Collections.unmodifiableList(this.errors));
+                addLogGet(e.getMessage(), e, false),
+                Collections.unmodifiableList(errors));
         }
     }
 
@@ -403,11 +396,11 @@ public final class XmlSigner extends NodeReader {
             final Map<String, String> attrs = finalOptions.getAttrs();
             final Location location = finalOptions.getLocation();
             final Map<String, String> existingPrefixes = finalOptions.getExistingPrefixes();
-            String xmlnsAttr = "xmlns";
+            String xmlnsAttr = Identifier.XMLNS;
             final String currentPrefix;
 
             // automatic insertion of `:`
-            if (StringSupport.notNullOrEmpty(prefix)) {
+            if (notNullOrEmpty(prefix)) {
                 xmlnsAttr += ":" + prefix;
                 currentPrefix = prefix + ":";
             } else {
@@ -416,70 +409,76 @@ public final class XmlSigner extends NodeReader {
 
             for(Map.Entry<String, String> entry : attrs.entrySet()) {
                 String name = entry.getKey();
-                if ("xmlns".equals(name) && !xmlnsAttr.equals(name)) {
-                    signatureAttrs.add(XmlSupport.buildAttribute(name, entry.getValue()).toString());
+                if (Identifier.XMLNS.equals(name) && !xmlnsAttr.equals(name)) {
+                    signatureAttrs.add(buildAttribute(name, entry.getValue()).toString());
                 }
-            };
+            }
 
             // add the xml namespace attribute
-            signatureAttrs.add(XmlSupport.buildAttribute(xmlnsAttr, Identifier.DEFAULT_NS_URI).toString());
+            signatureAttrs.add(buildAttribute(xmlnsAttr, Identifier.DEFAULT_NS_URI).toString());
 
-            final StringBuilder signatureXml = new StringBuilder();
-            signatureXml.append('<');
-            signatureXml.append(currentPrefix);
-            signatureXml.append("Signature ");
-            signatureXml.append(String.join(" ", signatureAttrs));
-            signatureXml.append('>');
+            final StringBuilder signatureXmlBuilder = new StringBuilder();
+            signatureXmlBuilder.append('<');
+            signatureXmlBuilder.append(currentPrefix);
+            signatureXmlBuilder.append("Signature ");
+            signatureXmlBuilder.append(String.join(" ", signatureAttrs));
+            signatureXmlBuilder.append('>');
 
             final String signedInfo = createSignedInfo(doc, prefix);
-            signatureXml.append(signedInfo);
-            signatureXml.append(getKeyInfo(prefix));
-            signatureXml.append("</");
-            signatureXml.append(currentPrefix);
-            signatureXml.append("Signature");
-            signatureXml.append('>');
+            signatureXmlBuilder.append(signedInfo);
+            signatureXmlBuilder.append(getKeyInfo(prefix));
+            signatureXmlBuilder.append("</");
+            signatureXmlBuilder.append(currentPrefix);
+            signatureXmlBuilder.append("Signature");
+            signatureXmlBuilder.append('>');
 
             this.originalXmlWithIds = XmlSupport.stringify(doc);
 
             final StringBuilder existingPrefixesBuilder = new StringBuilder();
 
-            existingPrefixes.forEach((key, value) -> {
-                XmlSupport.buildAttribute(existingPrefixesBuilder, "xmlns:" + key, value);
-            });
+            existingPrefixes.forEach((key, value) ->
+                buildAttribute(existingPrefixesBuilder, Identifier.XMLNS + ":" + key, value));
 
             // A trick to remove the namespaces that already exist in the xml
             // This only works if the prefix and namespace match with those in the xml
-            final Document wrappedDoc = XmlSupport.toWrappedDocument("Dummy", existingPrefixesBuilder.toString(), signatureXml.toString());
+            final Document wrappedDoc = XmlSupport.toWrappedDocument("Dummy", existingPrefixesBuilder.toString(), signatureXmlBuilder.toString());
             final Node firstChild = wrappedDoc.getDocumentElement().getFirstChild();
-            final Node signatureDoc = doc.adoptNode(firstChild);
+            final Node referenceNode = this.selectNode.apply(doc, location.getReference());
 
-            Node referenceNode = this.selectNode.apply(doc, location.getReference());
             if (referenceNode == null) {
-                throw new IllegalStateException(
-                    "The following xpath cannot be used because it was not found: " +
-                        location.getReference());
+                final String message = "The following xpath cannot be used because it was not found: " +
+                    location.getReference();
+
+                throw addLogThrow(
+                    message,
+                    null,
+                    XmlSignerException::new);
             }
 
+            final Node signatureDoc = doc.adoptNode(firstChild);
             switch (location.getAction()) {
-                case append:
+                case APPEND:
                     referenceNode.appendChild(signatureDoc);
                     break;
-                case prepend:
+                case PREPEND:
                     referenceNode.insertBefore(signatureDoc, referenceNode.getFirstChild());
                     break;
-                case before:
+                case BEFORE:
                     referenceNode.getParentNode().insertBefore(signatureDoc, referenceNode);
                     break;
-                case after:
+                case AFTER:
                     referenceNode.getParentNode().insertBefore(signatureDoc, referenceNode.getNextSibling());
                     break;
             }
 
             this.signatureNode = signatureDoc;
             this.calculateSignatureValue(doc, passphrase);
-            final NodeList signedInfoNodes = XPathSupport.findNodeChildren(this.signatureNode, "SignedInfo");
+            final NodeList signedInfoNodes = XPathSupport.findNodeChildren(this.signatureNode, AssertionQNames.SIGNED_INFO);
             if (signedInfoNodes.getLength() == 0) {
-                throw new RuntimeException("Could not find SignedInfo element in the message");
+                throw addLogThrow(
+                    "Cannot find SignedInfo element in the message",
+                    null,
+                    XmlSignerException::new);
             }
 
             final Node signedInfoNode = signedInfoNodes.item(0);
@@ -487,16 +486,8 @@ public final class XmlSigner extends NodeReader {
 
             this.signatureXml = XmlSupport.stringify(signatureDoc);
             this.signedXml = XmlSupport.stringify(doc);
-        } catch (NoSuchAlgorithmException
-            | SignatureException
-            | InvalidKeyException
-            | NoSuchProviderException
-            | IOException
-            | SAXException
-            | CanonicalizationException e) {
-            LOG.error(e.getMessage(), e);
-            this.errors.add(e.getMessage());
-            throw new IllegalStateException(e.getMessage(), e);
+        } catch (IOException | SAXException | CanonicalizationException e) {
+            throw addLogThrow(e.getMessage(), e, XmlSignerException::new);
         }
     }
 
@@ -542,10 +533,10 @@ public final class XmlSigner extends NodeReader {
             boolean isUnique = true;
             for(int k = 0; k < subsetAttributes.getLength(); k++){
                 String nodeName = subsetAttributes.item(k).getNodeName();
-                if (!nodeName.startsWith("xmlns:")) {
+                if (!nodeName.startsWith(Identifier.XMLNS_COLON)) {
                     continue;
                 }
-                String prefix = nodeName.replaceFirst("xmlns:", "");
+                String prefix = nodeName.replaceFirst(Identifier.XMLNS_COLON, "");
                 if (d.prefix.equals(prefix)) {
                     isUnique = false;
                     break;
@@ -576,17 +567,17 @@ public final class XmlSigner extends NodeReader {
         if (parentAttributes != null) {
             for (int i = 0; i < parentAttributes.getLength(); i++) {
                 Node attr = parentAttributes.item(i);
-                if (attr != null && attr.getNodeName() != null && attr.getNodeName().startsWith("xmlns:")) {
+                if (attr != null && attr.getNodeName() != null && attr.getNodeName().startsWith(Identifier.XMLNS_COLON)) {
                     nsList.add(
                         new PrefixNamespaceTuple(
-                            attr.getNodeName().replaceFirst("xmlns:", ""),
+                            attr.getNodeName().replaceFirst(Identifier.XMLNS_COLON, ""),
                             attr.getNodeValue()));
                 }
             }
         }
         return collectAncestorNamespaces(parent, nsList);
     }
-    private boolean isNonExclusiveC14n(String algorithm) {
+    private static boolean isNonExclusiveC14n(String algorithm) {
         boolean ret = algorithm.equals(Identifier.CANONICAL_XML_1_0_OMIT_COMMENTS)
                 || algorithm.equals(Identifier.CANONICAL_XML_1_0_WITH_COMMENTS);
         return ret;
@@ -594,26 +585,31 @@ public final class XmlSigner extends NodeReader {
 
     private String getCanonicalSignedInfoXml(Document doc) throws CanonicalizationException {
 
-        NodeList signedInfo = XPathSupport.findNodeChildren(this.signatureNode, "SignedInfo");
+        NodeList signedInfo = XPathSupport.findNodeChildren(this.signatureNode, AssertionQNames.SIGNED_INFO);
         if (signedInfo.getLength() == 0) {
-            throw new RuntimeException("Could not find SignedInfo element in the message");
+            throw addLogThrow(
+                "Cannot find SignedInfo element in the message",
+                null,
+                XmlSignerException::new);
+
         }
 
-        if(isNonExclusiveC14n(this.canonicalizationAlgorithm) && doc == null) {
-            throw new IllegalArgumentException("doc: whole xml must be provided for non-exclusive C14n");
+        if (isNonExclusiveC14n(this.canonicalizationAlgorithm) && doc == null) {
+            final String message = "doc: whole xml must be provided for non-exclusive C14n";
+            throw addLogThrow(message, null, XmlSignerException::new);
         }
 
         /*
          * Search for ancestor namespaces before canonicalization.
          */
         List<PrefixNamespaceTuple> ancestorNamespaces = this.findAncestorNamespaces(doc, "//*[local-name()='SignedInfo']");
-        CanonicalOptions options = new CanonicalOptions();
-        options.setAncestorNamespaces(ancestorNamespaces);
+        CanonicalOptions canonicalOptions = new CanonicalOptions();
+        canonicalOptions.setAncestorNamespaces(ancestorNamespaces);
 
         return this.getCanonicalXml(
             Collections.singletonList(this.canonicalizationAlgorithm),
             signedInfo.item(0),
-            options);
+            canonicalOptions);
     }
 
     /*
@@ -621,138 +617,156 @@ public final class XmlSigner extends NodeReader {
      */
     private String getCanonicalReferenceXml(Document doc, XmlReference ref, Node node) throws CanonicalizationException {
         ref.setAncestorNamespaces(findAncestorNamespaces(doc, ref.getXpathExpression()));
-        CanonicalOptions options = new CanonicalOptions();
-        options.setInclusiveNamespacesPrefixList(ref.getInclusiveNamespacesPrefixList());
-        options.setAncestorNamespaces(ref.getAncestorNamespaces());
-        return this.getCanonicalXml(ref.getTransforms(), node, options);
+        CanonicalOptions canonicalOptions = new CanonicalOptions();
+        canonicalOptions.setInclusiveNamespacesPrefixList(ref.getInclusiveNamespacesPrefixList());
+        canonicalOptions.setAncestorNamespaces(ref.getAncestorNamespaces());
+        return this.getCanonicalXml(ref.getTransforms(), node, canonicalOptions);
     }
 
-
-
-    private boolean validateSignatureValue(Document doc) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, CanonicalizationException {
-        final String localName = "SignedInfo";
-        String signedInfoCanonical = getCanonicalSignedInfoXml(doc);
-        SignatureAlgorithm signer = this.findSignatureAlgorithm(this.signatureAlgorithm);
-        final boolean ret = signer.verify(signedInfoCanonical, this.signingKey, this.signatureValue, null);
-        if (!ret) {
-            this.errors.add("Invalid signature: The signature value is incorrect: " + this.signatureValue);
+    private boolean validateSignatureValue(Document doc) {
+        try {
+            final String signedInfoCanonical = getCanonicalSignedInfoXml(doc);
+            final SignatureAlgorithm signer = this.findSignatureAlgorithm(this.signatureAlgorithm);
+            final boolean ret = signer.verify(signedInfoCanonical, this.signingKey, this.signatureValue, null);
+            if (!ret) {
+                final String message = "Invalid signature: The signature value is incorrect: " + this.signatureValue;
+                addLogGet(message, null,  false);
+            }
+            return ret;
+        } catch (CanonicalizationException e) {
+            return addLogGet(e.getMessage(), e, false);
         }
-        return ret;
+
     }
 
-    private void calculateSignatureValue(Document doc, char[] passphrase) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, CanonicalizationException {
+    private void calculateSignatureValue(Document doc, char[] passphrase) {
         final char[] finalPassphrase = passphrase == null ? new char[0] : passphrase;
-        String signedInfoCanonical = getCanonicalSignedInfoXml(doc);
-        SignatureAlgorithm signer = this.findSignatureAlgorithm(this.signatureAlgorithm);
-        this.signatureValue = signer.sign(signedInfoCanonical, this.signingKey, finalPassphrase, null);
+        try {
+            final String signedInfoCanonical = getCanonicalSignedInfoXml(doc);
+            final SignatureAlgorithm signer = this.findSignatureAlgorithm(this.signatureAlgorithm);
+            this.signatureValue = signer.sign(signedInfoCanonical, this.signingKey, finalPassphrase, null);
+        } catch (CanonicalizationException e) {
+            throw addLogThrow(e.getMessage(), e, XmlSignerException::new);
+        }
     }
 
     private SignatureAlgorithm findSignatureAlgorithm(String name) {
         SignatureAlgorithm alg = Algorithms.getInstance().getSignatureAlgorithms().get(name);
-        if (alg != null) {
-            return alg;
+        if (alg == null) {
+            throw addLogThrow(
+                "Signature algorithm is not supported: " +  name,
+                null,
+                XmlSignerException::new);
         }
-        throw new RuntimeException("Signature algorithm is not supported: " +  name);
+        return alg;
     }
 
     private CanonicalXml findCanonicalizationAlgorithm(String name) {
         CanonicalXml alg = Algorithms.getInstance().getCanonicalizationAlgorithms().get(name);
-        if (alg != null) {
-            return alg;
+        if (alg == null) {
+            throw addLogThrow(
+                "Canonicalization algorithm is not supported: " + name,
+                null,
+                XmlSignerException::new);
         }
-        throw new RuntimeException("Canonicalization algorithm is not supported: " + name);
+        return alg;
     }
 
     private HashAlgorithm findHashAlgorithm(String name) {
         HashAlgorithm alg = Algorithms.getInstance().getHashAlgorithms().get(name);
-        if (alg != null) {
-            return alg;
+        if (alg == null) {
+            throw addLogThrow(
+                "Hash algorithm is not supported: " + name,
+                null,
+                XmlSignerException::new);
         }
-        throw new RuntimeException("Hash algorithm is not supported: " + name);
+        return alg;
     }
 
-    private boolean validateReferences(Document doc, String xml) throws NoSuchProviderException, NoSuchAlgorithmException, CanonicalizationException {
+    // TODO: Reduce brain-overload somehow
+    private boolean validateReferences(Document doc, String xml) {
+        try {
+            for (XmlReference ref : this.references) {
+                String uri = ref.getUri().startsWith("#") ? ref.getUri().substring(1) : ref.getUri();
+                NodeList elem;
+                List<String> elem2 = new ArrayList<>();
 
-        for (XmlReference ref : this.references) {
-            String uri = ref.getUri().startsWith("#") ? ref.getUri().substring(1) : ref.getUri();
-            NodeList elem;
-            List<String> elem2= new ArrayList<>();
+                if (uri.isEmpty()) {
+                    elem = select.apply(doc, "//*");
+                } else if (uri.contains("'")) {
+                    // xpath injection
+                    return addLogGet(
+                        "Cannot validate uri with quotes inside it",
+                        null,
+                        false);
+                } else {
+                    String elemXpathExpression = null;
+                    int numElementsForId = 0;
 
-            if (uri.isEmpty()) {
-                elem = select.apply(doc, "//*");
-            } else if (uri.contains("'")) {
-                // xpath injection
-                throw new IllegalStateException("Cannot validate uri with quotes inside it");
-            } else {
-                String elemXpathExpression = null;
-                int numElementsForId = 0;
+                    for (String idAttr : idAttributes) {
 
-                for (String idAttr : idAttributes) {
+                        String tmpElemXpathExpression = "//*[@*[local-name(.)='" + idAttr + "']='" + uri + "']";
 
-                    String tmpElemXpathExpression = "//*[@*[local-name(.)='" + idAttr + "']='" + uri + "']";
-                    try {
-                        SAXIdAttributeReader idReader = AssertionFactory.newIdAttributeReader(xml, uri, idAttr);
+                        final SAXIdAttributeReader idReader = AssertionFactory.newIdAttributeReader(xml, uri, idAttr);
                         numElementsForId += idReader.getElements().size();
                         if (!idReader.getElements().isEmpty()) {
                             elem2 = idReader.getElements();
                             elemXpathExpression = tmpElemXpathExpression;
                         }
-                    } catch (SAXException e) {
-                        LOG.error(e.getMessage(), e);
-                        errors.add(e.getMessage());
-                        return false;
                     }
+
+                    if ( numElementsForId > 1) {
+                        final String message =
+                            "Cannot validate a document which contains multiple elements with the " +
+                            "same value for the ID / Id / Id attributes, in order to prevent " +
+                            "signature wrapping attack.";
+
+                        return addLogGet(message, null, false);
+                    }
+
+                    ref.setXpathExpression(elemXpathExpression);
+                    return true;
                 }
 
-                if ( numElementsForId > 1) {
-                    final String err =
-                        "Cannot validate a document which contains multiple elements with the " +
-                        "same value for the ID / Id / Id attributes, in order to prevent " +
-                        "signature wrapping attack.";
-                    LOG.error(err);
-                    errors.add(err);
-                    return false;
-                }
-
-                ref.setXpathExpression(elemXpathExpression);
-            }
-
-            if (elem2.isEmpty()) {
-                this.errors.add(
-                    String.format(
+                if (elem2.isEmpty()) {
+                    final String message = String.format(
                         "invalid signature: the signature references an element with uri %1$s but could not find such element in the xml",
-                        ref.getUri()));
-                return false ;
+                        ref.getUri());
+                    return addLogGet(message, null, false);
+                }
+
+                elem = select.apply(doc, ref.getXpathExpression());
+
+                String canonicalXml = getCanonicalReferenceXml(doc, ref, elem.item(0));
+                HashAlgorithm hash = this.findHashAlgorithm(ref.getDigestAlgorithm());
+
+                String digest = hash.hash(canonicalXml, null);
+
+                boolean valid = digest.equals(ref.getDigestValue());
+
+                if (!valid) {
+                    final String message = "invalid signature: for uri " + ref.getUri() +
+                        " calculated digest is " + digest +
+                        " but the xml to validate supplies digest " + ref.getDigestValue();
+                    addLogGet(message, null, false);
+                } else {
+                    return true;
+                }
             }
-
-            elem = select.apply(doc, ref.getXpathExpression());
-
-            String canonicalXml = getCanonicalReferenceXml(doc, ref, elem.item(0));
-            HashAlgorithm hash = this.findHashAlgorithm(ref.getDigestAlgorithm());
-            String digest = hash.hash(canonicalXml, null);
-
-            boolean valid = digest.equals(ref.getDigestValue());
-
-            if (!valid) {
-                this.errors.add(
-                    "invalid signature: for uri " + ref.getUri() +
-                    " calculated digest is " + digest +
-                    " but the xml to validate supplies digest " + ref.getDigestValue());
-
-                return false;
-            }
+        } catch (SAXException | CanonicalizationException e) {
+            return addLogGet(e.getMessage(), e, false);
         }
-
-        return true;
+        return false;
     }
 
     private String getKeyInfo(String prefix) {
 
         String currentPrefix = prefix == null ? "" : prefix;
-        if (StringSupport.notNullOrEmpty(currentPrefix)) {
+        if (notNullOrEmpty(currentPrefix)) {
             currentPrefix += ':';
         }
         StringBuilder b = new StringBuilder();
+
         if (this.keyInfoProvider != null) {
             String tagName = currentPrefix + "KeyInfo";
             XmlSupport.buildStartTag(b, tagName);
@@ -767,91 +781,95 @@ public final class XmlSigner extends NodeReader {
      * Generate the Reference nodes (as part of the signature process)
      * @param doc The document
      * @param prefix The prefix
-     * @throws NoSuchProviderException
-     * @throws NoSuchAlgorithmException
      */
-    private String createReferences(Document doc, String prefix) throws NoSuchProviderException, NoSuchAlgorithmException, CanonicalizationException {
+    private String createReferences(Document doc, String prefix) throws CanonicalizationException {
 
-        String effectivePrefix = prefix == null ? "" : prefix;
-        if (StringSupport.notNullOrEmpty(effectivePrefix)) {
-            effectivePrefix += ':';
-        }
-
-        StringBuilder builder = new StringBuilder();
-
-        for (XmlReference ref : this.references) {
-
-            NodeList nodes = select.apply(doc, ref.getXpathExpression());
-            if (nodes.getLength() == 0) {
-                throw new IllegalStateException(
-                    "The following xpath cannot be signed because it was not found: " + ref.getXpathExpression());
+            String effectivePrefix = prefix == null ? "" : prefix;
+            if (notNullOrEmpty(effectivePrefix)) {
+                effectivePrefix += ':';
             }
 
-            for (int i = 0; i < nodes.getLength(); i++) {
+            StringBuilder builder = new StringBuilder();
 
-                Element node = (Element)nodes.item(i);
+            for (XmlReference ref : this.references) {
 
-                if (ref.isEmptyUri()) {
-                    builder.append('<')
-                        .append(effectivePrefix)
-                        .append("Reference URI=\"\">");
-                } else {
-                    String id = this.ensureHasId(node);
-                    ref.setUri(id);
-                    builder.append('<')
-                        .append(effectivePrefix)
-                        .append("Reference URI=\"#")
-                        .append(id)
-                        .append("\">");
-                }
-                builder.append('<')
-                    .append(effectivePrefix)
-                    .append("Transforms>");
-
-                for (String t : ref.getTransforms()) {
-                    CanonicalXml transform = this.findCanonicalizationAlgorithm(t);
-                    builder.append('<')
-                        .append(effectivePrefix)
-                        .append("Transform Algorithm=\"")
-                        .append(transform.getIdentifier())
-                        .append("\"/>");
+                NodeList nodes = select.apply(doc, ref.getXpathExpression());
+                if (nodes.getLength() == 0) {
+                    throw addLogThrow(
+                        "The following xpath cannot be signed because it was not found: " + ref.getXpathExpression(),
+                        null,
+                        XmlSignerException::new);
                 }
 
-                String canonicalXml = this.getCanonicalReferenceXml(doc, ref, node);
+                for (int i = 0; i < nodes.getLength(); i++) {
 
-                HashAlgorithm digestAlgorithm = this.findHashAlgorithm(ref.getDigestAlgorithm());
-                builder.append("</").append(effectivePrefix).append("Transforms>")
-                    .append("<")
-                    .append(effectivePrefix)
-                    .append("DigestMethod Algorithm=\"")
-                    .append(digestAlgorithm.getIdentifier())
-                    .append("\"/>")
-                    .append("<")
-                    .append(effectivePrefix)
-                    .append("DigestValue>")
-                    .append(digestAlgorithm.hash(canonicalXml, null))
-                    .append("</")
-                    .append(effectivePrefix)
-                    .append("DigestValue>")
-                    .append("</")
-                    .append(effectivePrefix)
-                    .append("Reference>");
+                    Element node = (Element)nodes.item(i);
+
+                    if (ref.isEmptyUri()) {
+                        builder.append('<')
+                            .append(effectivePrefix)
+                            .append("Reference URI=\"\">");
+                    } else {
+                        String id = this.ensureHasId(node);
+                        ref.setUri(id);
+                        builder.append('<')
+                            .append(effectivePrefix)
+                            .append("Reference URI=\"#")
+                            .append(id)
+                            .append("\">");
+                    }
+                    builder.append('<')
+                        .append(effectivePrefix)
+                        .append("Transforms>");
+
+                    for (String t : ref.getTransforms()) {
+                        CanonicalXml transform = this.findCanonicalizationAlgorithm(t);
+                        builder.append('<')
+                            .append(effectivePrefix)
+                            .append("Transform Algorithm=\"")
+                            .append(transform.getIdentifier())
+                            .append("\"/>");
+                    }
+
+                    String canonicalXml = this.getCanonicalReferenceXml(doc, ref, node);
+
+                    HashAlgorithm digestAlgorithm = this.findHashAlgorithm(ref.getDigestAlgorithm());
+
+                    builder.append("</").append(effectivePrefix).append("Transforms>")
+                        .append("<")
+                        .append(effectivePrefix)
+                        .append("DigestMethod Algorithm=\"")
+                        .append(digestAlgorithm.getIdentifier())
+                        .append("\"/>")
+                        .append("<")
+                        .append(effectivePrefix)
+                        .append("DigestValue>")
+                        .append(digestAlgorithm.hash(canonicalXml, null))
+                        .append("</")
+                        .append(effectivePrefix)
+                        .append("DigestValue>")
+                        .append("</")
+                        .append(effectivePrefix)
+                        .append("Reference>");
+                }
             }
-        }
-        return builder.toString();
+
+            return builder.toString();
+
     }
 
     private String getCanonicalXml(final List<String> transforms, final Node node, CanonicalOptions options) throws CanonicalizationException {
 
         final CanonicalOptions finalOpts = options == null ? new CanonicalOptions() : options;
         if (finalOpts.getDefaultNsForPrefix().isEmpty()) {
-            finalOpts.setDefaultNsForPrefix(new DefaultNamespaceContextMap());
+            finalOpts.setDefaultNsForPrefix(SamlNamespaceContext.newInstance());
         }
         finalOpts.setSignatureNode(this.signatureNode);
 
         Node copy = node;
 
         final List<String> finalTransforms = transforms == null ? new ArrayList<>() : transforms;
+
         for (String t : finalTransforms) {
             CanonicalXml transform = findCanonicalizationAlgorithm(t);
             copy = transform.apply(copy, options);
@@ -870,7 +888,7 @@ public final class XmlSigner extends NodeReader {
         Node attr;
         if ("wssecurity".equals(this.idMode)) {
             attr = XPathSupport.findAttribute(node,
-                    "Id", Identifier.WSU_NS_URI);
+                    "Id", Identifier.WSU_NS_SCHEMA_LOCATION);
         } else {
             for (String idVariant : this.idAttributes) {
                 attr = XPathSupport.findAttribute(node, idVariant);
@@ -883,12 +901,13 @@ public final class XmlSigner extends NodeReader {
         String id = "_" + this.id++;
 
         if ("wssecurity".equals(this.idMode)) {
-            node.setAttributeNS("http://www.w3.org/2000/xmlns/",
-                    "xmlns:" + Identifier.WSU_NS_PREFIX,
-                    Identifier.WSU_NS_URI);
-            node.setAttributeNS(Identifier.WSU_NS_URI,
-                    Identifier.WSU_NS_PREFIX + ":Id",
-                    id);
+            node.setAttributeNS(
+                "http://www.w3.org/2000/xmlns/",
+                Identifier.XMLNS_COLON + Identifier.WSU_NS_PREFIX,
+                Identifier.WSU_NS_SCHEMA_LOCATION);
+            node.setAttributeNS(
+                Identifier.WSU_NS_SCHEMA_LOCATION,
+                Identifier.WSU_NS_PREFIX + ":Id", id);
         } else {
             node.setAttribute("Id", id);
         }
@@ -902,7 +921,7 @@ public final class XmlSigner extends NodeReader {
      * @param prefix
      * @return The SignedInfo String
      */
-    private String createSignedInfo(Document doc, String prefix) throws NoSuchProviderException, NoSuchAlgorithmException, CanonicalizationException {
+    private String createSignedInfo(Document doc, String prefix) throws CanonicalizationException {
         CanonicalXml transform = this.findCanonicalizationAlgorithm(this.canonicalizationAlgorithm);
         SignatureAlgorithm sigAlg = this.findSignatureAlgorithm(this.signatureAlgorithm);
         String currentPrefix = prefix == null ? "" : prefix;
@@ -925,14 +944,12 @@ public final class XmlSigner extends NodeReader {
      * Create the Signature node
      *
      * @param prefix The prefix
-     * @return the Signature elmenet
-     * @throws IOException
-     * @throws SAXException
+     * @return the Signature element
      */
-    private Node createSignature(String prefix) throws IOException, SAXException{
-        String xmlnsAttr = "xmlns";
+    private Node createSignature(String prefix) {
+        String xmlnsAttr = Identifier.XMLNS;
 
-        if (StringSupport.notNullOrEmpty(prefix)) {
+        if (notNullOrEmpty(prefix)) {
             xmlnsAttr += ':' + prefix;
             prefix += ':';
         } else {
@@ -946,9 +963,25 @@ public final class XmlSigner extends NodeReader {
         String dummySignatureWrapper = "<" + prefix + "Signature " + xmlnsAttr + "=\"http://www.w3.org/2000/09/xmldsig#\">" +
                 signatureValueXml +
                 "</" + prefix + "Signature>";
+        try {
+            Document doc = XmlSupport.toDocument(dummySignatureWrapper);
+            return doc.getDocumentElement().getFirstChild();
+        } catch (IOException | SAXException e) {
+            return addLogGet(e.getMessage(), e, null);
+        }
+    }
 
-        Document doc = XmlSupport.toDocument(dummySignatureWrapper);
-        return doc.getDocumentElement().getFirstChild();
+
+    private <T> T addLogGet(String message, Throwable throwable, T value) {
+        LOG.error(message, throwable);
+        errors.add(message);
+        return value;
+    }
+
+    private <T extends Exception> T addLogThrow(String message, Throwable throwable, BiFunction<String, Throwable, T> throwableSupplier) {
+        errors.add(message);
+        LOG.error(message, throwable);
+        return throwableSupplier.apply(message, throwable);
     }
 }
 

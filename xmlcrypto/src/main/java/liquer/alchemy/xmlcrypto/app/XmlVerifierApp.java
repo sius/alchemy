@@ -19,12 +19,12 @@ import java.nio.file.Paths;
  * Exemplary Usage:
 
      # mvn clean package
-     # mkdir ~/dev/test
-     # cp src/test/resources/*.pem ~/dev/test
-     # cp src/test/resources/*.cer ~/dev/test
-     # cp src/test/resources/*.xml ~/dev/test
-     # TEST_PATH=~/dev/test
-     # TEST_APP_CLASSPATH="target/xmlcrypto-1.0.0-SNAPSHOT.jar;ext/log4j-api-2.4.jar;ext/log4j-core-2.4.jar;ext/hamcrest-core-1.3.jar"
+     # mkdir /d/dev/test
+     # cp src/test/resources/*.pem /d/dev/test
+     # cp src/test/resources/*.cer /d/dev/test
+     # cp src/test/resources/*.xml /d/dev/test
+     # TEST_PATH=/d:/dev/test
+     # TEST_APP_CLASSPATH="target/xmlcrypto-1.0.0-SNAPSHOT.jar;ext/slf4j-api-1.7.24.jar;ext/logback-classic-1.2.3.jar;ext/logback-core-1.2.3.jar"
      java --class-path $TEST_APP_CLASSPATH \
          liquer.alchemy.xmlcrypto.app.XmlVerifierApp \
          --public-key-cert "$TEST_PATH/publickey.cer" \
@@ -64,11 +64,11 @@ public class XmlVerifierApp {
             xmlSigner.loadSignature(signature);
             ValidationResult result = xmlSigner.validateSignature(signedXml);
 
-            LOG.println("validToken: " + result.isValidToken());
-            LOG.println("validSignature: " + result.isValidSignature());
-            LOG.println("validationErrors:\n" + String.join("\n", result.getErrors()));
+            LOG.log("validToken: " + result.isValidToken());
+            LOG.log("validSignature: " + result.isValidSignature());
+            LOG.log("validationErrors:\n" + String.join("\n", result.getErrors()));
          } catch (Exception e) {
-            LOG.println(e.getMessage());
+            LOG.log(e.getMessage());
         }
     }
 }

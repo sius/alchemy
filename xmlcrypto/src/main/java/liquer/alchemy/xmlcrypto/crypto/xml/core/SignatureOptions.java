@@ -6,9 +6,9 @@ import java.util.Map;
 public class SignatureOptions {
 
     public SignatureOptions() {
-        setAttrs(null);
-        setExistingPrefixes(null);
-        setLocation(new Location());
+        attrs = new HashMap<>();
+        existingPrefixes = new HashMap<>();
+        location = new Location();
     }
 
 

@@ -4,25 +4,31 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-public interface Log<T> {
+public interface Log {
 
-    public static final int LF = 10;
-
-    default T println(String message) {
+    default Log println(String message) {
         return println(message, System.out);
     }
 
-    default T println(String message, OutputStream out) {
+    default Log println(String message, OutputStream out) {
         if (out == null || System.out == out) {
             System.out.println(message);
         } else {
             try (final OutputStream o = out) {
                 o.write(message.getBytes(StandardCharsets.UTF_8));
-                o.write(LF);
+                o.write(10);
             } catch (IOException e) {
-                throw new RuntimeException(e.getMessage(), e);
+                throw new RuntimeException(e);
             }
         }
-        return (T)this;
+        return this;
+    }
+
+    default void log(String message) {
+        println(message);
+    }
+
+    default void log(String message, OutputStream out) {
+        println(message, out);
     }
 }

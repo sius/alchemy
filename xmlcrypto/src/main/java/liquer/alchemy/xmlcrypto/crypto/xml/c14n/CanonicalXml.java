@@ -4,12 +4,14 @@ import liquer.alchemy.xmlcrypto.crypto.alg.Algorithm;
 import liquer.alchemy.xmlcrypto.crypto.xml.XmlSupport;
 import liquer.alchemy.xmlcrypto.crypto.xml.core.CharacterEncoder;
 import liquer.alchemy.xmlcrypto.crypto.xml.core.PrefixNamespaceTuple;
-import liquer.alchemy.xmlcrypto.support.StringSupport;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static liquer.alchemy.xmlcrypto.support.StringSupport.isNullOrEmpty;
+import static liquer.alchemy.xmlcrypto.support.StringSupport.notNullOrEmpty;
 
 public interface CanonicalXml extends Algorithm {
 
@@ -20,16 +22,15 @@ public interface CanonicalXml extends Algorithm {
     }
 
     default int compareAttribute(Node a, Node b) {
-        if (StringSupport.isNullOrEmpty(a.getNamespaceURI()) && StringSupport.notNullOrEmpty(b.getNamespaceURI())) {
+        if (isNullOrEmpty(a.getNamespaceURI()) && notNullOrEmpty(b.getNamespaceURI())) {
             return -1;
         }
-        if (StringSupport.isNullOrEmpty(b.getNamespaceURI()) && StringSupport.notNullOrEmpty(a.getNamespaceURI())) {
+        if (isNullOrEmpty(b.getNamespaceURI()) && notNullOrEmpty(a.getNamespaceURI())) {
             return 1;
         }
         String left = a.getNamespaceURI() + a.getLocalName();
         String right = b.getNamespaceURI() + b.getLocalName();
 
-        // return left.equals(right) ? 0 : left.compareTo(right);
         return left.compareTo(right);
     }
 
@@ -74,12 +75,11 @@ public interface CanonicalXml extends Algorithm {
 
     default StringBuilder buildAttributes(Node node) {
 
-        StringBuilder ret = new StringBuilder();
-        List<Node> attributeList = new ArrayList<>();
-
         if (node.getNodeType() == Node.COMMENT_NODE) {
             return buildComment(node);
         }
+
+        List<Node> attributeList = new ArrayList<>();
 
         NamedNodeMap attributes = node.getAttributes();
         for (int i = 0; i < attributes.getLength(); ++i) {
@@ -90,6 +90,7 @@ public interface CanonicalXml extends Algorithm {
         }
         attributeList.sort(this::compareAttribute);
 
+        StringBuilder ret = new StringBuilder();
         for (Node n : attributeList) {
             XmlSupport.buildAttribute(ret,
                     " " + n.getNodeName(),

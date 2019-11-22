@@ -1,14 +1,13 @@
 package liquer.alchemy.xmlcrypto.support;
 
-import liquer.alchemy.xmlcrypto.functional.Block1;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
-public final class Clock implements Timer, Log<Clock> {
+public final class Clock implements Timer, Log {
 
     public static Clock set() { return new Clock(); }
-    public static Clock set(Block1<Timer> block) {
+    public static Clock set(Consumer<Timer> block) {
         return new Clock(block);
     }
 
@@ -17,10 +16,10 @@ public final class Clock implements Timer, Log<Clock> {
     private List<Long> stops;
     private List<String> stopMessages;
 
-    private final Block1<Timer> block;
+    private final Consumer<Timer> block;
 
     private Clock() { this(t -> {}); }
-    private Clock(Block1<Timer> block) {
+    private Clock(Consumer<Timer> block) {
         this.block = block;
         reset();
     }
@@ -38,7 +37,7 @@ public final class Clock implements Timer, Log<Clock> {
 
     public Clock go() {
         start = System.currentTimeMillis();
-        block.run(this);
+        block.accept(this);
         return this;
     }
 
@@ -78,12 +77,12 @@ public final class Clock implements Timer, Log<Clock> {
         return String.join("\n", ret);
     }
 
-    public Clock println() {
+    public Log println() {
         return println( toString(), System.out);
     }
 
     @Override
-    public Clock println(String info) {
+    public Log println(String info) {
         return println( info + ":\n" + toString(), System.out);
     }
 }

@@ -13,7 +13,7 @@ class AttributeImpl implements Attribute {
 
     AttributeImpl(String name) {
         this.name = name;
-        this.values = new ArrayList();
+        this.values = new ArrayList<>();
     }
 
     public String getName() { return name; }

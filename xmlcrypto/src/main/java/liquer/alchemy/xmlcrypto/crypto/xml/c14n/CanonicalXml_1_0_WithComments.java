@@ -4,7 +4,6 @@ import liquer.alchemy.xmlcrypto.crypto.Identifier;
 import liquer.alchemy.xmlcrypto.crypto.xml.XmlSupport;
 import liquer.alchemy.xmlcrypto.crypto.xml.core.CharacterEncoder;
 import liquer.alchemy.xmlcrypto.crypto.xml.core.PrefixNamespaceTuple;
-import liquer.alchemy.xmlcrypto.support.StringSupport;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -12,6 +11,9 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.util.*;
+
+import static liquer.alchemy.xmlcrypto.support.StringSupport.isNullOrEmpty;
+import static liquer.alchemy.xmlcrypto.support.StringSupport.notNullOrEmpty;
 
 /**
  * https://www.w3.org/TR/2001/REC-xml-c14n-20010315
@@ -46,13 +48,18 @@ public class CanonicalXml_1_0_WithComments implements CanonicalXml {
         return Identifier.CANONICAL_XML_1_0_WITH_COMMENTS;
     }
 
-    private StringBuilder buildRecursively(Node node, Set<String> prefixesInScope, String defaultNamespaceURI, Map<String, String> defaultNsForPrefix, List<PrefixNamespaceTuple> ancestorNamespaces) {
+    private StringBuilder buildRecursively(
+        Node node,
+        Set<String> prefixesInScope,
+        String defaultNamespaceURI,
+        Map<String, String> defaultNsForPrefix,
+        List<PrefixNamespaceTuple> ancestorNamespaces) {
 
         if (node.getNodeType() == Node.COMMENT_NODE) {
             return buildComment(node);
         }
 
-        if (StringSupport.notNullOrEmpty(node.getTextContent())) {
+        if (notNullOrEmpty(node.getTextContent())) {
             return new StringBuilder(CharacterEncoder.getInstance().encodeText(node.getTextContent()));
         }
 
@@ -89,26 +96,33 @@ public class CanonicalXml_1_0_WithComments implements CanonicalXml {
      * @param ancestorNamespaces - Import ancestor namespaces if it is specified
      * @return
      */
-    private NamespacesTuple buildNamespaces(Node node, Set<String> prefixesInScope, String defaultNamespaceURI, Map<String, String> defaultNsForPrefix, List<PrefixNamespaceTuple> ancestorNamespaces) {
+    private NamespacesTuple buildNamespaces(
+        Node node, Set<String> prefixesInScope,
+        String defaultNamespaceURI,
+        Map<String, String> defaultNsForPrefix,
+        List<PrefixNamespaceTuple> ancestorNamespaces) {
+
         StringBuilder builder = new StringBuilder();
         String newDefaultNamespaceURI = defaultNamespaceURI;
         final String nodeNamespaceURI = node.getNamespaceURI();
-        String currentNamespaceURI = StringSupport.isNullOrEmpty(node.getNamespaceURI()) ? "" : nodeNamespaceURI;
+        String currentNamespaceURI = isNullOrEmpty(node.getNamespaceURI()) ? "" : nodeNamespaceURI;
 
         List<PrefixNamespaceTuple> nsTupleListToBuild = new ArrayList<>();
 
         String nodePrefix = node.getPrefix();
 
         // handel the namespace of the node itself
-        if (StringSupport.notNullOrEmpty(nodePrefix)) {
-            String effectiveNamespaceURI = StringSupport.notNullOrEmpty(nodeNamespaceURI) ? nodeNamespaceURI : defaultNsForPrefix.get(nodePrefix);
+        if (notNullOrEmpty(nodePrefix)) {
+            String effectiveNamespaceURI = notNullOrEmpty(nodeNamespaceURI) ? nodeNamespaceURI : defaultNsForPrefix.get(nodePrefix);
             if (!prefixesInScope.contains(nodePrefix)) {
                 nsTupleListToBuild.add(new PrefixNamespaceTuple(nodePrefix, effectiveNamespaceURI));
                 prefixesInScope.add(nodePrefix);
             }
-        } else if (!defaultNamespaceURI.equals(currentNamespaceURI)) {
-            newDefaultNamespaceURI = nodeNamespaceURI;
-            XmlSupport.buildAttribute(builder, "xmlns", newDefaultNamespaceURI);
+        } else {
+            if (!defaultNamespaceURI.equals(currentNamespaceURI)) {
+                newDefaultNamespaceURI = nodeNamespaceURI;
+                XmlSupport.buildAttribute(builder, "xmlns", newDefaultNamespaceURI);
+            }
         }
 
         // handle the attributes namespace
@@ -117,7 +131,7 @@ public class CanonicalXml_1_0_WithComments implements CanonicalXml {
             Node attr = attributes.item(i);
             final String attrPrefix = attr.getPrefix();
 
-            if (StringSupport.notNullOrEmpty(attrPrefix)) {
+            if (notNullOrEmpty(attrPrefix)) {
 
                 final String attrLocalName = attr.getLocalName();
                 final String attrNamespaceURI = attr.getNamespaceURI();
@@ -133,14 +147,14 @@ public class CanonicalXml_1_0_WithComments implements CanonicalXml {
                 // handle all prefixed attributes
                 // that are not xmlns definitions and
                 // where the prefix is not defined already
-                if (!prefixesInScope.contains(attrPrefix) && !attrPrefix.equals("xmlns") && !attrPrefix.equals("xml")) {
+                if (!prefixesInScope.contains(attrPrefix) && !"xmlns".equals(attrPrefix) && !"xml".equals(attrPrefix)) {
                     nsTupleListToBuild.add(new PrefixNamespaceTuple(attrPrefix, attrNamespaceURI));
                     prefixesInScope.add(attrPrefix);
                 }
             }
         }
 
-        if(ancestorNamespaces != null && ancestorNamespaces.size() > 0){
+        if(ancestorNamespaces != null && !ancestorNamespaces.isEmpty()){
             // Remove namespaces which are already present in nsListToRender
             for (PrefixNamespaceTuple pnt1 : ancestorNamespaces){
 

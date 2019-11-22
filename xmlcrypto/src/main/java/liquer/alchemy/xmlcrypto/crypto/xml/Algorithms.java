@@ -9,7 +9,7 @@ import liquer.alchemy.xmlcrypto.crypto.xml.c14n.Canonicalization;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Algorithms {
+public final class Algorithms {
 
     private static class SingletonHelper {
 

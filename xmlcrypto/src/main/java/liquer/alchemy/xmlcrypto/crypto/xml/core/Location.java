@@ -1,6 +1,6 @@
 package liquer.alchemy.xmlcrypto.crypto.xml.core;
 
-import liquer.alchemy.xmlcrypto.support.StringSupport;
+import static liquer.alchemy.xmlcrypto.support.StringSupport.isNullOrEmpty;
 
 public class Location {
 
@@ -9,8 +9,8 @@ public class Location {
     private ActionTypes action;
 
     public Location() {
-        setReference("/*");
-        setAction(ActionTypes.append);
+        reference = "/*";
+        action = ActionTypes.APPEND;
     }
 
     public String getReference() {
@@ -18,7 +18,7 @@ public class Location {
     }
 
     public void setReference(String reference) {
-        this.reference = StringSupport.isNullOrEmpty(reference) ? "/*" : reference;
+        this.reference = isNullOrEmpty(reference) ? "/*" : reference;
     }
 
     public ActionTypes getAction() {
@@ -26,6 +26,6 @@ public class Location {
     }
 
     public void setAction(ActionTypes action) {
-        this.action = action == null ? ActionTypes.append : action;
+        this.action = action == null ? ActionTypes.APPEND : action;
     }
 }

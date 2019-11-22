@@ -1,8 +1,8 @@
 package liquer.alchemy.xmlcrypto.crypto.xml;
 
 import liquer.alchemy.xmlcrypto.support.IOSupport;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
 import java.io.File;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class FileKeyInfo implements KeyInfo {
 
-    private static Logger LOG = LogManager.getLogger(FileKeyInfo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FileKeyInfo.class);
 
     private final File file;
 

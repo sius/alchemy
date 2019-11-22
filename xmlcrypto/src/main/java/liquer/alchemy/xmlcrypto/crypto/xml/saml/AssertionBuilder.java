@@ -8,14 +8,12 @@ import liquer.alchemy.xmlcrypto.crypto.xml.saml.jaxb.model.AttributeStatementTyp
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.jaxb.model.AttributeType;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.jaxb.model.ConditionsType;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.jaxb.model.SubjectType;
+import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.NCName;
 
 import java.util.GregorianCalendar;
 import java.util.List;
 
 public interface AssertionBuilder {
-    String DEFAULT_VERSION = "2.0";
-    String DEFAULT_SUBJECT_CONFIRMATION_TYPE_METHOD =
-        "urn:oasis:names:tc:SAML:2.0:cm:bearer";
 
     AssertionBuilder reset();
 
@@ -30,6 +28,8 @@ public interface AssertionBuilder {
     AssertionBuilder id();
 
     AssertionBuilder id(String id);
+
+    AssertionBuilder id(NCName id);
 
     AssertionBuilder issuer(String issuerNameIdValue);
 

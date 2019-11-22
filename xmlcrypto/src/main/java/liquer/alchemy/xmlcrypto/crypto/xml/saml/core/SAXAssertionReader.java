@@ -1,5 +1,6 @@
 package liquer.alchemy.xmlcrypto.crypto.xml.saml.core;
 
+import com.sun.org.apache.xerces.internal.dom.DOMInputImpl;
 import liquer.alchemy.xmlcrypto.crypto.Identifier;
 import liquer.alchemy.xmlcrypto.crypto.xml.*;
 import liquer.alchemy.xmlcrypto.crypto.xml.core.KeyInfoImpl;
@@ -7,128 +8,68 @@ import liquer.alchemy.xmlcrypto.crypto.xml.core.X509DataImpl;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.*;
 import liquer.alchemy.xmlcrypto.functional.Func0;
 import liquer.alchemy.xmlcrypto.functional.Func1;
-import liquer.alchemy.xmlcrypto.support.StringSupport;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import liquer.alchemy.xmlcrypto.functional.Try;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.ls.LSInput;
+import org.w3c.dom.ls.LSResourceResolver;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.IOException;
+import java.net.URI;
 import java.util.*;
-
 
 /**
  * Reads Assertion with SAX
+ * Resolve Schemas, DTDs from trusted locations
  */
-final class SAXAssertionReader extends DefaultHandler implements Assertion {
+final class SAXAssertionReader extends DefaultHandler implements Assertion, LSResourceResolver {
 
-    private static final Logger LOG = LogManager.getLogger(SAXAssertionReader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SAXAssertionReader.class);
 
-    private enum AssertionElement {
-        UNDEFINED,
-        Assertion,
-        Issuer,
-        Subject, SubjectConfirmation,
-        Conditions, AudienceRestriction, Audience,
-        AttributeStatement, Attribute, AttributeValue,
+    private static Map<String, String> RESOLVER_MAP;
 
-        // Signature
-        Signature,
-        CanonicalizationMethod,
-        SignatureMethod,
-        SignedInfo,
-        Reference,
-        DigestMethod,
-        DigestValue,
-        Transforms,
-        Transform,
-        InclusiveNamespaces,
-        SignatureValue,
-        KeyInfo,
-        X509Data,
-        X509Certificate,
-        X509IssuerSerial,
-        X509IssuerName,
-        X509SerialNumber
-    }
-
-    private static class LocalNames {
-        private static final String ASSERTION = "Assertion";
-        private static final String ISSUER = "Issuer";
-        private static final String SUBJECT = "Subject";
-        private static final String SUBJECT_CONFIRMATION = "SubjectConfirmation";
-        private static final String CONDITIONS = "Conditions";
-        private static final String AUDIENCE_RESTRICTION = "AudienceRestriction";
-        private static final String AUDIENCE = "Audience";
-        private static final String ATTRIBUTE_STATEMENT = "AttributeStatement";
-        private static final String ATTRIBUTE = "Attribute";
-        private static final String ATTRIBUTE_VALUE = "AttributeValue";
-    }
-
-    private static class QNames {
-        private static final String NS_PREFIX = "saml:";
-        private static final String ASSERTION = NS_PREFIX + LocalNames.ASSERTION;
-        private static final String ISSUER = NS_PREFIX + LocalNames.ISSUER;
-        private static final String SUBJECT = NS_PREFIX + LocalNames.SUBJECT;
-        private static final String SUBJECT_CONFIRMATION = NS_PREFIX + LocalNames.SUBJECT_CONFIRMATION;
-        private static final String CONDITIONS = NS_PREFIX + LocalNames.CONDITIONS;
-        private static final String AUDIENCE_RESTRICTION = NS_PREFIX + LocalNames.AUDIENCE_RESTRICTION;
-        private static final String AUDIENCE = NS_PREFIX + LocalNames.AUDIENCE;
-        private static final String ATTRIBUTE_STATEMENT = NS_PREFIX + LocalNames.ATTRIBUTE_STATEMENT;
-        private static final String ATTRIBUTE = NS_PREFIX + LocalNames.ATTRIBUTE;
-        private static final String ATTRIBUTE_VALUE = NS_PREFIX + LocalNames.ATTRIBUTE_VALUE;
-
-        private static final String ISSUE_INSTANT = "IssueInstant";
-        private static final String VERSION = "Version";
-        private static final String ID = "ID";
-        private static final String METHOD = "Method";
-        private static final String NOT_BEFORE = "NotBefore";
-        private static final String NOT_ON_OR_AFTER = "NotOnOrAfter";
-        private static final String NAME = "Name";
-
-        // Signature
-        private static final String SIGNATURE = "Signature";
-        private static final String CANONICALIZATION_METHOD = "CanonicalizationMethod";
-        private static final String SIGNATURE_METHOD = "SignatureMethod";
-        private static final String SIGNED_INFO = "SignedInfo";
-        private static final String REFERENCE = "Reference";
-        private static final String DIGEST_METHOD = "DigestMethod";
-        private static final String DIGEST_VALUE = "DigestValue";
-        private static final String TRANSFORMS = "Transforms";
-        private static final String TRANSFORM = "Transform";
-        private static final String INCLUSIVE_NAMESPACES = "InclusiveNamespaces";
-
-        private static final String X509_DATA = "X509Data";
-        private static final String X509_CERTIFICATE = "X509Certificate";
-        private static final String X509_ISSUER_SERIAL = "X509IssuerSerial";
-        private static final String X509_ISSUER_NAME = "X509IssuerName";
-        private static final String X509_SERIAL_NUMBER = "X509SerialNumber";
-
-        private static final String SIGNATURE_VALUE = "SignatureValue";
-        private static final String KEY_INFO = "KeyInfo";
-        private static final String ALGORITHM = "Algorithm";
-        private static final String URI = "URI";
-        private static final String PREFIX_LIST = "PrefixList";
+    static {
+        RESOLVER_MAP = new HashMap<>();
+        RESOLVER_MAP.put(Identifier.SAML2_NS_URI, "/schemas/oasis/saml/saml-schema-assertion-2.0.xsd");
+        RESOLVER_MAP.put("datatypes.dtd", "/schemas/www.w3.org/2001/datatypes.dtd");
+        RESOLVER_MAP.put(Identifier.XML_SCHEMA_DTD_LOCATION, "/schemas/www.w3.org/2001/XMLSchema.dtd");
+        RESOLVER_MAP.put(Identifier.XMLDSIG_SCHEMA_LOCATION, "/schemas/www.w3.org/TR/2002/REC-xmldsig-core-20020212/xmldsig-core-schema.xsd");
+        RESOLVER_MAP.put(Identifier.SOAP_SCHEMA_LOCATION, "/schemas/www.w3.org/2003/05/soap-envelope/index.xsd");
+        RESOLVER_MAP.put(Identifier.SOAP_ENV_SCHEMA_LOCATION, "/schemas/schemas.xmlsoap.org/soap/envelope/index.xsd");
+        RESOLVER_MAP.put(Identifier.XMLENC_SCHEMA_LOCATION, "/schemas/www.w3.org/TR/2002/REC-xmlenc-core-20021210/xenc-schema.xsd");
+        RESOLVER_MAP.put(Identifier.WSSE_NS_SCHEMA_LOCATION, "/schemas/oasis/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd");
+        RESOLVER_MAP.put(Identifier.DATEV_WSSE_NS_SCHEMA_LOCATION, "/schemas/oasis/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd");
+        RESOLVER_MAP.put(Identifier.WSU_NS_SCHEMA_LOCATION, "/schemas/oasis/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd");
     }
 
     private static void renderEndElement(final StringBuilder b, String uri, String localName, String qName) throws SAXException {
-        String elementName = localName; // element name
+        // element name
+        String elementName = localName;
         if ("".equals(elementName)) {
-            elementName = qName; // not namespaceAware
+            // not namespaceAware
+            elementName = qName;
         }
         b.append("</" + elementName + '>');
     }
 
     private static void renderStartElement(final StringBuilder b, String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        String elementName = localName; // element name
+        // element name
+        String elementName = localName;
         if ("".equals(elementName)) {
-            elementName = qName; // not namespaceAware
+            // not namespaceAware
+            elementName = qName;
         }
         b.append('<' + elementName);
         if (attributes != null) {
             for (int i = 0; i < attributes.getLength(); i++) {
-                String aName = attributes.getLocalName(i); // Attr name
+                // Attr name
+                String aName = attributes.getLocalName(i);
                 if ("".equals(aName)) {
                     aName = attributes.getQName(i);
                 }
@@ -151,16 +92,13 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
         private String x509Certificate;
         private String x509IssuerName;
         private String x509SerialNumber;
-        private String digestValue;
         private String signatureValue;
         private String canonicalizationAlgorithm;
         private String signatureAlgorithm;
         private String digestAlgorithm;
         private String referenceURI;
-        private XmlReference assertionReference;
         private KeyInfo keyInfo;
-
-        private boolean hasX509IssuerSerial;
+        private String digestValue;
 
         private StringBuilder signatureFragmentBuilder;
         private StringBuilder digestValueBuilder;
@@ -171,11 +109,9 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
         private boolean renderMode;
 
         // trick sonar and avoid if...else...
-        private final Func0<Integer> currentDepthClosure;
         private final Func0<AssertionElement> currentElementClosure;
         private final Func0<AssertionElement> popElementClosure;
         private final Func1<AssertionElement, AssertionElement> pushElementClosure;
-        private final Func1<AssertionElement, Boolean> currentHasAncestorClosure;
 
         private SAXSignatureReader(final SAXAssertionReader assertionReader, XmlSignerOptions options) {
             this.signatureXml = null;
@@ -183,12 +119,10 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
             this.transforms = new ArrayList<>();
             this.inclusiveNamespacesPrefixList = new ArrayList<>();
             this.references = new ArrayList<>();
-
-            this.currentDepthClosure = () -> assertionReader.currentDepth();
-            this.currentElementClosure = () -> assertionReader.currentElement();
-            this.popElementClosure = () -> assertionReader.popElement();
-            this.pushElementClosure = (item) -> assertionReader.pushElement(item);
-            this.currentHasAncestorClosure = (ancestor) -> assertionReader.hasAncestor(ancestor);
+            // use assertionReader elementStack
+            this.currentElementClosure = assertionReader::currentElement;
+            this.popElementClosure = assertionReader::popElement;
+            this.pushElementClosure = assertionReader::pushElement;
         }
 
         SAXSignatureReader(String xml, XmlSignerOptions options) {
@@ -199,21 +133,12 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
             this.references = new ArrayList<>();
 
             final Stack<AssertionElement> elementStack = new Stack<>();
-            this.currentDepthClosure = () -> elementStack.size();
-            this.currentElementClosure = () -> elementStack.peek();
-            this.popElementClosure = () -> elementStack.pop();
-            this.pushElementClosure = (item) -> elementStack.push(item);
-            this.currentHasAncestorClosure = (ancestor) -> {
-                final int pos = elementStack.indexOf(ancestor);
-                return (pos != -1 && pos < (elementStack.size()-1));
-            };
+            this.currentElementClosure = elementStack::peek;
+            this.popElementClosure = elementStack::pop;
+            this.pushElementClosure = elementStack::push;
         }
 
-        @Override public String toString() {
-            return signatureXml == null
-                ? this.signatureFragment
-                : this.signatureXml;
-        }
+        @Override public String toString() { return signatureXml == null ? this.signatureFragment : this.signatureXml; }
 
         @Override
         public String getCanonicalizationAlgorithm() { return this.canonicalizationAlgorithm; }
@@ -231,32 +156,37 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
         public List<XmlReference> getReferences() { return Collections.unmodifiableList(this.references); }
 
         @Override
-        public XmlReference getAssertionReference() {
-            return this.assertionReference;
-        }
+        public XmlReference getAssertionReference() { return this.references.isEmpty() ? null : this.references.get(0); }
 
         @Override
         public KeyInfo getKeyInfo() { return this.keyInfo; }
 
-        private int currentDepth() {
-            return currentDepthClosure.apply();
+        private AssertionElement currentElement() { return currentElementClosure.apply(); }
+
+        private AssertionElement pushElement(AssertionElement item) { return pushElementClosure.apply(item); }
+
+        private AssertionElement popElement() { return popElementClosure.apply(); }
+
+        /* ErrorHandler Implementation */
+
+        @Override
+        public void warning(SAXParseException exception) throws SAXException {
+            LOG.warn(exception.getMessage(), exception);
         }
 
-        private AssertionElement currentElement() {
-            return currentElementClosure.apply();
+        @Override
+        public void error(SAXParseException exception) throws SAXException {
+            LOG.error(exception.getMessage(), exception);
         }
 
-        private AssertionElement pushElement(AssertionElement item) {
-            return pushElementClosure.apply(item);
+        @Override
+        public void fatalError(SAXParseException exception) throws SAXException {
+            LOG.error("FATAL: " + exception.getMessage(), exception);
         }
 
-        private AssertionElement popElement() {
-            return popElementClosure.apply();
-        }
+        /* End of ErrorHandler Implementation */
 
-        private boolean currentHasAncestor(AssertionElement ancestor) {
-            return currentHasAncestorClosure.apply(ancestor);
-        }
+        /* ContentHandler Implementation */
 
         @Override
         public void startDocument() {
@@ -270,16 +200,6 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
 
         @Override
         public void endDocument() {
-            final List<String> validationErrors = endAndValidateDocument(null);
-            if (!validationErrors.isEmpty()) {
-                throw new IllegalStateException("Illegal state: " + String.join(" ", validationErrors));
-            }
-        }
-
-        private List<String> endAndValidateDocument(String assertionId) {
-
-            final List<String> errors = new ArrayList<>();
-
             this.signatureFragment = signatureFragmentBuilder.toString();
             this.digestValue = digestValueBuilder.toString();
             this.signatureValue = signatureValueBuilder.toString();
@@ -287,173 +207,93 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
             this.x509IssuerName = x509IssuerNameBuilder.toString();
             this.x509SerialNumber = x509SerialNumberBuilder.toString();
 
-            final boolean hasCanonicalizationAlgorithm = StringSupport.notNullEmptyOrBlank(this.canonicalizationAlgorithm);
-            final boolean hasSignatureAlgorithm = StringSupport.notNullEmptyOrBlank(this.signatureAlgorithm);
-            final boolean hasDigestAlgorithm = StringSupport.notNullEmptyOrBlank(this.digestAlgorithm);
-            final boolean hasDigestValue = StringSupport.notNullEmptyOrBlank(this.digestValue);
-            final boolean hasSignatureValue = StringSupport.notNullEmptyOrBlank(this.signatureValue);
-
-            if (!hasCanonicalizationAlgorithm) {
-                errors.add(
-                    "Cannot find Algorithm attribute in CanonicalizationMethod Element.");
-            }
-            if (!hasSignatureAlgorithm) {
-                errors.add(
-                    "Cannot find Algorithm attribute in SignatureMethod Element.");
-            }
-            if (!hasSignatureValue) {
-                errors.add(
-                    "Cannot find the value of the SignatureValue Element.");
-            }
-            if (!hasDigestAlgorithm) {
-                errors.add(
-                    "Cannot find Algorithm attribute in DigestMethod Element.");
-            }
-            if (!hasDigestValue) {
-                errors.add(
-                    "Cannot not find the value of the DigestValue Element.");
+            boolean hasImplicitTransforms = (this.implicitTransforms != null && !this.implicitTransforms.isEmpty());
+            if (hasImplicitTransforms) {
+                this.implicitTransforms.addAll(transforms);
             }
 
-            if (references.isEmpty()) {
-                errors.add("Cannot find any Reference elements");
-            } else {
-                if (assertionId != null) {
-
-                    // enveloped Signature
-                    final boolean hasX509Certificate = StringSupport.notNullEmptyOrBlank(this.x509Certificate);
-                    final boolean hasX509IssuerName = StringSupport.notNullEmptyOrBlank(this.x509IssuerName);
-                    final boolean hasX509SerialNumber = StringSupport.notNullEmptyOrBlank(this.x509SerialNumber);
-
-                    int refIdCount = 0;
-                    for (XmlReference ref : references) {
-                        String uri = ref.getUri().startsWith("#") ? ref.getUri().substring(1) : ref.getUri();
-                        if (assertionId.equals(uri)) {
-                            assertionReference = ref;
-                            refIdCount++;
-                        }
-                    }
-                    if (refIdCount > 1) {
-                        errors.add(
-                            "Cannot validate a document which contains multiple references with the " +
-                                "same value for the Assertion ID attribute");
-                    }
-                    if (!hasX509Certificate) {
-                        errors.add("Cannot find any X509Certificate value");
-                    }
-                    if (!hasX509IssuerName) {
-                        errors.add("Cannot find any X509IssuerName value");
-                    }
-                    if (!hasX509SerialNumber) {
-                        errors.add("Cannot find any X509SerialNumber value");
-                    }
-
-                }
+            /*
+             * DigestMethods take an octet stream rather than a node set.
+             * If the output of the last transform is a node set,
+             * we need to canonicalize the node set to an octet stream
+             * using non-exclusive canonicalization.
+             * If there are no transforms,
+             * we need to canonicalize because URI de-referencing for a same-document reference
+             * will return a node-set.
+             * See:
+             * https://www.w3.org/TR/xmldsig-core1/#sec-DigestMethod
+             * https://www.w3.org/TR/xmldsig-core1/#sec-ReferenceProcessingModel
+             * https://www.w3.org/TR/xmldsig-core1/#sec-Same-Document
+             */
+            if (transforms.isEmpty() || Identifier.ENVELOPED_SIGNATURE.equals(transforms.get(transforms.size() - 1))) {
+                transforms.add(Identifier.CANONICAL_XML_1_0_OMIT_COMMENTS);
             }
 
-            if (errors.isEmpty()) {
-                boolean hasImplicitTransforms = (this.implicitTransforms != null && !this.implicitTransforms.isEmpty());
-                if (hasImplicitTransforms) {
-                    this.implicitTransforms.addAll(transforms);
-                }
-
-                /*
-                 * DigestMethods take an octet stream rather than a node set.
-                 * If the output of the last transform is a node set,
-                 * we need to canonicalize the node set to an octet stream
-                 * using non-exclusive canonicalization.
-                 * If there are no transforms,
-                 * we need to canonicalize because URI de-referencing for a same-document reference
-                 * will return a node-set.
-                 * See:
-                 * https://www.w3.org/TR/xmldsig-core1/#sec-DigestMethod
-                 * https://www.w3.org/TR/xmldsig-core1/#sec-ReferenceProcessingModel
-                 * https://www.w3.org/TR/xmldsig-core1/#sec-Same-Document
-                 */
-                if (transforms.isEmpty() || Identifier.ENVELOPED_SIGNATURE.equals(transforms.get(transforms.size() - 1))) {
-                    transforms.add(Identifier.CANONICAL_XML_1_0_OMIT_COMMENTS);
-                }
-
-                final X509Data x509data = new X509DataImpl(x509IssuerName, x509SerialNumber, x509Certificate);
-                this.keyInfo = new KeyInfoImpl(x509data);
-            }
-
-            return errors;
+            final X509Data x509data = new X509DataImpl(x509IssuerName, x509SerialNumber, x509Certificate);
+            this.keyInfo = new KeyInfoImpl(x509data);
         }
 
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             switch (qName) {
 
-                case QNames.SIGNATURE:
-                    this.pushElement(AssertionElement.Signature);
+                case AssertionQNames.SIGNATURE:
+                    this.pushElement(AssertionElement.SIGNATURE);
                     this.renderMode = true;
                     break;
-                case QNames.CANONICALIZATION_METHOD:
-                    this.pushElement(AssertionElement.CanonicalizationMethod);
-                    if (this.currentHasAncestor(AssertionElement.SignedInfo)) {
-                        this.canonicalizationAlgorithm = attributes.getValue(QNames.ALGORITHM);
-                    }
+                case AssertionQNames.CANONICALIZATION_METHOD:
+                    this.pushElement(AssertionElement.CANONICALIZATION_METHOD);
+                    this.canonicalizationAlgorithm = attributes.getValue(AssertionQNames.ALGORITHM);
                     break;
-                case QNames.SIGNATURE_METHOD:
-                    this.pushElement(AssertionElement.SignatureMethod);
-                    if (this.currentHasAncestor(AssertionElement.SignedInfo)) {
-                        this.signatureAlgorithm = attributes.getValue(QNames.ALGORITHM);
-                     }
+                case AssertionQNames.SIGNATURE_METHOD:
+                    this.pushElement(AssertionElement.SIGNATURE_METHOD);
+                    this.signatureAlgorithm = attributes.getValue(AssertionQNames.ALGORITHM);
                     break;
-                case QNames.SIGNED_INFO:
-                    this.pushElement(AssertionElement.SignedInfo);
+                case AssertionQNames.SIGNED_INFO:
+                    this.pushElement(AssertionElement.SIGNED_INFO);
                     break;
-                case QNames.REFERENCE:
-                    this.pushElement(AssertionElement.Reference);
-                    if (this.currentHasAncestor(AssertionElement.SignedInfo)) {
-                        this.referenceURI = attributes.getValue(QNames.URI);
-                    }
+                case AssertionQNames.REFERENCE:
+                    this.pushElement(AssertionElement.REFERENCE);
+                    this.referenceURI = attributes.getValue(AssertionQNames.URI);
                     break;
-                case QNames.DIGEST_METHOD:
-                    this.pushElement(AssertionElement.DigestMethod);
-                    if (this.currentHasAncestor(AssertionElement.Reference)) {
-                        this.digestAlgorithm = attributes.getValue(QNames.ALGORITHM);
-                    }
+                case AssertionQNames.DIGEST_METHOD:
+                    this.pushElement(AssertionElement.DIGEST_METHOD);
+                    this.digestAlgorithm = attributes.getValue(AssertionQNames.ALGORITHM);
                     break;
-                case QNames.DIGEST_VALUE:
-                    this.pushElement(AssertionElement.DigestValue);
+                case AssertionQNames.DIGEST_VALUE:
+                    this.pushElement(AssertionElement.DIGEST_VALUE);
                     break;
-                case QNames.SIGNATURE_VALUE:
-                    this.pushElement(AssertionElement.SignatureValue);
+                case AssertionQNames.SIGNATURE_VALUE:
+                    this.pushElement(AssertionElement.SIGNATURE_VALUE);
                     break;
-                case QNames.TRANSFORMS:
-                    this.pushElement(AssertionElement.Transforms);
+                case AssertionQNames.TRANSFORMS:
+                    this.pushElement(AssertionElement.TRANSFORMS);
                     break;
-                case QNames.TRANSFORM:
-                    this.pushElement(AssertionElement.Transform);
-                    if (this.currentHasAncestor(AssertionElement.Transforms)) {
-                        this.transforms.add(attributes.getValue(QNames.ALGORITHM));
-                    }
+                case AssertionQNames.TRANSFORM:
+                    this.pushElement(AssertionElement.TRANSFORM);
+                    this.transforms.add(attributes.getValue(AssertionQNames.ALGORITHM));
                     break;
-                case QNames.INCLUSIVE_NAMESPACES:
-                    this.pushElement(AssertionElement.InclusiveNamespaces);
-                    if (this.currentHasAncestor(AssertionElement.Transform)) {
-                        this.inclusiveNamespacesPrefixList.add(attributes.getValue(QNames.PREFIX_LIST));
-                    }
+                case AssertionQNames.INCLUSIVE_NAMESPACES:
+                    this.pushElement(AssertionElement.INCLUSIVE_NAMESPACES);
+                    this.inclusiveNamespacesPrefixList.add(attributes.getValue(AssertionQNames.PREFIX_LIST));
                     break;
-                case QNames.KEY_INFO:
-                    this.pushElement(AssertionElement.KeyInfo);
+                case AssertionQNames.KEY_INFO:
+                    this.pushElement(AssertionElement.KEY_INFO);
                     break;
-                case QNames.X509_DATA:
-                    this.pushElement(AssertionElement.X509Data);
+                case AssertionQNames.X509_DATA:
+                    this.pushElement(AssertionElement.X_509_DATA);
                     break;
-                case QNames.X509_CERTIFICATE:
-                    this.pushElement(AssertionElement.X509Certificate);
+                case AssertionQNames.X509_CERTIFICATE:
+                    this.pushElement(AssertionElement.X_509_CERTIFICATE);
                     break;
-                case QNames.X509_ISSUER_SERIAL:
-                    this.pushElement(AssertionElement.X509IssuerSerial);
-                    hasX509IssuerSerial = true;
+                case AssertionQNames.X509_ISSUER_SERIAL:
+                    this.pushElement(AssertionElement.X_509_ISSUER_SERIAL);
                     break;
-                case QNames.X509_ISSUER_NAME:
-                    this.pushElement(AssertionElement.X509IssuerName);
+                case AssertionQNames.X509_ISSUER_NAME:
+                    this.pushElement(AssertionElement.X_509_ISSUER_NAME);
                     break;
-                case QNames.X509_SERIAL_NUMBER:
-                    this.pushElement(AssertionElement.X509SerialNumber);
+                case AssertionQNames.X509_SERIAL_NUMBER:
+                    this.pushElement(AssertionElement.X_509_SERIAL_NUMBER);
                     break;
                 default:
                     this.pushElement(AssertionElement.UNDEFINED);
@@ -468,7 +308,7 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
         @Override
         public void endElement(String uri, String localName, String qName) throws SAXException {
             switch (qName) {
-                case QNames.REFERENCE:
+                case AssertionQNames.REFERENCE:
                     final XmlReference xmlReference = new XmlReference();
                     xmlReference.setXpathExpression(null);
                     xmlReference.setTransforms(this.transforms);
@@ -479,7 +319,7 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
                     xmlReference.setEmptyUri(false);
                     this.references.add(xmlReference);
                     break;
-                case QNames.SIGNATURE:
+                case AssertionQNames.SIGNATURE:
                     renderEndElement(this.signatureFragmentBuilder, uri, localName, qName);
                     this.renderMode = false;
                     break;
@@ -494,35 +334,36 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
         }
 
         @Override
+        public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+            if (this.renderMode) {
+                this.signatureFragmentBuilder.append(String.valueOf(ch, start, length));
+            }
+        }
+
+
+
+        @Override
         public void characters(char[] ch, int start, int length) throws SAXException {
             switch (this.currentElement()) {
-                case Signature:
+                case SIGNATURE:
                     if (this.renderMode) {
                         this.signatureFragmentBuilder.append(String.valueOf(ch, start, length));
                     }
                     break;
-                case SignatureValue:
+                case SIGNATURE_VALUE:
                     this.signatureValueBuilder.append(String.valueOf(ch, start, length));
                     break;
-                case DigestValue:
-                    if (this.currentHasAncestor(AssertionElement.Reference)) {
-                        this.digestValueBuilder.append(String.valueOf(ch, start, length));
-                    }
+                case DIGEST_VALUE:
+                    this.digestValueBuilder.append(String.valueOf(ch, start, length));
                     break;
-                case X509Certificate:
-                    if (this.currentHasAncestor(AssertionElement.KeyInfo)) {
-                        this.x509CertificateBuilder.append(String.valueOf(ch, start, length));
-                    }
+                case X_509_CERTIFICATE:
+                    this.x509CertificateBuilder.append(String.valueOf(ch, start, length));
                     break;
-                case X509IssuerName:
-                    if (this.currentHasAncestor(AssertionElement.X509IssuerSerial)) {
-                        this.x509IssuerNameBuilder.append(String.valueOf(ch, start, length));
-                    }
+                case X_509_ISSUER_NAME:
+                    this.x509IssuerNameBuilder.append(String.valueOf(ch, start, length));
                     break;
-                case X509SerialNumber:
-                    if (this.currentHasAncestor(AssertionElement.X509IssuerSerial)) {
-                        this.x509SerialNumberBuilder.append(String.valueOf(ch, start, length));
-                    }
+                case X_509_SERIAL_NUMBER:
+                    this.x509SerialNumberBuilder.append(String.valueOf(ch, start, length));
                     break;
                 default:
                     break;
@@ -531,6 +372,8 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
                 this.signatureFragmentBuilder.append(String.valueOf(ch, start, length));
             }
         }
+
+        /* End ContentHandler Implementation */
     }
 
     private final String signedXml;
@@ -548,54 +391,34 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
     private StringBuilder issuerBuilder;
 
     @Override
-    public Signature getSignature() {
-        return signature;
-    }
+    public Signature getSignature() { return signature; }
 
     @Override
-    public String getVersion() {
-        return version;
-    }
+    public String getVersion() { return version; }
 
     @Override
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
 
     @Override
-    public GregorianCalendar getIssueInstant() {
-        return issueInstant;
-    }
+    public GregorianCalendar getIssueInstant() { return issueInstant; }
 
     @Override
-    public String getIssuer() {
-        return issuerBuilder.toString();
-    }
+    public String getIssuer() { return issuerBuilder.toString(); }
 
     @Override
-    public List<Subject> getSubjects() {
-        return Collections.unmodifiableList(subjects);
-    }
+    public List<Subject> getSubjects() { return Collections.unmodifiableList(subjects); }
 
     @Override
-    public Conditions getConditions() {
-        return conditions;
-    }
+    public Conditions getConditions() { return conditions; }
 
     @Override
-    public List<AttributeStatement> getAttributeStatements() {
-        return Collections.unmodifiableList(attributeStatements);
-    }
+    public List<AttributeStatement> getAttributeStatements() { return Collections.unmodifiableList(attributeStatements); }
 
     @Override
-    public XmlSigner getXmlSigner() {
-        return xmlSigner;
-    }
+    public XmlSigner getXmlSigner() { return xmlSigner; }
 
     @Override
-    public ValidationResult validateSignature() {
-        return xmlSigner.validateAssertion(this);
-    }
+    public ValidationResult validateSignature() { return xmlSigner.validateAssertion(this); }
 
     @Override
     public String toString() { return signedXml;  }
@@ -603,6 +426,19 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
     private final SAXSignatureReader signature;
 
     private final Stack<AssertionElement> elementStack;
+
+    /**
+     * Reuse the EntityResolver and/or ErrorHandler
+     */
+    SAXAssertionReader() {
+        signature = null;
+        elementStack = null;
+        signedXml = null;
+        xmlSigner = null;
+        audienceRestrictions = null;
+        attributeStatements = null;
+        subjects = null;
+    }
 
     SAXAssertionReader(String xml, XmlSignerOptions options) {
         signedXml = xml;
@@ -617,7 +453,75 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
         xmlSigner = new XmlSigner(options);
     }
 
-    private int currentDepth() { return elementStack.size(); }
+    /* LSResourceResolver Implementation  */
+
+    @Override
+    public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId, String baseURI) {
+        final InputSource inputSource = require(systemId);
+        final LSInput ret =  new DOMInputImpl(
+            publicId,
+            systemId,
+            null,
+            (inputSource != null ? inputSource.getByteStream() : null),
+            null
+        );
+        ret.setBaseURI(baseURI);
+        ret.setCertifiedText(true);
+        return ret;
+    }
+
+    /* End LSResourceResolver Implementation */
+
+    /* EntityResolver Implementation  */
+
+    @Override
+    public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+        return require(systemId);
+    }
+
+    String resolveAbsolutePath(URI systemIdURI) {
+        if (systemIdURI == null) {
+            return null;
+        }
+        if (systemIdURI.getScheme() == null || systemIdURI.getScheme().equals("file")) {
+            String[] segments = systemIdURI.getPath().split("/");
+            return (segments.length > 0)
+                ? RESOLVER_MAP.getOrDefault(segments[segments.length -1], null)
+                : null;
+        } else {
+            return RESOLVER_MAP.getOrDefault(systemIdURI.toString(), null);
+        }
+    }
+
+
+    InputSource require(String systemId) {
+        final URI systemIdURI = Try.of(() -> new URI(systemId)).orElseGet(null);
+        final String resourcePath = resolveAbsolutePath(systemIdURI);
+        return resourcePath != null
+            ? Try.of(() -> new InputSource(SAXAssertionReader.class.getResourceAsStream(resourcePath))).orElseGet(null)
+            : null;
+    }
+
+    /* End of EntityResolver Implementation */
+
+    /* ErrorHandler Implementation */
+
+    @Override
+    public void warning(SAXParseException exception) throws SAXException {
+        LOG.warn(exception.getMessage(), exception);
+    }
+
+    @Override
+    public void error(SAXParseException exception) throws SAXException {
+        LOG.error(exception.getMessage(), exception);
+    }
+
+    @Override
+    public void fatalError(SAXParseException exception) throws SAXException {
+        LOG.error("FATAL: " + exception.getMessage(), exception);
+    }
+
+    /* End of ErrorHandler Implementation */
 
     private AssertionElement currentElement() {
         return elementStack.peek();
@@ -631,22 +535,11 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
         return elementStack.pop();
     }
 
-    private boolean hasAncestor(AssertionElement parent) {
-        int pos = elementStack.indexOf(parent);
-        return (pos != -1 && pos < (elementStack.size()-1));
-    }
+    /* ContentHandler Implementation */
 
     @Override
     public void endDocument() {
-        final List<String> validationErrors = new ArrayList<>();
-        if (StringSupport.isNullEmptyOrBlank(this.id)) {
-            validationErrors.add(
-                "ID Attribute cannot be null, empty or blank.");
-        }
-        validationErrors.addAll(this.signature.endAndValidateDocument(this.id));
-        if (!validationErrors.isEmpty()) {
-            throw new IllegalStateException("Illegal state: " + String.join(" ", validationErrors));
-        }
+        this.signature.endDocument();
         if (this.getSignature() != null) {
             this.xmlSigner.loadSignature(this.getSignature());
         }
@@ -656,47 +549,38 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 
         switch (qName) {
-            case QNames.ASSERTION:
-                elementStack.push(AssertionElement.Assertion);
-                if (currentDepth() != 1) {
-                    throw new SAXException("Illegal position of " + qName + " Element at depth " + currentDepth());
-                }
+            case AssertionQNames.ASSERTION:
+                elementStack.push(AssertionElement.ASSERTION);
                 startAssertion(uri, localName, qName, attributes);
                 break;
-            case QNames.ISSUER:
-                elementStack.push(AssertionElement.Issuer);
-                if (currentDepth() != 2) {
-                    throw new SAXException("Illegal position of " + qName + " Element at depth " + currentDepth());
-                }
+            case AssertionQNames.ISSUER:
+                elementStack.push(AssertionElement.ISSUER);
                 break;
-            case QNames.SUBJECT_CONFIRMATION:
-                elementStack.push(AssertionElement.SubjectConfirmation);
+            case AssertionQNames.SUBJECT_CONFIRMATION:
+                elementStack.push(AssertionElement.SUBJECT_CONFIRMATION);
                 startSubjectConfirmation(uri, localName, qName, attributes);
                 break;
-            case QNames.CONDITIONS:
-                elementStack.push(AssertionElement.Conditions);
-                if (currentDepth() != 2) {
-                    throw new SAXException("Illegal position of " + qName + " Element at depth " + currentDepth());
-                }
+            case AssertionQNames.CONDITIONS:
+                elementStack.push(AssertionElement.CONDITIONS);
                 startConditions(uri, localName, qName, attributes);
                 break;
-            case QNames.AUDIENCE_RESTRICTION:
-                elementStack.push(AssertionElement.AudienceRestriction);
+            case AssertionQNames.AUDIENCE_RESTRICTION:
+                elementStack.push(AssertionElement.AUDIENCE_RESTRICTION);
                 startAudienceRestriction(uri, localName, qName, attributes);
                 break;
-            case QNames.AUDIENCE:
-                elementStack.push(AssertionElement.Audience);
+            case AssertionQNames.AUDIENCE:
+                elementStack.push(AssertionElement.AUDIENCE);
                 break;
-            case QNames.ATTRIBUTE_STATEMENT:
-                elementStack.push(AssertionElement.AttributeStatement);
+            case AssertionQNames.ATTRIBUTE_STATEMENT:
+                elementStack.push(AssertionElement.ATTRIBUTE_STATEMENT);
                 startStatement(uri, localName, qName, attributes);
                 break;
-            case QNames.ATTRIBUTE:
-                elementStack.push(AssertionElement.Attribute);
+            case AssertionQNames.ATTRIBUTE:
+                elementStack.push(AssertionElement.ATTRIBUTE);
                 startAttribute(uri, localName, qName, attributes);
                 break;
-            case QNames.ATTRIBUTE_VALUE:
-                elementStack.push(AssertionElement.AttributeValue);
+            case AssertionQNames.ATTRIBUTE_VALUE:
+                elementStack.push(AssertionElement.ATTRIBUTE_VALUE);
                 break;
             default:
                 signature.startElement(uri, localName, qName, attributes);
@@ -707,7 +591,7 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         switch (qName) {
-            case QNames.CONDITIONS:
+            case AssertionQNames.CONDITIONS:
                 this.conditions = new ConditionsImpl(notBefore, notOnOrAfter, audienceRestrictions);
                 break;
             default:
@@ -718,31 +602,28 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
     }
 
     @Override
+    public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+        if (ch != null) {
+            signature.ignorableWhitespace(ch, start, length);
+        }
+    }
+
+    @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         if (ch != null) {
              switch (currentElement()) {
-                case Issuer:
+                case ISSUER:
                     issuerBuilder.append(String.valueOf(ch, start, length));
                     break;
-                case Audience:
-                    if (audienceRestrictions.isEmpty()) {
-                        throw new IllegalStateException("cannot add Audience, have not seen any AudienceRestriction");
-                    }
+                case AUDIENCE:
                     ((AudienceRestrictionImpl)audienceRestrictions
                         .get(audienceRestrictions.size() - 1))
                         .addAudience(String.valueOf(ch, start, length));
                     break;
-                case AttributeValue:
-                    if (attributeStatements.isEmpty()) {
-                        throw new IllegalStateException("cannot add AttributeValue, have not seen any AttributeStatement");
-                    }
-
+                case ATTRIBUTE_VALUE:
                     final AttributeStatement statement = attributeStatements
                         .get(attributeStatements.size() - 1);
                     List<Attribute> attributes = statement.getAttributes();
-                    if (attributes.isEmpty()) {
-                        throw new IllegalStateException("cannot add AttributeValue, have not seen any Attribute");
-                    }
                     ((AttributeImpl)attributes.get(attributes.size() - 1)).addValue(String.valueOf(ch, start, length));
                     break;
 
@@ -754,10 +635,7 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
     }
 
     private void startAttribute(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        if (attributeStatements.isEmpty()) {
-            throw new IllegalStateException("cannot add Attribute, have not seen any AttributeStatement");
-        }
-        final String name = attributes.getValue(QNames.NAME);
+        final String name = attributes.getValue(AssertionQNames.NAME);
         ((AttributeStatementImpl)attributeStatements
             .get(attributeStatements.size() - 1)).addAttribute(new AttributeImpl(name));
     }
@@ -773,26 +651,28 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion {
     private void startConditions(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         notBefore = new GregorianCalendar();
         notBefore.setTime(
-            DatatypeConverter.parseDateTime(attributes.getValue(QNames.NOT_BEFORE))
+            DatatypeConverter.parseDateTime(attributes.getValue(AssertionQNames.NOT_BEFORE))
                 .getTime());
 
         notOnOrAfter = new GregorianCalendar();
         notOnOrAfter.setTime(
-            DatatypeConverter.parseDateTime(attributes.getValue(QNames.NOT_ON_OR_AFTER))
+            DatatypeConverter.parseDateTime(attributes.getValue(AssertionQNames.NOT_ON_OR_AFTER))
                 .getTime());
     }
 
     private void startSubjectConfirmation(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        subjects.add(new SubjectImpl(attributes.getValue(QNames.METHOD)));
+        subjects.add(new SubjectImpl(attributes.getValue(AssertionQNames.METHOD)));
     }
 
     private void startAssertion(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         issueInstant = new GregorianCalendar();
         issueInstant.setTime(
-            DatatypeConverter.parseDateTime(attributes.getValue(QNames.ISSUE_INSTANT))
+            DatatypeConverter.parseDateTime(attributes.getValue(AssertionQNames.ISSUE_INSTANT))
                 .getTime());
 
-        version = attributes.getValue(QNames.VERSION);
-        id = attributes.getValue(QNames.ID);
+        version = attributes.getValue(AssertionQNames.VERSION);
+        id = attributes.getValue(AssertionQNames.ID);
     }
+
+    /* End ContentHandler Implementation */
 }

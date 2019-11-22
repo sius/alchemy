@@ -1,36 +1,54 @@
 package liquer.alchemy.xmlcrypto.crypto.xml.saml;
 
+import liquer.alchemy.xmlcrypto.crypto.xml.URLKeyInfo;
 import liquer.alchemy.xmlcrypto.crypto.xml.ValidationResult;
 import liquer.alchemy.xmlcrypto.crypto.xml.XmlSignerOptions;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.AssertionFactory;
 import liquer.alchemy.xmlcrypto.support.BaseN;
 import liquer.alchemy.xmlcrypto.support.Clock;
+import liquer.alchemy.xmlcrypto.support.IOSupport;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.function.Supplier;
 import java.util.zip.GZIPInputStream;
 
 public class AssertionReaderTest {
 
-    private static String TEST_TOKEN;
+    private final static Supplier<String> TOKEN = () ->
+        AssertionFactory.newBuilder()
+            .issuer("liquer")
+            .conditionsMinutes(10, "http://liquer.io")
+            .addStatement("http://liquer.io/7k/user",
+                    Arrays.asList(
+                            "john.snow@winterfell.7k"
+                    )).buildBase64GZippedToken(
+                    new XmlSignerOptions(),
+                    new URLKeyInfo(AssertionReaderTest.class.getResource("/publickey.cer")),
+                    new URLKeyInfo(AssertionReaderTest.class.getResource("/private-pkcs8.pem")));
+
+    private static String SAML_TOKEN;
 
     @BeforeClass
-    public static void init() {
-        TEST_TOKEN = TestAssertion.TOKEN.get();
+    public static void beforeAll() {
+        SAML_TOKEN = TOKEN.get();
     }
 
     @Test
     public void testValidateAssertion() {
 
-        try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(TEST_TOKEN))) ) {
+        try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(SAML_TOKEN))) ) {
 
+            String xml = IOSupport.toString(in);
+            System.out.println(xml);
             Clock.set((t) -> {
-                final Assertion assertion = AssertionFactory.newReader(in,
+                final Assertion assertion = AssertionFactory.newReader(xml,
                     new XmlSignerOptions()
-                            .namespaceContext(new DefaultNamespaceContextMap())
+                            .namespaceContext(SamlNamespaceContext.newInstance())
                             .timer(t));
 
                 final ValidationResult result = assertion.validateSignature();
@@ -55,12 +73,12 @@ public class AssertionReaderTest {
     @Test
     public void testValidateAssertion1() {
 
-        try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(TEST_TOKEN))) ) {
+        try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(SAML_TOKEN))) ) {
 
             Clock.set( (t) -> {
                 final Assertion assertion = AssertionFactory.newReader(in,
                         new XmlSignerOptions()
-                                .namespaceContext(new DefaultNamespaceContextMap())
+                                .namespaceContext(SamlNamespaceContext.newInstance())
                                 .timer(t));
 
                 final ValidationResult result = assertion.validateSignature();
@@ -87,13 +105,13 @@ public class AssertionReaderTest {
 
             for (int i = 1; i <= len; i++) {
                 t.stop(i + ". validateAssertion");
-                try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(TEST_TOKEN))) ) {
+                try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(SAML_TOKEN))) ) {
 
                     t.stop("- read GZIPInputStream");
 
                     final Assertion assertion = AssertionFactory.newReader(in,
                             new XmlSignerOptions()
-                                    .namespaceContext(new DefaultNamespaceContextMap())
+                                    .namespaceContext(SamlNamespaceContext.newInstance())
                                     .timer(t));
 
                     final ValidationResult result = assertion.validateSignature();

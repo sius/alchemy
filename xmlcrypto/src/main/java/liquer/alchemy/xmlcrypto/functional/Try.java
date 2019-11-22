@@ -25,6 +25,14 @@ import java.util.function.Supplier;
  */
 public final class Try<B> {
 
+    private final B value;
+    private final Throwable throwable;
+
+    private Try(B value, Throwable throwable) {
+        this.value = value;
+        this.throwable = throwable;
+    }
+
     /**
      * Create the Exception guard
      *
@@ -34,17 +42,10 @@ public final class Try<B> {
      */
     public static <B> Try<B> of(Tryable<B> t0) {
         try {
-            return new Try(t0.get(), null);
+            return new Try<>(t0.get(), null);
         } catch (Throwable t) {
-            return new Try(null, t);
+            return new Try<>(null, t);
         }
-    }
-
-    private final B value;
-    private final Throwable throwable;
-    private Try(B value, Throwable throwable) {
-        this.value = value;
-        this.throwable = throwable;
     }
 
     /**
@@ -64,9 +65,8 @@ public final class Try<B> {
      * wrapped inside an RuntimeException.
      *
      * @return the value
-     * @throws TryableException
      */
-    public B orElseThrow() throws TryableException {
+    public B orElseThrow() {
         return orElseThrow(() -> throwable);
     }
 
@@ -76,9 +76,8 @@ public final class Try<B> {
      *
      * @param t
      * @return the value
-     * @throws TryableException
      */
-    public B orElseThrow(Supplier<Throwable> t) throws TryableException {
+    public B orElseThrow(Supplier<Throwable> t) {
         if (isFailure()) {
             throw new TryableException(t.get());
         }

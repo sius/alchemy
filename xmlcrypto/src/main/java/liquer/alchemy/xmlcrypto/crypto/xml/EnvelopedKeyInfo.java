@@ -7,7 +7,7 @@ import org.w3c.dom.Node;
 
 import java.util.List;
 
-public class EnvelopedKeyInfo extends NodeReader implements KeyInfo {
+public class EnvelopedKeyInfo implements KeyInfo, NodeReader {
 
     private X509Data x509Data;
 
@@ -21,19 +21,22 @@ public class EnvelopedKeyInfo extends NodeReader implements KeyInfo {
             readFirst(readElementsByTagNameNS(
                 node,
                 Identifier.DEFAULT_NS_URI,
-                "X509IssuerName")));
+                "X509IssuerName"))
+                    .orElse(null));
 
         final String serialNumber = readTextContent(
             readFirst(readElementsByTagNameNS(
                 node,
                 Identifier.DEFAULT_NS_URI,
-                "X509SerialNumber")));
+                "X509SerialNumber")).
+                    orElse(null));
 
         final String key = readTextContent(
             readFirst(readElementsByTagNameNS(
                 node,
                 Identifier.DEFAULT_NS_URI,
-                "X509Certificate")));
+                "X509Certificate"))
+                    .orElse(null));
 
         x509Data = new X509DataImpl(
             issuerName,

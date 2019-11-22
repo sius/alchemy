@@ -1,42 +1,66 @@
 package liquer.alchemy.xmlcrypto.support;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Stream;
 
 public class TypedMap extends YashMap {
 
-    public static TypedMap unmodifiable(Map<String, Object> other) {
-        return new TypedMap(other, true);
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(TypedMap.class);
+
+    private static final long serialVersionUID = 0L;
 
     public TypedMap() { super(); }
     public TypedMap(Map<String, Object> map) {
-        this(map, false);
-    }
-    private TypedMap(Map<String, Object> map, boolean unmodifiable) {
-        super(map, unmodifiable);
+        super(map);
     }
 
+    /**
+     * Creates a new TypedMap instance that contains only (at maximum) the specified keys.
+     * Not existing keys will be ignored.
+     *
+     * @param keys the Keys to preserve
+     * @return the new pruned TypeMap instance
+     */
 	public TypedMap prune(String... keys) {
     	YashMap ret = new YashMap();
     	for (String key : keys) {
-    		if (containsKey(key))
-    			ret.put(key, get(key));
+    		if (containsKey(key)) {
+    		    ret.put(key, get(key));
+            }
     	}
     	return new TypedMap(ret);
     }
+
+    /**
+     * Same as prune, but modifies the instance
+     * @param keys the Keys to preserve
+     * @return the same pruned TypeMap instance (this)
+     */
 	public TypedMap selfPrune(Object... keys) {
         Iterator<Map.Entry<String, Object>> iter = this.entrySet().iterator();
-        for (;iter.hasNext();) {
+        while (iter.hasNext()) {
             Map.Entry<String, Object> next = iter.next();
             boolean found = false;
-            for (int i = 0; !found && i < keys.length; i++)
-            	found = next.getKey().equals(keys[i]);
-            if (!found) iter.remove();
+            for (int i = 0; !found && i < keys.length; i++) {
+                found = next.getKey().equals(keys[i]);
+            }
+            if (!found) {
+                iter.remove();
+            }
         }
         return this;
     }
+
+    /**
+     * Convenience method that calls put with the key.toString() value
+     *
+     * @param key the Object key
+     * @param value the Object value
+     */
     public void putWithObjectKey(Object key, Object value) {
         put(key == null ? null : key.toString(), value);
     }
@@ -51,12 +75,53 @@ public class TypedMap extends YashMap {
     public List<TypedMap> listOf(String key) {
     	return listOf(this, key, new ArrayList<>());
     }
+
+    /**
+     * @param key the specified key
+     * @return the removed value or defaultValue if the specified key does not exist
+     */
     public String deleteString(String key) { return deleteString(key, null); }
+
+    /**
+     *
+     * @param key the specified key
+     * @return the removed value or defaultValue if the specified key does not exist
+     */
     public Long deleteLong(String key) { return deleteLong(key, null); }
+
+    /**
+     *
+     * @param key the specified key
+     * @return the removed value or defaultValue if the specified key does not exist
+     */
     public Integer deleteInteger(String key) { return deleteInteger(key, null); }
+
+    /**
+     *
+     * @param key the specified key
+     * @return the removed value or defaultValue if the specified key does not exist
+     */
     public Short deleteShort(String key) { return deleteShort(key, null); }
+
+    /**
+     *
+     * @param key the specified key
+     * @return the removed value or defaultValue if the specified key does not exist
+     */
     public Double deleteDouble(String key) { return deleteDouble(key, null); }
+
+    /**
+     *
+     * @param key the specified key
+     * @return the removed value or defaultValue if the specified key does not exist
+     */
     public Float deleteFloat(String key) { return deleteFloat(key, null); }
+
+    /**
+     *
+     * @param key the specified key
+     * @return the removed value or defaultValue if the specified key does not exist
+     */
     public Boolean deleteBoolean(String key) { return deleteBoolean(key, null); }
 
     public String[] deleteStrings(String key) { return deleteStrings(key, null); }
@@ -185,7 +250,7 @@ public class TypedMap extends YashMap {
     }
 
     public String stringValue(String key, String defaultValue) { return stringValue(this, key, defaultValue); }
-	public <T extends Enum<T>> T enumValue(Class<T> clazz, String key, Enum<T> defaultValue) { return enumValue(clazz, this, key, null); }
+	public <T extends Enum<T>> T enumValue(Class<T> clazz, String key, T defaultValue) { return enumValue(clazz, this, key, defaultValue); }
     public Long longValue(String key, Long defaultValue) { return longValue(this, key, defaultValue); }
     public Integer integerValue(String key, Integer defaultValue) { return integerValue(this, key, defaultValue); }
     public Short shortValue(String key, Short defaultValue) { return shortValue(this, key, defaultValue); }
@@ -274,42 +339,54 @@ public class TypedMap extends YashMap {
     public List<TypedMap> listOf(String key, List<TypedMap> defaultValue) { return listOf(this, key, defaultValue); }
 
     public List<String> stringList(String key, String[] defaultValue) { return Arrays.asList(stringArray(this, key, defaultValue)); }
-    public <T extends Enum<T>> List<T> enumList(Class<T> clazz, String key, T[] defaultValue) { return Arrays.asList(enumArray(clazz, this, key, null)); }
-    public List<Long> longList(String key, Long[] defaultValue) { return Arrays.asList(longArray(this, key, defaultValue)); }
-    public List<Integer> integerList(String key, Integer[] defaultValue) { return Arrays.asList(integerArray(this, key, defaultValue)); }
-    public List<Short> shortList(String key, Short[] defaultValue) { return Arrays.asList(shortArray(this, key, defaultValue)); }
-    public List<Double> doubleList(String key, Double[] defaultValue) { return Arrays.asList(doubleArray(this, key, defaultValue)); }
-    public List<Float> floatList(String key, Float[] defaultValue) { return Arrays.asList(floatArray(this, key, defaultValue)); }
-    public List<Boolean> booleanList(String key, Boolean[] defaultValue) { return Arrays.asList(booleanArray(this, key, defaultValue)); }
+    public <T extends Enum<T>> List<T> enumList(Class<T> clazz, String key, List<T> defaultValue) {
+        T[] arr = enumArray(clazz, key, null);
+        return arr == null ? defaultValue : Arrays.asList(arr);
+    }
+    public List<Long> longList(String key, List<Long> defaultValue) {
+        Long[] arr = longArray(this, key, null);
+        return arr == null ? defaultValue : Arrays.asList(arr);
+    }
+    public List<Integer> integerList(String key, List<Integer> defaultValue) {
+        Integer[] arr = integerArray(this, key, null);
+        return arr == null ? defaultValue : Arrays.asList(arr);
+    }
+    public List<Short> shortList(String key, List<Short> defaultValue) {
+        Short[] arr = shortArray(this, key, null);
+        return arr == null ? defaultValue : Arrays.asList(arr);
+    }
+    public List<Double> doubleList(String key, List<Double> defaultValue) {
+        Double[] arr = doubleArray(this, key, null);
+        return arr == null ? defaultValue : Arrays.asList(arr);
+    }
+    public List<Float> floatList(String key, List<Float> defaultValue) {
+        Float[] arr = floatArray(this, key, null);
+        return arr == null ? defaultValue : Arrays.asList(arr);
+    }
+    public List<Boolean> booleanList(String key, List<Boolean> defaultValue) {
+        Boolean[] arr = booleanArray(this, key, null);
+        return arr == null ? defaultValue : Arrays.asList(arr);
+    }
 
     public static TypedMap valueOf(Map<?,?> params, String key, Map<String, Object> defaultValue) {
         TypedMap ret = new TypedMap(defaultValue);
-        if (params != null && key != null && !key.equals("")) {
-          Object o = params.get(key);
-          if (o instanceof Map)
-            ret = new TypedMap(YashMap.of((Map<?,?>)o));
+        if (params != null && key != null && !key.isEmpty()) {
+            Object o = params.get(key);
+            if (o instanceof Map) {
+                ret = new TypedMap(YashMap.of((Map<?,?>)o));
+            }
         }
         return ret;
     }
     public static String stringValue(Map<?,?> params, String key, String defaultValue) {
         String ret = defaultValue;
-        if (params != null && key != null && !key.equals("")) {
-            Object o = params.get(key);
-            if (o != null && o.getClass().isArray()) {
-                int len = Array.getLength(o);
-                if (len > 0) {
-                    Object v = Array.get(o, 0);
-                    ret = (v != null ? ret : "");
-                } else {
-                    ret = "";
-                }
-            } else {
-                if (o != null)
-                    ret = o.toString();
-            }
+        if (params != null && StringSupport.notNullOrEmpty(key)) {
+            ret = StringSupport.stringify(params.get(key), defaultValue);
         }
         return ret;
     }
+
+
     public static <T extends Enum<T>> T enumValue(Class<T> clazz, Map<?,?> params, String key, T defaultValue) {
 	    T ret = defaultValue;
 	    String s = stringValue(params, key, null);
@@ -317,7 +394,7 @@ public class TypedMap extends YashMap {
 	    	try {
 			    ret = Enum.valueOf(clazz, s);
 		    } catch (IllegalArgumentException ignore) {
-
+                LOG.error(ignore.getMessage(), ignore);
 		    }
 	    }
 	    return ret;
@@ -328,7 +405,9 @@ public class TypedMap extends YashMap {
         if (s != null) {
             try {
                 ret = Double.valueOf(s).longValue();
-            } catch (NumberFormatException ignore) {}
+            } catch (NumberFormatException ignore) {
+                LOG.error(ignore.getMessage(), ignore);
+            }
         }
         return ret;
     }
@@ -338,7 +417,9 @@ public class TypedMap extends YashMap {
         if (s != null) {
             try {
                 ret = Double.valueOf(s).intValue();
-            } catch (NumberFormatException ignore) { }
+            } catch (NumberFormatException ignore) {
+                LOG.error(ignore.getMessage(), ignore);
+            }
         }
         return ret;
     }
@@ -348,7 +429,9 @@ public class TypedMap extends YashMap {
         if (s != null) {
             try {
                 ret = Double.valueOf(s).shortValue();
-            } catch (NumberFormatException ignore) {}
+            } catch (NumberFormatException ignore) {
+                LOG.error(ignore.getMessage(), ignore);
+            }
         }
         return ret;
     }
@@ -358,7 +441,9 @@ public class TypedMap extends YashMap {
         if (s != null) {
             try {
                 ret = Double.valueOf(s);
-            } catch (NumberFormatException ignore) {}
+            } catch (NumberFormatException ignore) {
+                LOG.error(ignore.getMessage(), ignore);
+            }
         }
         return ret;
     }
@@ -368,76 +453,99 @@ public class TypedMap extends YashMap {
         if (s != null) {
             try {
                 ret = Double.valueOf(s).floatValue();
-            } catch (NumberFormatException ignore) {}
+            } catch (NumberFormatException ignore) {
+                LOG.error(ignore.getMessage(), ignore);
+            }
         }
         return ret;
     }
     public static Boolean booleanValue(Map<?,?> params, String key, Boolean defaultValue) {
         Boolean ret = defaultValue;
         String s = stringValue(params, key, null);
-        if (s != null)
+        if (s != null) {
             ret = Boolean.valueOf(s);
+        }
         return ret;
     }
     public static boolean isArrayAttribute(Map<?,?> params, String key) {
         boolean ret = false;
         if (params != null && key != null && !key.equals("")) {
             Object o = params.get(key);
-            if (o != null)
+            if (o != null) {
                 ret = o.getClass().isArray();
+            }
          }
         return ret;
     }
 	public static List<TypedMap> listOf(Map<?,?> params, String key, List<TypedMap> defaultValue) {
-		List<TypedMap> ret = (defaultValue == null) ? new ArrayList<>() : new ArrayList(defaultValue);
-    	if (params != null && key != null && !key.equals("")) {
-	    	Object o = params.get(key);
-	    	if (o instanceof Map<?,?>) {
-	    		Map<?,?> m = (Map<?,?>)o;
-	    		ret = new ArrayList<>();
-	    		for (int i = 0; i < m.size(); i++) {
-	    			String index = String.valueOf(i);
-	    			if (m.containsKey(index))
-	    				ret.add(i, valueOf(m, index, new TypedMap()));
-	    		}
-            }
+		List<TypedMap> ret = (defaultValue == null)
+            ? new ArrayList<>()
+            : new ArrayList(defaultValue);
+
+    	if (params != null && StringSupport.notNullOrEmpty(key)) {
+            ret = copyMapToList(params.get(key));
     	}
     	return ret;
     }
 
-    public static String[] stringArray(Map<?,?> params, String key, String[] defaultValue) {
-        String[] ret = (defaultValue == null) ? null : defaultValue.clone();
-        if (params != null && key != null && !key.equals("")) {
-            Object o = params.get(key);
-            if (o != null) {
-                if (o.getClass().isArray()) {
-                    int len = Array.getLength(o);
-                    ret = new String[len];
-                    for (int i = 0; i < len; i++) {
-                        Object v = Array.get(o, i);
-                        if (v != null)
-                            ret[i] = v.toString();
-                        else
-                            ret[i] = null;
-                    }
-                } else {
-                    ret = new String[] { o.toString() };
+    private static List<TypedMap> copyMapToList(Object o) {
+        final List<TypedMap> ret = new ArrayList<>();
+        if (o instanceof Map<?,?>) {
+            Map<?,?> m = (Map<?,?>)o;
+            for (int i = 0; i < m.size(); i++) {
+                String index = String.valueOf(i);
+                if (m.containsKey(index)) {
+                    ret.add(i, valueOf(m, index, new TypedMap()));
                 }
             }
         }
         return ret;
     }
 
-	public static <T extends Enum<T>> T[] enumArray(Class<T> clazz, Map<?,?> params, String key, T[] defaultValue) {
+    public static String[] stringArray(Map<?,?> params, String key, String[] defaultValue) {
+        String[] ret = (defaultValue == null)
+            ? null
+            : defaultValue.clone();
+
+        if (params == null || StringSupport.isNullOrEmpty(key)) {
+            return ret;
+        }
+
+        Object o = params.get(key);
+        if (o == null) {
+            return ret;
+        }
+
+        if (Collection.class.isAssignableFrom(o.getClass())) {
+            o = ((Collection)o).toArray();
+        }
+
+        if (o.getClass().isArray()) {
+            int len = Array.getLength(o);
+            ret = new String[len];
+            for (int i = 0; i < len; i++) {
+                Object v = Array.get(o, i);
+                ret[i] = (v != null) ? v.toString() : null;
+            }
+        } else {
+            ret = new String[] { o.toString() };
+        }
+
+        return ret;
+    }
+
+	public static <T extends Enum<T>> T[] enumArray(Class<T> componentType, Map<?,?> params, String key, T[] defaultValue) {
 		T[] ret = (defaultValue == null) ? null : defaultValue.clone();
-		String[] strings = stringArray(params, key, new String[0]);
-		if (strings.length > 0) {
+		String[] arr = stringArray(params, key, new String[0]);
+		if (arr.length > 0) {
 			int i = 0;
-			T[] farr = (T[])Array.newInstance(clazz, strings.length);
-			for (String s : strings) {
+			T[] farr = (T[])Array.newInstance(componentType, arr.length);
+			for (String s : arr) {
 				try {
-					Array.set(farr, i++, Enum.valueOf(clazz, s));
-				} catch (IllegalArgumentException ignore) { }
+					Array.set(farr, i++, Enum.valueOf(componentType, s));
+				} catch (IllegalArgumentException ignore) {
+                    LOG.error(ignore.getMessage(), ignore);
+                }
 			}
 			ret = farr;
 		}
@@ -452,7 +560,9 @@ public class TypedMap extends YashMap {
             for (String s : strings) {
                 try {
                     farr[i++] = Long.valueOf(s);
-                } catch (NumberFormatException ignore) { }
+                } catch (NumberFormatException ignore) {
+                    LOG.error(ignore.getMessage(), ignore);
+                }
             }
             ret = farr;
         }
@@ -467,7 +577,9 @@ public class TypedMap extends YashMap {
             for (String s : strings) {
                 try {
                     farr[i++] = Integer.valueOf(s);
-                } catch (NumberFormatException ignore) { }
+                } catch (NumberFormatException ignore) {
+                    LOG.error(ignore.getMessage(), ignore);
+                }
             }
             ret = farr;
         }
@@ -482,7 +594,9 @@ public class TypedMap extends YashMap {
             for (String s : strings) {
                 try {
                     farr[i++] = Short.valueOf(s);
-                } catch (NumberFormatException ignore) { }
+                } catch (NumberFormatException ignore) {
+                    LOG.error(ignore.getMessage(), ignore);
+                }
             }
             ret = farr;
         }
@@ -497,7 +611,9 @@ public class TypedMap extends YashMap {
             for (String s : strings) {
                 try {
                     farr[i++] = Double.valueOf(s);
-                } catch (NumberFormatException ignore) { }
+                } catch (NumberFormatException ignore) {
+                    LOG.error(ignore.getMessage(), ignore);
+                }
             }
             ret = farr;
         }
@@ -512,7 +628,9 @@ public class TypedMap extends YashMap {
             for (String s : strings) {
                 try {
                     farr[i++] = Float.valueOf(s);
-                } catch (NumberFormatException ignore) { }
+                } catch (NumberFormatException ignore) {
+                    LOG.error(ignore.getMessage(), ignore);
+                }
             }
             ret = farr;
         }
@@ -524,8 +642,9 @@ public class TypedMap extends YashMap {
         if (strings.length > 0) {
             int i = 0;
             Boolean[] farr = new Boolean[strings.length];
-            for (String s : strings)
+            for (String s : strings) {
                 farr[i++] = Boolean.valueOf(s);
+            }
             ret = farr;
         }
         return ret;

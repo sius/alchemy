@@ -6,8 +6,8 @@ import liquer.alchemy.xmlcrypto.crypto.xml.*;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.AssertionBuilder;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.Base64GZipped;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.jaxb.model.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -18,7 +18,10 @@ import javax.xml.datatype.DatatypeFactory;
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Builds signed and unsigned Assertion Strings.
@@ -34,12 +37,17 @@ import java.util.*;
  */
 final class JAXBAssertionBuilder implements AssertionBuilder {
 
-    private static final Logger LOG = LogManager.getLogger(SAXAssertionReader.class);
+    public static final String DEFAULT_VERSION = "2.0";
+    public static final String DEFAULT_SUBJECT_CONFIRMATION_TYPE_METHOD =
+        "urn:oasis:names:tc:SAML:2.0:cm:bearer";
 
+    private static final Logger LOG = LoggerFactory.getLogger(SAXAssertionReader.class);
     private static final ThreadLocal<DatatypeFactory> DATATYPE_FACTORY_THREAD_LOCAL;
     private static final ThreadLocal<ObjectFactory> OBJECT_FACTORY_THREAD_LOCAL;
     private static final ThreadLocal<Marshaller> MARSHALLER_THREAD_LOCAL;
     private static final JAXBContext CONTEXT;
+
+
     static {
         DATATYPE_FACTORY_THREAD_LOCAL = ThreadLocal.withInitial(() -> {
             try {
@@ -141,11 +149,30 @@ final class JAXBAssertionBuilder implements AssertionBuilder {
      */
     @Override
     public AssertionBuilder id() {
-        return id(UUID.randomUUID().toString());
+        return id(new NCName());
     }
 
     /**
      * Assign ID attribute to Assertion
+     *
+     * @param id
+     * @return the partial build AssertionBuilder
+     */
+    @Override
+    public AssertionBuilder id(NCName id) {
+        if (id != null) {
+            assertion.setID(id.toString());
+        }
+        return this;
+    }
+
+    /**
+     * Assign ID attribute to Assertion
+     *
+     * This Method can be used to detect a vulnerable
+     * SAML validation implementation, i.e.
+     * that does not implement a Schema based structure validation
+     * To detect a vulnerable Implementation you can provide an invalid NCName
      *
      * @param id
      * @return the partial build AssertionBuilder

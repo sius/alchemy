@@ -1,10 +1,8 @@
 package liquer.alchemy.xmlcrypto.support;
 
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Provide case conversion for input Strings using RegularExpressions.
@@ -21,7 +19,6 @@ public final class CaseFlavorSupport {
     private static final Pattern PUNCTUATION_PATTERN;
 
     static {
-        // TODO ReDoS (Regular Expression Denial of Service) Attacks
         EMPTY = "";
         CAMEL_CASE_PATTERN = Pattern.compile("([\\s\\p{Punct}]+|^)([\\p{L}])");
         ENSURE_TRAIN_CASE_PATTERN = Pattern.compile("([\\p{L}]+)");
@@ -30,18 +27,6 @@ public final class CaseFlavorSupport {
     }
 
     private CaseFlavorSupport() { }
-
-    public static final String joinDistinct(String delimiter, Object... values) {
-        return Arrays.asList(values)
-            .stream().map(x -> StringSupport.trim(x.toString(), delimiter))
-            .filter(StringSupport::notNullEmptyOrBlank)
-            .collect(Collectors.joining(delimiter));
-
-    }
-
-    public static final String joinUrl(Object... values) {
-        return joinDistinct("/", values);
-    }
 
     public static String toCamelCase(String input) {
         return toCamelCase(input, Locale.US);
@@ -67,7 +52,7 @@ public final class CaseFlavorSupport {
         return ret;
     }
 
-    public static String identity(String input) {
+    public static <T> T identity(T input) {
         return input;
     }
 
@@ -127,7 +112,6 @@ public final class CaseFlavorSupport {
         return locale == null ? Locale.US : locale;
     }
 
-
     public static String toSeparatedLowerCase(String input, char sep, Locale locale) {
         String ret = EMPTY;
         if (StringSupport.notNullEmptyOrBlank(input)) {
@@ -146,29 +130,6 @@ public final class CaseFlavorSupport {
                 ret = PUNCTUATION_PATTERN.matcher(buffer.toString()).replaceAll(Character.toString(sep));
             } else {
                 ret = input.toLowerCase(locale);
-            }
-        }
-        return ret;
-    }
-
-    public static String toSeparatedUpperCase(String input, char sep, Locale locale) {
-        String ret = EMPTY;
-        if (StringSupport.notNullEmptyOrBlank(input)) {
-
-            input = input.substring(0, Math.min(MAX_INPUT_LENGTH, input.length()));
-
-            Matcher m = SEPARATED_CASE_PATTERN.matcher(input);
-            StringBuffer buffer = new StringBuffer();
-            if (m.find()) {
-                String prefix = m.start() > 0 ? String.valueOf(sep) : "";
-                m.appendReplacement(buffer, prefix + m.group(1).toUpperCase(ensure(locale)));
-                while (m.find()) {
-                    m.appendReplacement(buffer, sep + m.group(1).toUpperCase(ensure(locale)));
-                }
-                m.appendTail(buffer);
-                ret = PUNCTUATION_PATTERN.matcher(buffer.toString()).replaceAll(Character.toString(sep));
-            } else {
-                ret = input.toUpperCase(locale);
             }
         }
         return ret;

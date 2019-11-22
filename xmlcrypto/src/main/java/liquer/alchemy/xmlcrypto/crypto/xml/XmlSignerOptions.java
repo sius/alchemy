@@ -1,7 +1,7 @@
 package liquer.alchemy.xmlcrypto.crypto.xml;
 
 import liquer.alchemy.xmlcrypto.crypto.Identifier;
-import liquer.alchemy.xmlcrypto.crypto.xml.core.NamespaceContextMap;
+import liquer.alchemy.xmlcrypto.crypto.xml.core.StaticNamespaceContext;
 import liquer.alchemy.xmlcrypto.support.Clock;
 import liquer.alchemy.xmlcrypto.support.Timer;
 
@@ -23,20 +23,18 @@ public class XmlSignerOptions {
     private Set<String> idAttributes;
     private List<String> implicitTransforms;
     private NamespaceContext namespaceContext;
-    private boolean preferSelfClosingTag;
 
     private Timer timer;
 
     public XmlSignerOptions() {
-        setIdMode(null);
-        setSignatureAlgorithm(Identifier.RSA_WITH_SHA1);
-        setCanonicalizationAlgorithm(Identifier.EXCLUSIVE_CANONICAL_XML_1_0_OMIT_COMMENTS);
-        setDigestAlgorithm(Identifier.SHA1);
-        setIdAttributes(null);
-        setImplicitTransforms(null);
-        setNamespaceContext(new NamespaceContextMap());
-        setPreferSelfClosingTag(false);
-        setTimer(Clock.set());
+        idMode = null;
+        signatureAlgorithm = Identifier.RSA_WITH_SHA1;
+        canonicalizationAlgorithm = Identifier.EXCLUSIVE_CANONICAL_XML_1_0_OMIT_COMMENTS;
+        digestAlgorithm = Identifier.SHA1;
+        idAttributes = new HashSet<>();
+        implicitTransforms = new ArrayList<>();
+        namespaceContext = new StaticNamespaceContext();
+        timer = Clock.set();
     }
 
     public XmlSignerOptions signatureAlgorithm() {
@@ -65,15 +63,6 @@ public class XmlSignerOptions {
     public XmlSignerOptions digestAlgorithm(String digestAlgorithm) {
         setDigestAlgorithm(digestAlgorithm);
         return this;
-    }
-
-
-    public boolean isPreferSelfClosingTag() {
-        return preferSelfClosingTag;
-    }
-
-    public void setPreferSelfClosingTag(boolean preferSelfClosingTag) {
-        this.preferSelfClosingTag = preferSelfClosingTag;
     }
 
     public String getSignatureAlgorithm() {

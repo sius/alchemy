@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface ValidationResult {
 
-    default List<String> getErrors() { return new ArrayList<>(); };
+    default List<String> getErrors() { return new ArrayList<>(); }
 
     default boolean isValidSignature() { return false; }
 

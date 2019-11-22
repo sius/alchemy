@@ -3,16 +3,20 @@ package liquer.alchemy.xmlcrypto.crypto.alg;
 import liquer.alchemy.xmlcrypto.crypto.CryptoSupport;
 import liquer.alchemy.xmlcrypto.crypto.opt.HashOptions;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-
 public interface HashAlgorithm extends Algorithm {
 
-    default String hash(String value, HashOptions options) throws NoSuchProviderException, NoSuchAlgorithmException {
+    default String hash(String value, HashOptions options) {
 
-        options = options == null
+        final HashOptions hashOptions = options == null
                 ? new HashOptions()
                 : options;
-        return CryptoSupport.hash(value, getName(), options.isZeroTerminated(), options.getCharset(), options.getEncoder());
+
+        return CryptoSupport.hashHex(
+            value,
+            getName(),
+            hashOptions.isZeroTerminated(),
+            hashOptions.getCharset(),
+            hashOptions.getEncoder());
+
     }
 }

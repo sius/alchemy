@@ -1,16 +1,45 @@
 package liquer.alchemy.xmlcrypto.support;
 
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 
 public class CaseFlavorSupportTest {
 
     @Test
-    public void testJoinUrl() {
-        String expected = "http://localhost:9080/v1/customers/1/image";
-        String actual = CaseFlavorSupport.joinUrl("http://localhost:9080/v1/", "/customers/", "1/", "/image");
-        assertEquals(expected, actual);
+    public void testToTitleCase() {
+        assertEquals("Test", CaseFlavorSupport.toTitleCase("test"));
+        assertEquals("Test test", CaseFlavorSupport.toTitleCase("test test"));
+        assertEquals("1test", CaseFlavorSupport.toTitleCase("1test"));
+
+        assertEquals("", CaseFlavorSupport.toTitleCase(null));
+        assertEquals("", CaseFlavorSupport.toTitleCase("   "));
+    }
+
+    @Test
+    public void testToSeparatedTitleCase() {
+        assertEquals("Test", CaseFlavorSupport.toSeparatedTitleCase("test", ' '));
+        assertEquals("Test Test", CaseFlavorSupport.toSeparatedTitleCase("testTest", ' '));
+        assertEquals("1 Test", CaseFlavorSupport.toSeparatedTitleCase("1Test", ' '));
+
+        assertEquals("", CaseFlavorSupport.toSeparatedTitleCase(null, ' '));
+    }
+
+    @Test
+    public void testToSeparatedLowerCase() {
+        assertEquals("test", CaseFlavorSupport.toSeparatedLowerCase("test", ' ', Locale.getDefault()));
+        assertEquals("test test", CaseFlavorSupport.toSeparatedLowerCase("testTest", ' ', Locale.getDefault()));
+        assertEquals("1 test", CaseFlavorSupport.toSeparatedLowerCase("1Test", ' ', Locale.getDefault()));
+
+        assertEquals("", CaseFlavorSupport.toSeparatedLowerCase(null, ' ', Locale.getDefault()));
+    }
+
+    @Test
+    public void testEnsureLocale() {
+        Assert.assertEquals(Locale.US, CaseFlavorSupport.ensure(null));
     }
 
     @Test
@@ -36,13 +65,26 @@ public class CaseFlavorSupportTest {
     }
 
     @Test
+    public void testToLispCaseWithDefaultLocale() {
+        assertEquals("aa-bb-cc-dd-ee-xx-a1-ssß", CaseFlavorSupport.toLispCase("AaBbCcDdEeXxA1SSß", Locale.getDefault()));
+        assertEquals("street", CaseFlavorSupport.toSnakeCase("street", Locale.getDefault()));
+        assertEquals("aa-bb-cc-dd-ee-xx-a1-ssß", CaseFlavorSupport.toLispCase("aa-bb-cc-dd-ee-xx-a1-ssß", Locale.getDefault()));
+    }
+
+    @Test
     public void testToKebabCase() {
         assertEquals("aa-bb-cc-dd-ee-xx-a1-ssß", CaseFlavorSupport.toKebabCase("AaBbCcDdEeXxA1SSß"));
         assertEquals("street", CaseFlavorSupport.toSnakeCase("street"));
         assertEquals("aa-bb-cc-dd-ee-xx-a1-ssß", CaseFlavorSupport.toKebabCase("aa-bb-cc-dd-ee-xx-a1-ssß"));
         assertEquals("aa-bb-cc-dd-ee-xx-a1-ssß", CaseFlavorSupport.toKebabCase("aa_bb_cc_dd_ee_xx_a1_ssß"));
     }
-
+    @Test
+    public void testToKebabCaseWithLocale() {
+        assertEquals("aa-bb-cc-dd-ee-xx-a1-ssß", CaseFlavorSupport.toKebabCase("AaBbCcDdEeXxA1SSß", Locale.getDefault()));
+        assertEquals("street", CaseFlavorSupport.toKebabCase("street", Locale.getDefault()));
+        assertEquals("aa-bb-cc-dd-ee-xx-a1-ssß", CaseFlavorSupport.toKebabCase("aa-bb-cc-dd-ee-xx-a1-ssß", Locale.getDefault()));
+        assertEquals("aa-bb-cc-dd-ee-xx-a1-ssß", CaseFlavorSupport.toKebabCase("aa_bb_cc_dd_ee_xx_a1_ssß", Locale.getDefault()));
+    }
     @Test
     public void testToTrainCase() {
         assertEquals("Aa-Bb-Cc-Dd-Ee-Xx-A1-SSß", CaseFlavorSupport.toTrainCase("aaBbCcDdEeXxA1SSß"));
@@ -58,6 +100,14 @@ public class CaseFlavorSupportTest {
         assertEquals("street", CaseFlavorSupport.toSnakeCase("street"));
         assertEquals("aa_bb_cc_dd_ee_xx_a1_ssß", CaseFlavorSupport.toSnakeCase("aa_bb_cc_dd_ee_xx_a1_ssß"));
         assertEquals("aa_bb_cc_dd_ee_xx_a1_ssß", CaseFlavorSupport.toSnakeCase("Aa-Bb-Cc-Dd-Ee-Xx-A1-SSß"));
+    }
+
+    @Test
+    public void testToSnakeCaseWithDefaultLLocale() {
+        assertEquals("aa_bb_cc_dd_ee_xx_a1_ssß", CaseFlavorSupport.toSnakeCase("aaBbCcDdEeXxA1SSß", Locale.getDefault()));
+        assertEquals("street", CaseFlavorSupport.toSnakeCase("street", Locale.getDefault()));
+        assertEquals("aa_bb_cc_dd_ee_xx_a1_ssß", CaseFlavorSupport.toSnakeCase("aa_bb_cc_dd_ee_xx_a1_ssß", Locale.getDefault()));
+        assertEquals("aa_bb_cc_dd_ee_xx_a1_ssß", CaseFlavorSupport.toSnakeCase("Aa-Bb-Cc-Dd-Ee-Xx-A1-SSß", Locale.getDefault()));
     }
 
     @Test
@@ -116,6 +166,6 @@ public class CaseFlavorSupportTest {
     @Test
     public void testIdentity() {
         String ident = "aooäfg   7(()okasägfkoaäsefgkeä#sgksb#d";
-        assertEquals(ident, StringSupport.identity(ident));
+        assertEquals(ident, CaseFlavorSupport.identity(ident));
     }
 }

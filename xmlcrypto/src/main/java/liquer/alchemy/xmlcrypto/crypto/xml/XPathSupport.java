@@ -4,6 +4,8 @@ import liquer.alchemy.xmlcrypto.crypto.xml.core.NodeListImpl;
 import liquer.alchemy.xmlcrypto.functional.Func2;
 import liquer.alchemy.xmlcrypto.functional.Func3;
 import liquer.alchemy.xmlcrypto.support.StringSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -15,11 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static liquer.alchemy.xmlcrypto.support.StringSupport.isNullOrEmpty;
+
 /**
  *
  */
 public class XPathSupport {
-    // private static final Logger LOG = LoggerFactory.getLogger(XPathSupport.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(XPathSupport.class);
+
     private static final XPathFactory XPATH_FACTORY;
 
     static {
@@ -28,9 +34,11 @@ public class XPathSupport {
         try {
             XPATH_FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         } catch (XPathFactoryConfigurationException e) {
-            // LOG.warn("Feature secure processing is not supported", e);
+            LOG.warn("Feature secure processing is not supported", e);
         }
     }
+
+    private XPathSupport() { }
 
     private static XPath newXPath() {
         return newXPath(null);
@@ -67,7 +75,8 @@ public class XPathSupport {
             Object found = newXPath(namespaceContext).compile(xpathExpression).evaluate(node, XPathConstants.NODESET);
             return (found instanceof NodeList) ? (NodeList)found : new NodeListImpl();
         } catch (XPathExpressionException e) {
-            throw new RuntimeException(new XPathExpressionException("could not find xpath " + xpathExpression));
+            LOG.error(e.getMessage(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -80,7 +89,8 @@ public class XPathSupport {
             Object found = newXPath(namespaceContext).compile(xpathExpression).evaluate(node, XPathConstants.NODE);
             return (found instanceof Node) ? (Node)found : null;
         } catch (XPathExpressionException e) {
-            throw new RuntimeException(new XPathExpressionException("could not find xpath " + xpathExpression));
+            LOG.error("cannot find xpath " + xpathExpression);
+            throw new RuntimeException(e);
         }
     }
 
@@ -112,9 +122,9 @@ public class XPathSupport {
             }
             return node;
         } catch (XPathExpressionException e) {
-            throw new RuntimeException(new XPathExpressionException(String.format("could not find xpath %1$s", xpathExpression)));
+            LOG.error("Cannot find xpath " + xpathExpression, e);
+            throw new RuntimeException(e);
         }
-
     }
 
     public static NodeList findNodeChildren(Node node, String localName) {
@@ -132,7 +142,7 @@ public class XPathSupport {
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Node child = nodeList.item(i);
                 String childLocalName = child.getLocalName();
-                if ((childLocalName != null && childLocalName.equals(localName)) && (namespace == null || namespace.isEmpty() || child.getNamespaceURI().equals(namespace))) {
+                if ((childLocalName != null && childLocalName.equals(localName)) && (StringSupport.isNullOrEmpty(namespace) || child.getNamespaceURI().equals(namespace))) {
                     nodes.add(child);
                 }
             }
@@ -160,11 +170,13 @@ public class XPathSupport {
     }
 
     private static boolean equalsExplicitly(Node attr, String localName, String namespace) {
-        return attr.getLocalName().equals(localName) && (StringSupport.isNullOrEmpty(namespace) || attr.getNamespaceURI().equals(namespace));
+        return attr.getLocalName().equals(localName)
+            && (isNullOrEmpty(namespace) || attr.getNamespaceURI().equals(namespace));
     }
 
     private static boolean equalsImplicitly(Node attr, String localName, String namespace, Node node) {
-        return attr.getLocalName().equals(localName) && ((StringSupport.isNullOrEmpty(attr.getNamespaceURI()) && node.getNamespaceURI().equals(namespace)) || StringSupport.isNullOrEmpty(namespace));
+        return attr.getLocalName().equals(localName)
+            && ((isNullOrEmpty(attr.getNamespaceURI()) && node.getNamespaceURI().equals(namespace)) || isNullOrEmpty(namespace));
     }
 }
 

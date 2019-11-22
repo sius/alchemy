@@ -1,3 +1,3 @@
 package liquer.alchemy.xmlcrypto.crypto.xml.core;
 
-public enum ActionTypes { append, prepend, before, after }
+public enum ActionTypes { APPEND, PREPEND, BEFORE, AFTER }

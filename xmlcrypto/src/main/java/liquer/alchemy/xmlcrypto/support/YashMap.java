@@ -1,31 +1,33 @@
 package liquer.alchemy.xmlcrypto.support;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 /**
  * Yet another hash map based on the <code>LinkedHashMap</code>.
  */
 public class YashMap extends LinkedHashMap<String, Object> {
 
-	private static final long serialVersionUID = 4802126420623311422L;
+    private static final long serialVersionUID = 0L;
 
-    public static YashMap unmodifiable(YashMap other) {
-        return new YashMap(other, true);
+    public YashMap() {
+        super();
     }
 
-    public static YashMap urlDecode(String queryString) throws IOException {
-        return NestedParamsSupport.parseNestedQuery(queryString, "&");
+    public YashMap(int capacity) {
+        super(capacity);
     }
 
-    public static String urlEncode(Object o, String prefix) throws IllegalArgumentException, UnsupportedEncodingException {
-        return NestedParamsSupport.buildNestedQuery(o, prefix);
+    public YashMap(int capacity, float loadFactor) {
+        super(capacity, loadFactor);
+
+    }
+
+    protected YashMap(Map<String, Object> map) {
+        super(map == null ? new LinkedHashMap<>() : new LinkedHashMap<>(map));
     }
 
     public static YashMap of(Map<?, ?> map) {
@@ -52,57 +54,35 @@ public class YashMap extends LinkedHashMap<String, Object> {
      * @param keyValuePairs key and value alternating
      */
     public static YashMap of(Object... keyValuePairs) {
-        return new YashMap(keyValuePairs);
-    }
 
-    private final boolean unmodifiable;
-
-    public YashMap() {
-        unmodifiable = false;
-    }
-
-    public YashMap(int capacity) {
-        super(capacity);
-        unmodifiable = false;
-    }
-
-    public YashMap(Map<String, Object> map) {
-        this(map, false);
-    }
-
-    public YashMap(int capacity, float loadFactor) {
-        super(capacity, loadFactor);
-        unmodifiable = false;
-    }
-
-    protected YashMap(Map<String, Object> map, boolean unmodifiable) {
-        super(map == null ? new LinkedHashMap<>() : new LinkedHashMap<>(map));
-        this.unmodifiable = unmodifiable;
-    }
-
-    private YashMap(Object... keyValuePairs) {
-        unmodifiable = false;
+        final YashMap ret = new YashMap();
         for (int i = 0; i < keyValuePairs.length; i++) {
             String key = keyValuePairs[i].toString();
-            if (containsKey(key)) {
-                Object value = get(keyValuePairs[i]);
-                List<Object> arr = new ArrayList<>();
-                if (value.getClass().isArray()) {
-                    int len = Array.getLength(value);
-                    for (int l = 0; l < len; l++) {
-                        arr.add(Array.get(value, l));
-                    }
-                } else {
-                    arr.add(value);
-                }
+            if (ret.containsKey(key)) {
+                Object value = ret.get(keyValuePairs[i]);
+                List<Object> arr = copyValueToList(value);
                 int next = i + 1;
                 arr.add((keyValuePairs.length > next ? keyValuePairs[next] : null));
-                this.put(key, arr.toArray());
+                ret.put(key, arr.toArray());
                 i++;
             } else {
-                this.put(key, (keyValuePairs.length > (++i) ? keyValuePairs[i] : null));
+                ret.put(key, (keyValuePairs.length > (++i) ? keyValuePairs[i] : null));
             }
         }
+        return ret;
+    }
+
+    private static List<Object> copyValueToList(Object value) {
+        final List<Object> ret = new ArrayList<>();
+        if (value.getClass().isArray()) {
+            final int len = Array.getLength(value);
+            for (int l = 0; l < len; l++) {
+                ret.add(Array.get(value, l));
+            }
+        } else {
+            ret.add(value);
+        }
+        return ret;
     }
 
     public YashMap dup() {
@@ -110,64 +90,8 @@ public class YashMap extends LinkedHashMap<String, Object> {
     }
 
     @Override
-    public Object remove(Object o) {
-        if (unmodifiable) {
-            return null;
-        }
-        return super.remove(o);
-    }
-
-    @Override
-    public void clear() {
-        if (!unmodifiable) {
-            super.clear();
-        }
-    }
-
-    @Override
-    public void putAll(Map<? extends String, ?> map) {
-        if (!unmodifiable) {
-            super.putAll(map);
-        }
-    }
-
-    @Override
-    public Object putIfAbsent(String s, Object o) {
-        if (!unmodifiable) {
-            return super.putIfAbsent(s, o);
-        }
-        return null;
-    }
-
-    @Override
-    public boolean replace(String s, Object o, Object v1) {
-        if (unmodifiable) {
-            return false;
-        }
-        return super.replace(s, o, v1);
-    }
-
-    @Override
-    protected boolean removeEldestEntry(Map.Entry<String, Object> entry) {
-        if (unmodifiable) {
-            return false;
-        }
-        return super.removeEldestEntry(entry);
-    }
-
-    @Override
-    public void replaceAll(BiFunction<? super String, ? super Object, ?> biFunction) {
-        if (!unmodifiable) {
-            super.replaceAll(biFunction);
-        }
-
-    }
-
-    @Override
     public Object put(String key, Object value) {
-        if (unmodifiable) {
-            return null;
-        }
+
         if (value == null) {
             return super.put(key, null);
         } else {
@@ -198,49 +122,64 @@ public class YashMap extends LinkedHashMap<String, Object> {
         return ret;
     }
 
-    public void replace(YashMap that) {
-        if (unmodifiable) {
-            return;
-        }
+    public void replace(Map<String, Object> that) {
         if (that != null) {
             clear();
-            for (Map.Entry<String, Object> entry : that.entrySet())
+            for (Map.Entry<String, Object> entry : that.entrySet()) {
                 put(entry.getKey(), entry.getValue());
+            }
         }
     }
 
-    public YashMap merge(YashMap that) {
+    /**
+     * Merges 2 Maps overriding existing key values with the key values of that.
+     * Adds all new entries from that.
+     *
+     * @param that the entry supplier Map
+     * @return a new YashMap instance containing the merged entries
+     */
+    public YashMap merge(Map<String, Object> that) {
         YashMap ret = new YashMap(this);
         if (that != null) {
-            for (Map.Entry<String, Object> entry : that.entrySet())
+            for (Map.Entry<String, Object> entry : that.entrySet()) {
                 ret.put(entry.getKey(), entry.getValue());
+            }
         }
         return ret;
     }
 
-    public void selfMerge(YashMap that) {
-        if (unmodifiable) {
-            return;
-        }
+    /**
+     * Merges 2 Maps overriding existing key values with the key values of that.
+     * Adds all new entries from that to the instance.
+     *
+     * @param that the entry supplier Map
+     */
+    public void selfMerge(Map<String, Object> that) {
         if (that != null) {
-            for (Map.Entry<String, Object> entry : that.entrySet())
+            for (Map.Entry<String, Object> entry : that.entrySet()) {
                 put(entry.getKey(), entry.getValue());
+            }
         }
     }
 
-    public YashMap reverseMerge(YashMap that) {
+    public YashMap reverseMerge(Map<String, Object> that) {
         if (that != null) {
-            return that.merge(this);
+            final YashMap thatMap = (that instanceof YashMap)
+                ? (YashMap)that
+                : new YashMap(that);
+
+            return thatMap.merge(this);
         }
         return new YashMap(this);
     }
 
-    public void selfReverseMerge(YashMap that) {
-        if (unmodifiable) {
-            return;
-        }
+    public void selfReverseMerge(Map<String, Object> that) {
         if (that != null) {
-            replace(that.merge(this));
+            final YashMap thatMap = (that instanceof YashMap)
+                ? (YashMap)that
+                : new YashMap(that);
+
+            replace(thatMap.merge(this));
         }
     }
 
@@ -253,77 +192,11 @@ public class YashMap extends LinkedHashMap<String, Object> {
     }
 
     public Object delete(String key, Object defaultValue) {
-        if (unmodifiable) {
-            return null;
-        }
         Object ret = defaultValue;
         if (key != null) {
             ret = remove(key);
         }
         return ret;
-    }
-
-    /**
-     * @param selector function
-     * @return a new {@link YashMap} with the Entries selected by the BiFunction
-     */
-    public YashMap select(BiFunction<String, Object, Boolean> selector) {
-        YashMap ret = new YashMap(this);
-        if (selector != null) {
-            for (Map.Entry<String, Object> next : entrySet()) {
-                if (selector.apply(next.getKey(), next.getValue()))
-                    ret.put(next.getKey(), next.getValue());
-            }
-        }
-        return ret;
-    }
-
-    /**
-     * @param selector function
-     * @return a new {@link YashMap} without the Entries selected by the BiFunction
-     */
-    public YashMap reject(BiFunction<String, Object, Boolean> selector) {
-        YashMap ret = new YashMap(this);
-        if (selector != null) {
-            for (Map.Entry<String, Object> next : entrySet()) {
-                if (selector.apply(next.getKey(), next.getValue()))
-                    ret.delete(next.getKey());
-            }
-        }
-        return ret;
-    }
-
-    public YashMap each(BiFunction<String, Object, Void> b) {
-        if (b != null) {
-            for (Map.Entry<String, Object> next : entrySet()) {
-                b.apply(next.getKey(), next.getValue());
-            }
-        }
-        return this;
-    }
-
-    /**
-     * @return a flattened Key Value Array
-     */
-    public Object[] toArray() {
-        List<Object> list = new ArrayList<>();
-
-        for (Map.Entry<String, Object> next : entrySet()) {
-            String k = next.getKey();
-            Object v = next.getValue();
-            if (v == null) {
-                list.add(new Object[]{k, null});
-            } else {
-                if (v instanceof YashMap) {
-                    list.add(new Object[]{k, ((YashMap) v).toArray()});
-                } else if (v instanceof Map) {
-                    list.add(new Object[]{k, of((Map<?, ?>) v).toArray()});
-                } else {
-                    list.add(new Object[]{k, v});
-                }
-            }
-        }
-        return list.toArray();
     }
 
     public YashMap stringifyValues() {
@@ -335,21 +208,11 @@ public class YashMap extends LinkedHashMap<String, Object> {
     }
 
     public void selfStringifyValues() {
-        if (unmodifiable)
-            return;
         YashMap ret = new YashMap();
         for (Map.Entry<String, Object> next : this.entrySet()) {
             ret.put(next.getKey(), (next.getValue() == null ? "" : next.getValue().toString()));
         }
         clear();
         selfMerge(ret);
-    }
-
-    public String urlEncode() throws IllegalArgumentException, UnsupportedEncodingException {
-        return urlEncode("");
-    }
-
-    public String urlEncode(String prefix) throws IllegalArgumentException, UnsupportedEncodingException {
-        return YashMap.urlEncode(this, prefix);
     }
 }

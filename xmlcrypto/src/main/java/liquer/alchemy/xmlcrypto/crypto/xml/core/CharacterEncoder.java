@@ -7,7 +7,11 @@ import java.util.regex.Pattern;
 
 public class CharacterEncoder {
 
+    public static final Pattern NORMALIZE_TEXT_PATTERN = Pattern.compile("([&<>\r])");
+    public static final Pattern NORMALIZE_ATTRIBUTE_PATTERN = Pattern.compile("([&<\"\r\n\t])");
+
     private static class SingletonHelper {
+
         private static final Map<String, String> xml_special_to_encoded_attribute;
         private static final Map<String, String> xml_special_to_encoded_text;
         private static final CharacterEncoder INSTANCE;
@@ -31,10 +35,6 @@ public class CharacterEncoder {
         }
     }
 
-    public static CharacterEncoder getInstance() {
-        return SingletonHelper.INSTANCE;
-    }
-
     private Map<String, String> attributeCharacterMap;
     private Map<String, String> textCharacterMap;
 
@@ -43,6 +43,10 @@ public class CharacterEncoder {
         Map<String, String> textCharacterMap) {
         this.attributeCharacterMap = attributeCharacterMap;
         this.textCharacterMap = textCharacterMap;
+    }
+
+    public static CharacterEncoder getInstance() {
+        return SingletonHelper.INSTANCE;
     }
 
     /**
@@ -57,18 +61,18 @@ public class CharacterEncoder {
         return normalizeText(normalizeLineEnding(text));
     }
 
-    private String normalizeWhiteSpace(String value) {
+    private static String normalizeWhiteSpace(String value) {
         return value.replaceAll("[\r\n\t]+", " ");
     }
     private String normalizeAttribute(String attributeValue) {
-        return normalize(Pattern.compile("([&<\"\r\n\t])"), this.attributeCharacterMap, attributeValue);
+        return normalize(NORMALIZE_ATTRIBUTE_PATTERN, this.attributeCharacterMap, attributeValue);
     }
 
     /*
      * this should normally be done by the xml parser
      * See: https://www.w3.org/TR/xml/#sec-line-ends
      */
-    private String normalizeLineEnding(String value) {
+    private static String normalizeLineEnding(String value) {
         return value.replaceAll("\r\n?]+", "\n");
     }
 
@@ -78,10 +82,10 @@ public class CharacterEncoder {
      * <li>https://www.w3.org/TR/xml-c14n#Example-Chars
      */
     private String normalizeText(String text) {
-        return normalize(Pattern.compile("([&<>\r])"), this.textCharacterMap, text);
+        return normalize(NORMALIZE_TEXT_PATTERN, this.textCharacterMap, text);
     }
 
-    private String normalize(Pattern p, Map<String, String> map, String value) {
+    private static String normalize(Pattern p, Map<String, String> map, String value) {
         String ret = value;
         Matcher m = p.matcher(value);
         while(m.find()) {
