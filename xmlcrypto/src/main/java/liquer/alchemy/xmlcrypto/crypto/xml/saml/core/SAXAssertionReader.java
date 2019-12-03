@@ -172,16 +172,19 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion, LSRe
         @Override
         public void warning(SAXParseException exception) throws SAXException {
             LOG.warn(exception.getMessage(), exception);
+            throw exception;
         }
 
         @Override
         public void error(SAXParseException exception) throws SAXException {
             LOG.error(exception.getMessage(), exception);
+            throw exception;
         }
 
         @Override
         public void fatalError(SAXParseException exception) throws SAXException {
             LOG.error("FATAL: " + exception.getMessage(), exception);
+            throw exception;
         }
 
         /* End of ErrorHandler Implementation */
@@ -346,9 +349,9 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion, LSRe
         public void characters(char[] ch, int start, int length) throws SAXException {
             switch (this.currentElement()) {
                 case SIGNATURE:
-                    if (this.renderMode) {
-                        this.signatureFragmentBuilder.append(String.valueOf(ch, start, length));
-                    }
+                    // if (this.renderMode) {
+                        // this.signatureFragmentBuilder.append(String.valueOf(ch, start, length));
+                    // }
                     break;
                 case SIGNATURE_VALUE:
                     this.signatureValueBuilder.append(String.valueOf(ch, start, length));
@@ -509,16 +512,19 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion, LSRe
     @Override
     public void warning(SAXParseException exception) throws SAXException {
         LOG.warn(exception.getMessage(), exception);
+        throw exception;
     }
 
     @Override
     public void error(SAXParseException exception) throws SAXException {
         LOG.error(exception.getMessage(), exception);
+        throw exception;
     }
 
     @Override
     public void fatalError(SAXParseException exception) throws SAXException {
         LOG.error("FATAL: " + exception.getMessage(), exception);
+        throw exception;
     }
 
     /* End of ErrorHandler Implementation */

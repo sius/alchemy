@@ -25,6 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 /**
  * Assertion Factory
@@ -141,18 +142,18 @@ public final class AssertionFactory {
 
     private static SAXParser saxParser() { return SAX_PARSER_THREAD_LOCAL.get(); }
 
-    public static Assertion newReader(InputStream in) { return newReader(in, null); }
+    public static Assertion newReader(InputStream in) throws AssertionException { return newReader(in, null); }
 
-    public static Assertion newReader(InputStream in, XmlSignerOptions options) {
+    public static Assertion newReader(InputStream in, XmlSignerOptions options) throws AssertionException {
         try {
             return newReader(IOSupport.toString(in), options);
         } catch (IOException e) {
             LOG.error(e.getMessage(), e);
-            throw new IllegalStateException(e);
+            throw new AssertionException(e.getMessage(), e);
         }
     }
 
-    public static Assertion newReader(String xml, XmlSignerOptions options) {
+    public static Assertion newReader(String xml, XmlSignerOptions options) throws AssertionException {
         if (xml == null) {
             throw new NullPointerException("Argument xml cannot be null");
         }
@@ -160,9 +161,9 @@ public final class AssertionFactory {
 
         try {
             assertionParser().parse(new ByteArrayInputStream(xml.getBytes()), assertionReader, Identifier.SAML2_NS_URI);
-        } catch (Exception e) {
+        } catch (IOException | SAXException e) {
             LOG.error(e.getMessage(), e);
-            throw new IllegalStateException(e);
+            throw new AssertionException(e.getMessage(), e);
         }
 
         return assertionReader;

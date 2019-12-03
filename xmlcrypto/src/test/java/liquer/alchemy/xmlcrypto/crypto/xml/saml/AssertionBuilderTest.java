@@ -4,6 +4,7 @@ import liquer.alchemy.xmlcrypto.crypto.Identifier;
 import liquer.alchemy.xmlcrypto.crypto.xml.URLKeyInfo;
 import liquer.alchemy.xmlcrypto.crypto.xml.ValidationResult;
 import liquer.alchemy.xmlcrypto.crypto.xml.XmlSignerOptions;
+import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.AssertionException;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.AssertionFactory;
 import liquer.alchemy.xmlcrypto.support.Clock;
 import liquer.alchemy.xmlcrypto.support.Timer;
@@ -90,21 +91,25 @@ public class AssertionBuilderTest {
             t.stop("build assertion");
             System.out.println(signedXml);
 
-            final Assertion assertion =
-                AssertionFactory.newReader(signedXml,
+            final Assertion assertion;
+            try {
+                assertion = AssertionFactory.newReader(signedXml,
                     new XmlSignerOptions().namespaceContext(SamlNamespaceContext.newInstance()));
+                final ValidationResult result = assertion.validateSignature();
 
-            final ValidationResult result = assertion.validateSignature();
+                t.stop("read and validate assertion");
 
-            t.stop("read and validate assertion");
+                if (!result.isValidToken()) {
+                    final String validationErrors =
+                            String.join("\n", result.getErrors());
+                    Assert.fail(validationErrors);
+                }
 
-            if (!result.isValidToken()) {
-                final String validationErrors =
-                    String.join("\n", result.getErrors());
-                Assert.fail(validationErrors);
+                Assert.assertTrue(result.isValidToken());
+            } catch (AssertionException e) {
+                e.printStackTrace();
+                Assert.fail(e.getMessage());
             }
-
-            Assert.assertTrue(result.isValidToken());
 
         }).go().stop("done").println("createAndValidate_RSAWithSHA1");
     }
@@ -128,22 +133,26 @@ public class AssertionBuilderTest {
 
             t.stop("build assertion");
 
-            final Assertion assertion =
-                AssertionFactory.newReader(signedXml,
+            final Assertion assertion;
+            try {
+                assertion = AssertionFactory.newReader(signedXml,
                         new XmlSignerOptions().namespaceContext(SamlNamespaceContext.newInstance()));
 
-            final ValidationResult result = assertion.validateSignature();
+                final ValidationResult result = assertion.validateSignature();
 
-            t.stop("read and validate assertion");
+                t.stop("read and validate assertion");
 
-            if (!result.isValidToken()) {
-                final String validationErrors =
-                    String.join("\n", result.getErrors());
-                Assert.fail(validationErrors);
+                if (!result.isValidToken()) {
+                    final String validationErrors =
+                            String.join("\n", result.getErrors());
+                    Assert.fail(validationErrors);
+                }
+
+                Assert.assertTrue(result.isValidToken());
+            } catch (AssertionException e) {
+                e.printStackTrace();
+                Assert.fail(e.getMessage());
             }
-
-            Assert.assertTrue(result.isValidToken());
-
         }).go().stop("done").println("createAndValidate_RSAWithSHA256");
     }
 
@@ -166,21 +175,26 @@ public class AssertionBuilderTest {
 
             t.stop("build assertion");
 
-            final Assertion assertion =
-                    AssertionFactory.newReader(signedXml,
-                            new XmlSignerOptions().namespaceContext(SamlNamespaceContext.newInstance()));
+            final Assertion assertion;
+            try {
+                assertion = AssertionFactory.newReader(signedXml,
+                        new XmlSignerOptions().namespaceContext(SamlNamespaceContext.newInstance()));
 
-            final ValidationResult result = assertion.validateSignature();
+                final ValidationResult result = assertion.validateSignature();
 
-            t.stop("read and validate assertion");
+                t.stop("read and validate assertion");
 
-            if (!result.isValidToken()) {
-                final String validationErrors =
-                        String.join("\n", result.getErrors());
-                Assert.fail(validationErrors);
+                if (!result.isValidToken()) {
+                    final String validationErrors =
+                            String.join("\n", result.getErrors());
+                    Assert.fail(validationErrors);
+                }
+
+                Assert.assertTrue(result.isValidToken());
+            } catch (AssertionException e) {
+                e.printStackTrace();
+                Assert.fail(e.getMessage());
             }
-
-            Assert.assertTrue(result.isValidToken());
 
         }).go().stop("done").println("createAndValidate_RSAWithSHA512");
     }

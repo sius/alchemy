@@ -3,6 +3,7 @@ package liquer.alchemy.xmlcrypto.crypto.xml.saml;
 import liquer.alchemy.xmlcrypto.crypto.xml.URLKeyInfo;
 import liquer.alchemy.xmlcrypto.crypto.xml.ValidationResult;
 import liquer.alchemy.xmlcrypto.crypto.xml.XmlSignerOptions;
+import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.AssertionException;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.AssertionFactory;
 import liquer.alchemy.xmlcrypto.support.BaseN;
 import liquer.alchemy.xmlcrypto.support.Clock;
@@ -46,22 +47,26 @@ public class AssertionReaderTest {
             String xml = IOSupport.toString(in);
             System.out.println(xml);
             Clock.set((t) -> {
-                final Assertion assertion = AssertionFactory.newReader(xml,
-                    new XmlSignerOptions()
-                            .namespaceContext(SamlNamespaceContext.newInstance())
-                            .timer(t));
+                final Assertion assertion;
+                try {
+                    assertion = AssertionFactory.newReader(xml,
+                        new XmlSignerOptions()
+                                .namespaceContext(SamlNamespaceContext.newInstance())
+                                .timer(t));
+                    final ValidationResult result = assertion.validateSignature();
 
-                final ValidationResult result = assertion.validateSignature();
+                    t.stop("read and validate assertion");
 
-                t.stop("read and validate assertion");
-
-                if (!result.isValidToken()) {
-                    final String validationErrors =
-                        String.join("\n", result.getErrors());
-                    Assert.fail(validationErrors);
+                    if (!result.isValidToken()) {
+                        final String validationErrors =
+                                String.join("\n", result.getErrors());
+                        Assert.fail(validationErrors);
+                    }
+                    Assert.assertTrue(result.isValidSignature());
+                } catch (AssertionException e) {
+                    e.printStackTrace();
+                    Assert.fail(e.getMessage());
                 }
-                Assert.assertTrue(result.isValidSignature());
-
             }).go().stop("done").println("validateAssertion");
 
         } catch (IOException e) {
@@ -76,24 +81,32 @@ public class AssertionReaderTest {
         try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(SAML_TOKEN))) ) {
 
             Clock.set( (t) -> {
-                final Assertion assertion = AssertionFactory.newReader(in,
-                        new XmlSignerOptions()
-                                .namespaceContext(SamlNamespaceContext.newInstance())
-                                .timer(t));
+                final Assertion assertion;
+                try {
+                    assertion = AssertionFactory.newReader(in,
+                            new XmlSignerOptions()
+                                    .namespaceContext(SamlNamespaceContext.newInstance())
+                                    .timer(t));
+                    final ValidationResult result = assertion.validateSignature();
 
-                final ValidationResult result = assertion.validateSignature();
+                    t.stop("read and validate assertion");
 
-                t.stop("read and validate assertion");
-
-                if (!result.isValidToken()) {
-                    final String validationErrors =
-                        String.join("\n", result.getErrors());
-                    Assert.fail(validationErrors);
+                    if (!result.isValidToken()) {
+                        final String validationErrors =
+                                String.join("\n", result.getErrors());
+                        Assert.fail(validationErrors);
+                    }
+                } catch (AssertionException e) {
+                    e.printStackTrace();
+                    Assert.fail(e.getMessage());
                 }
+
+
             }).go().stop("done").println("validateAssertion1");
 
         } catch (IOException e) {
             e.printStackTrace();
+            Assert.fail(e.getMessage());
         }
     }
 
@@ -124,8 +137,9 @@ public class AssertionReaderTest {
                         Assert.fail(validationErrors);
                     }
 
-                } catch (IOException e) {
+                } catch (IOException | AssertionException e) {
                     e.printStackTrace();
+                    Assert.fail(e.getMessage());
                 }
             }
 

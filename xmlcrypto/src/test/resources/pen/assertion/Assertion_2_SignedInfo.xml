@@ -1,0 +1,52 @@
+<saml:Assertion xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wsswssecurity-secext-1.0.xsd" xmlns="http://www.w3.org/2000/09/xmldsig#" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:ns5="http://www.w3.org/2001/04/xmlenc#" Version="2.0" ID="_49545238-47c9-4d18-a64c-7454bb706479" IssueInstant="2019-12-03T00:10:59.047+01:00">
+    <saml:Issuer>liquer</saml:Issuer>
+    <Signature>
+        <SignedInfo>
+            <CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+            <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+            <Reference URI="#_49545238-47c9-4d18-a64c-7454bb706479">
+                <Transforms>
+                    <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+                    <Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+                </Transforms>
+                <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+                <DigestValue>U+dSzjXzavfTYi2C0zMhhqeV0ZY=</DigestValue>
+            </Reference>
+        </SignedInfo>
+        <SignedInfo>
+            <CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+            <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+            <Reference URI="#_49545238-47c9-4d18-a64c-7454bb706479">
+                <Transforms>
+                    <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+                    <Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+                </Transforms>
+                <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+                <DigestValue>U+dSzjXzavfTYi2C0zMhhqeV0ZY=</DigestValue>
+            </Reference>
+        </SignedInfo>
+        <SignatureValue>SyBNHcC/OPCAiTCylwT6SdSKA9kJu3vTbsWghWsHtUmvdCZF7Xe9sYdtdjKVCPgYp5gvLlCZOSnUL2n/JBB3/DZqyOQxwQHMKGERQ++i+bIhfjoX/y6SjKZPlHbo5n1Cxd/g+anb8SPy1hQA2raroLk4cSPkUYTcoj5llFR78R3VXAXH2UWIRKsQK/UzutnBj1EBuVpZ1BR7JPcGfWPFlvYyYZEka2stUbQ3/sU5YHjzyI8dT/WN7zSHiMOi7rzJJebBTk9OQPHdPLh44tSuuE5twM+gLZT/ajoWkZBkM5EIc3qxKgN3cOEjhPdzc1yFswTl3ADRLNt/3caDBqnRyvhaXqsn80MyRxDf1ezWemreqimsNHfIvzIuGLUFjkHVvlBB3TQS70atZE2/9slpJ7iKrBoasdXcCvR/mTV2r/lMYCnekj5ClshFTUn1C+f7484Zt782GTqVcvwbV8e3y8nClgCBBlDZ7YdnFi5YyI+DEHXrzGhpFzP0ICCKz/kfpOHFENWo/57tQa2kFkKEdtpdEwB5M4K+6XLlCsHTm8TOn0XyfvP54p2vf1M25ha77iZsPFEMAkR7O3w5hcKx744IIX2JTomvq0BS2x4ud+380iFxtI9lZyLB4T2UaUa8OSJjLklN9wI2s/9SMkQ5NJ6EfF4iOYIrICMTtpEJ/78=</SignatureValue>
+        <KeyInfo>
+            <X509Data>
+                <X509Certificate>MIIFazCCA1OgAwIBAgIUUzNHWDmd0hTyJLp5xKIZVrd5jxYwDQYJKoZIhvcNAQELBQAwRTELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoMGEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDAeFw0xOTEwMDgxNDMyMTFaFw0yMDEwMDcxNDMyMTFaMEUxCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDD4EBnJtiepr2zTD4h8NombtUbmsm2ddCmTWpbZ2UeVog3iq/QweGOPtG99/mlP+fNQYsIUD3nfXcFhkSXJq+RjQY+Vzp79Mlqjkb7vVV8FPopg9JgKqlIjEUh7ab5bePHX8h9fEd1UFlw1lJTMbwfNT2uhguiDUJ0NGR0UZGffijyT3w+HkaN3qG0sYoRVebBTRiodvhSqbMRgt3REekU8OqniEIkLMiX1kLnaZYAKZ+r6vG3UHT7vx+YZko4n1bgczQLx1mwApiIZkNik8r4BngR/1iK+Cygn5TZ10Eml5WsXr9sWklhwI9waChfmxPPSiOE1dDYAyCDBo1c4JWzkl1uo1hle4kscUTIg1M1SCT533bVa/FDh7ncWRj1HZ3TbF1By2Ctw4eukhUis0Jlk+YIsQN/qxqdoyAzKT2JMbEmsKnGos53mE/94Giq5z6Qc/MZQWpu0Y3PtWo3eQu7fl1q+FV6nAy93hCMwdsZfMK8u+wKsNrvbgC778pUkd+BXXN+n3gZwqMFsmAlgkYBUC8XlO8vSs8Olr2eXrGPIHlG5f0AQwitzIiSB5hlh1t5zkDHHm3i7x0w9t18nZ9Dfj2/XGiNhIxOv0Gv0quAYz4ZBJBqbZcSUYYkdkNuN9TVXuuwcbxwQWgw//gNHoIYxge2sU0moB3A8SbldfoqgwIDAQABo1MwUTAdBgNVHQ4EFgQUOCCCVJDvjiTpQFzs1O2j+q5nnIIwHwYDVR0jBBgwFoAUOCCCVJDvjiTpQFzs1O2j+q5nnIIwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAgEAjUUxEbwUyQmpxykAGfKtDtqL7TxoTnf00BZXUxZIUz/W2ZOvYkTTHZJhVxTUDqnSrBVNpT7kUHG0hX285eVHOYM9YPz8gwr1uJZ+srqz9dnDVbGWjo71XOouKGH8HUSmZ5rjVG0UglO6RfLxVAEDdIkSAIeZwnH+g6VwHQQtW1mwblLZWIo+4XK7kP7G/1W99krktc/9N/rt9mTgrt6NVH0ToqpOcQ4/nf+7naVPvwSvvRiDnyKUMyMTdi7cFN0po0v8ITjkT+9NxxCOOR8VcEsie/VnxCHN9WN8hejzLcPGYsuTh6XvgZVrhdnilCaD5ba1N3VydxIpFJfvpye+GWmbhuNwvRqDqp+FlUg9daICotMKWPO0LXhCToVGsfoCLN3MM9KUvX6IayGVqhOT0IEiKL2jfZvB3MmX5LHXvrDoP10QgCpmgxTgY9inyxBuwPkzWg2ZFwk+Vwv7v97wU6sRHB2P+KtQc2zjpAwyOJJ+Wj/AVjBFGieuoMt5hdYKG/HVBEZTrhDES/fUm3c9XUHw1g1S5B6aITfQd74d/X2xpCPXHaMuniiaibRrg99a773/SdICofpUJi+EyG1h1SV8M06/EEk2JVFMQI5CetZKJeozaN5EMHajx2vmTKaH594+Iq/HlbdI+gT2XRuEDs9V1djwoUiXRbmJhgat2ug=</X509Certificate>
+                <X509IssuerSerial>
+                    <X509IssuerName>O=Internet Widgits Pty Ltd,ST=Some-State,C=AU</X509IssuerName>
+                    <X509SerialNumber>474989786977238633643715922704902051876256190230</X509SerialNumber>
+                </X509IssuerSerial>
+            </X509Data>
+        </KeyInfo>
+    </Signature>
+    <saml:Subject>
+        <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer"/>
+    </saml:Subject>
+    <saml:Conditions NotBefore="2019-12-03T00:10:59.050+01:00" NotOnOrAfter="2019-12-03T00:20:59.050+01:00">
+        <saml:AudienceRestriction>
+            <saml:Audience>http://liquer.io</saml:Audience>
+        </saml:AudienceRestriction>
+    </saml:Conditions>
+    <saml:AttributeStatement>
+        <saml:Attribute Name="http://liquer.io/7k/user">
+            <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi="http://www.w3.org/2001/XMLSchema-instance">john.snow@winterfell.7k</saml:AttributeValue>
+        </saml:Attribute>
+    </saml:AttributeStatement>
+</saml:Assertion>

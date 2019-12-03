@@ -93,7 +93,7 @@ public class AssertionFactoryTest {
 
             Assert.assertEquals(xml, assertion.toString());
 
-        } catch (IOException e) {
+        } catch (IOException | AssertionException e) {
             Assert.fail(e.getMessage());
         }
     }

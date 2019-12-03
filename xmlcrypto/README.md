@@ -90,6 +90,16 @@ java --class-path $TEST_APP_CLASSPATH \
 - End-Of-Line problems: Linux (`\n`), Windows (`\r\n`), older Mac ?? (`\r`)
 - Limited cryptographic strength policy files
 
+# Canonicalization (C14N)
+- Remove any XML declaration and document type declarations
+- Encode document in UTF-8
+- Expand entities to their character equivalent
+- Replace CDATA sections with their character equivalent
+- Encode the special XML entities &lt; &gt; &quot;
+- Normalize attribute values, as if by a validating parser
+- Open empty elements with start and end tags
+- Sort namespace declarations and attributes
+
 ## Solve limited cryptographic strength policy files
 
 1. Install unlimited jurisdiction strength policy files (IBM JDK)
@@ -126,3 +136,4 @@ saml-2.0-os/saml-schema-assertion-2.0.xsd
 - ["On the Effectiveness of XML Schema Validation for Countering XML Signature Wrapping Attacks", Meiko Jensen, Christopher Meyer, Juraj Somorovsky, and Jörg Schwenk, 2013](https://www.nds.ruhr-uni-bochum.de/media/nds/veroeffentlichungen/2013/03/25/paper.pdf) - [A copy here](docs/paper.pdf)
 - ["XSpRES: Robust and Effective XML Signatures for Web Services", Christian Mainka, Meiko Jensen, Luigi Lo Iacono, and Jörg Schwenk, 2012](https://www.nds.ruhr-uni-bochum.de/media/nds/veroeffentlichungen/2012/07/24/CLOSER_XSpRES.pdf) - [A copy here](docs/CLOSER_XSpRES.pdf)
 - ["XML Signature Syntax and Processing Version 1.1", W3C, 2008](https://www.w3.org/TR/xmldsig-core/)
+- [White Space in XML Documents](http://usingxml.com/Basics/XmlSpace)
