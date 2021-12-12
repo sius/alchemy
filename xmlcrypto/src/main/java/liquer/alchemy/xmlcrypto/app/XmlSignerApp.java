@@ -38,7 +38,7 @@ public class XmlSignerApp  {
     public static void main(String[] args) {
 
 
-        final TypedMap tm = new TypedMap(YashMap.of(args));
+        final TypedMap tm = new TypedMap(YashMap.of((Object[])args));
 
         try {
             final Path privateKeyFile = Try.of(() ->

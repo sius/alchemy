@@ -42,3 +42,5 @@ gradle-app.setting
 .attach_*
 /**/target/
 
+.idea
+

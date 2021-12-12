@@ -480,7 +480,7 @@ public class TypedMap extends YashMap {
 	public static List<TypedMap> listOf(Map<?,?> params, String key, List<TypedMap> defaultValue) {
 		List<TypedMap> ret = (defaultValue == null)
             ? new ArrayList<>()
-            : new ArrayList(defaultValue);
+            : new ArrayList<>(defaultValue);
 
     	if (params != null && StringSupport.notNullOrEmpty(key)) {
             ret = copyMapToList(params.get(key));

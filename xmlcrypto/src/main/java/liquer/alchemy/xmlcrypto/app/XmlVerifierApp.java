@@ -36,7 +36,7 @@ public class XmlVerifierApp {
     private static final Log LOG = new Log(){};
     public static void main(String[] args) {
 
-        final TypedMap tm = new TypedMap(YashMap.of(args));
+        final TypedMap tm = new TypedMap(YashMap.of((Object[])args));
 
         try {
             final Path publicKeyFile = Try.of(() ->
