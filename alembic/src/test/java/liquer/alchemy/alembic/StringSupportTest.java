@@ -1,5 +1,5 @@
 package liquer.alchemy.alembic;
 
-public class StringSupportTest {
+class StringSupportTest {
 
 }

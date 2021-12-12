@@ -1,7 +1,7 @@
 package liquer.alchemy.athanor.reflect;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 @SuppressWarnings("unchecked")
 public final class Athanor {
 	
-	private static final Logger LOG = LogManager.getLogger(Athanor.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Athanor.class);
 	
 	private static TypeMapper typeMapper = new TypeMapper();
 	
@@ -92,9 +92,16 @@ public final class Athanor {
 					final List<?> attributesList = (List)attributes;
 					final int lenProjection = Array.getLength(projection);
 					final int totalLen = (lenProjection + attributesList.size());
-					ret = Array.newInstance(projection.getClass().getComponentType(), totalLen);
+					final Class<?> projectionType = projection.getClass().getComponentType();
+					ret = Array.newInstance(projectionType, totalLen);
 					for (int i = lenProjection; i < totalLen; i++) {
-						Array.set(ret, i, attributesList.get(i));
+						final Object o = attributesList.get(i);
+						if (o instanceof Map) {
+							final Map<String, Object> attributesMap = cloneMap((Map<?, ?>) o, keyMapper);
+							Array.set(ret, i, loopObj(null, projectionType, attributesMap, maxDepth - 1));
+						} else {
+									Array.set(ret, i, typeMapper.changeType(o, projectionType));
+						}
 					}
 				} else {
 					ret = loopSeq(projection, projection.getClass(), null, (List<?>) attributes, maxDepth - 1);
@@ -118,11 +125,11 @@ public final class Athanor {
 		try {
 			Class<?> clazz = map.getClass();
 			if (Map.class.isAssignableFrom(clazz)) {
-				ret = map.getClass().newInstance();
+				ret = map.getClass().getDeclaredConstructor().newInstance();
 			 } else {
 				ret = new LinkedHashMap<>();
 			}
-		} catch (IllegalAccessException | InstantiationException ignore) {
+		} catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException ignore) {
 			ret =  new LinkedHashMap<>();
 		}
 
@@ -141,7 +148,7 @@ public final class Athanor {
 			try {
 				return instanceClass.getDeclaredConstructor().newInstance();
 			} catch (NoSuchMethodException | InvocationTargetException | SecurityException | InstantiationException| IllegalAccessException | IllegalArgumentException  e) {
-				LOG.error(e);
+				LOG.error(e.getMessage(), e);
 			}
 		} else {
 			if (Collection.class.isAssignableFrom(instanceClass)) {

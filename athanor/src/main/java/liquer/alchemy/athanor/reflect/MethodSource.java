@@ -60,7 +60,7 @@ public final class MethodSource implements ISource {
 
 	@Override
 	public Object getValue(Object instance) {
-		boolean accessible = method.isAccessible();
+		boolean accessible = method.trySetAccessible();
 		if (!accessible)
 			method.setAccessible(true);
 		try {

@@ -5,17 +5,17 @@ import liquer.alchemy.crypto.KeyRing;
 import liquer.alchemy.crypto.Signature;
 import liquer.alchemy.crypto.json.jwt.NumericDate;
 import liquer.alchemy.crypto.sig.url.SimpleURLSigner;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SimpleURLSignerTest {
+class SimpleURLSignerTest {
 
 	@Test
-	public void getSignedURL_And_Verify() throws NoSuchAlgorithmException, InvalidKeyException {
+	void getSignedURL_And_Verify() throws NoSuchAlgorithmException, InvalidKeyException {
 		KeyRing keyRing = new KeyRing(Signature.HS256, 10);
 		NumericDate notBefore = new NumericDate();
 		SimpleURLSigner signer = new SimpleURLSigner(keyRing);

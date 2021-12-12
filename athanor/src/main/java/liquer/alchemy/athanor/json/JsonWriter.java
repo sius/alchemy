@@ -1,9 +1,13 @@
 package liquer.alchemy.athanor.json;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -12,7 +16,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class JsonWriter extends Writer {
 
-	private static final Logger LOG = LogManager.getLogger(JsonWriter.class);
+	private static final Logger LOG = LoggerFactory.getLogger(JsonWriter.class);
 	protected static final int DEFAULT_CHAR_BUFFER_SIZE = 8192;
 
 	private String charsetName;
@@ -47,7 +51,7 @@ public class JsonWriter extends Writer {
 		try {
 			out.close();
 		} catch (IOException e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 		}
 	}
 	@Override
@@ -55,7 +59,7 @@ public class JsonWriter extends Writer {
 		try {
 			out.flush();
 		} catch (IOException e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 		}
 	}
 	@Override
@@ -63,7 +67,7 @@ public class JsonWriter extends Writer {
 		try {
 			out.write(cBuf, off, len);
 		} catch (IOException e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 		}
 	}
 	public void print(String s) {

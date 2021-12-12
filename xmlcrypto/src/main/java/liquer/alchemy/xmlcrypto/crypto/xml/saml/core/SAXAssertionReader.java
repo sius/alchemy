@@ -1,6 +1,5 @@
 package liquer.alchemy.xmlcrypto.crypto.xml.saml.core;
 
-import com.sun.org.apache.xerces.internal.dom.DOMInputImpl;
 import liquer.alchemy.xmlcrypto.crypto.Identifier;
 import liquer.alchemy.xmlcrypto.crypto.xml.*;
 import liquer.alchemy.xmlcrypto.crypto.xml.core.KeyInfoImpl;
@@ -19,7 +18,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.bind.DatatypeConverter;
+import jakarta.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -461,7 +460,7 @@ final class SAXAssertionReader extends DefaultHandler implements Assertion, LSRe
     @Override
     public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId, String baseURI) {
         final InputSource inputSource = require(systemId);
-        final LSInput ret =  new DOMInputImpl(
+        final LSInput ret =  new LSInputImpl(
             publicId,
             systemId,
             null,

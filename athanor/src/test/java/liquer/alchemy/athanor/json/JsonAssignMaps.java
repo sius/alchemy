@@ -1,12 +1,11 @@
 package liquer.alchemy.athanor.json;
 
-import liquer.alchemy.athanor.json.Json;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class JsonAssignMaps {
+class JsonAssignMaps {
 	
 	private Map<String, Object> m1 = new HashMap<>();
 	private Map<String, Object> m2 = new HashMap<>();
@@ -20,13 +19,13 @@ public class JsonAssignMaps {
 	}
 	
 	@Test
-	public void assignMap() {
+	void assignMap() {
 		System.out.println(Json.stringify(Json.assign(Map.class, m2, m1), 2));
 		
 	}
 	
 	@Test
-	public void reassignMap() {
+	void reassignMap() {
 		System.out.println(Json.stringify(Json.assign(m1, m2), 2));
 		System.out.println(Json.stringify(Json.reassign(m1, m2), 2));
 	}

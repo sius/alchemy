@@ -9,9 +9,8 @@ import liquer.alchemy.xmlcrypto.crypto.xml.saml.SamlNamespaceContext;
 import liquer.alchemy.xmlcrypto.functional.TryableException;
 import liquer.alchemy.xmlcrypto.support.BaseN;
 import liquer.alchemy.xmlcrypto.support.IOSupport;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -22,7 +21,9 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.zip.GZIPInputStream;
 
-public class AssertionFactoryTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+class AssertionFactoryTest {
 
     private final static Supplier<String> TOKEN = () ->
         AssertionFactory.newBuilder()
@@ -38,52 +39,52 @@ public class AssertionFactoryTest {
 
     private static String SAML_TOKEN;
 
-    @BeforeClass
-    public static void beforeAll() {
+    @BeforeAll
+    static void beforeAll() {
         SAML_TOKEN = TOKEN.get();
     }
 
     @Test
-    public void testResolveXmlSchemaDtdLocation() {
+    void testResolveXmlSchemaDtdLocation() {
         final EntityResolver resolver = AssertionFactory.getEntityResolver();
 
         try {
             final InputSource inputSource = resolver.resolveEntity("", Identifier.XML_SCHEMA_DTD_LOCATION);
             String actual = IOSupport.toString(inputSource.getByteStream());
-            Assert.assertNotNull(actual);
+            assertNotNull(actual);
         } catch (SAXException | IOException | TryableException e) {
-            Assert.fail(e.getMessage());
+            fail(e.getMessage());
         }
     }
 
     @Test
-    public void testResolveXmldsigSchemaLocation() {
+    void testResolveXmldsigSchemaLocation() {
         final EntityResolver resolver = AssertionFactory.getEntityResolver();
 
         try {
             final InputSource inputSource = resolver.resolveEntity("", Identifier.XMLDSIG_SCHEMA_LOCATION);
             String actual = IOSupport.toString(inputSource.getByteStream());
-            Assert.assertNotNull(actual);
+            assertNotNull(actual);
         } catch (SAXException | IOException | TryableException e) {
-            Assert.fail(e.getMessage());
+            fail(e.getMessage());
         }
     }
 
     @Test
-    public void testResolveXmlencSchemaLocation() {
+    void testResolveXmlencSchemaLocation() {
         final EntityResolver resolver = AssertionFactory.getEntityResolver();
 
         try {
             final InputSource inputSource = resolver.resolveEntity("", Identifier.XMLENC_SCHEMA_LOCATION);
             String actual = IOSupport.toString(inputSource.getByteStream());
-            Assert.assertNotNull(actual);
+            assertNotNull(actual);
         } catch (SAXException | IOException | TryableException e) {
-            Assert.fail(e.getMessage());
+            fail(e.getMessage());
         }
     }
 
     @Test
-    public void testNewReader() {
+    void testNewReader() {
         try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(SAML_TOKEN)))) {
 
             String xml = IOSupport.toString(in);
@@ -91,10 +92,10 @@ public class AssertionFactoryTest {
                 new XmlSignerOptions()
                     .namespaceContext(SamlNamespaceContext.newInstance()));
 
-            Assert.assertEquals(xml, assertion.toString());
+            assertEquals(xml, assertion.toString());
 
         } catch (IOException | AssertionException e) {
-            Assert.fail(e.getMessage());
+            fail(e.getMessage());
         }
     }
 }

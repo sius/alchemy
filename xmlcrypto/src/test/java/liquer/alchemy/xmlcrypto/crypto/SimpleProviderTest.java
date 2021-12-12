@@ -1,6 +1,6 @@
 package liquer.alchemy.xmlcrypto.crypto;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.Security;
 
@@ -16,7 +16,7 @@ public class SimpleProviderTest {
     }
 
     @Test
-    public void testProvider() {
+    void testProvider() {
         String providerName = "BC";
         
         if (Security.getProvider(providerName) == null) {

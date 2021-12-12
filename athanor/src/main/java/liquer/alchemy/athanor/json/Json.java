@@ -2,8 +2,8 @@ package liquer.alchemy.athanor.json;
 
 import liquer.alchemy.athanor.reflect.*;
 import liquer.alchemy.alembic.BaseN;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.reflect.Array;
@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  */
 public abstract class Json {
 
-	private static final Logger LOG = LogManager.getLogger(Json.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Json.class);
 
 
 	public static final String DATA 	= "data";
@@ -425,7 +425,7 @@ public abstract class Json {
 				ret = a.transmute(ret, Json.parse(data));
 			}
 		} catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 		}
 		return ret;
 	}
@@ -441,7 +441,7 @@ public abstract class Json {
 				ret = a.transmute(ret, data);
 			}
 		} catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 		}
 		return ret;
 	}
@@ -458,7 +458,7 @@ public abstract class Json {
 				ret = a.transmute(ret, Json.parse(data));
 			}
 		} catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 		}
 		return ret;
 	}
@@ -499,7 +499,7 @@ public abstract class Json {
 				ret = a.transmute(ret, Json.parseStrict(data));
 			}
 		} catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 		}
 		return ret;
 	}
@@ -516,7 +516,7 @@ public abstract class Json {
 				ret = a.transmute(ret, Json.parseStrict(data));
 			}
 		} catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 		}
 		return ret;
 	}
@@ -525,7 +525,7 @@ public abstract class Json {
 		try {
 			return parse(new ByteArrayInputStream(jsonStr.getBytes(Singleton.CONFIG.getCharset())));
 		} catch (IOException e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 			return null;
 		}
 	}
@@ -540,7 +540,7 @@ public abstract class Json {
 		try {
 			return parseStrict(new ByteArrayInputStream(jsonStr.getBytes(Singleton.CONFIG.getCharset())));
 		} catch (IOException e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 			return null;
 		}
 	}

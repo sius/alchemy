@@ -8,7 +8,7 @@
 
 package liquer.alchemy.xmlcrypto.crypto.xml.saml.jaxb.model;
 
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 
 
 /**

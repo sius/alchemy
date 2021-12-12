@@ -34,9 +34,9 @@ public final class Try<B> {
      */
     public static <B> Try<B> of(Tryable<B> t0) {
         try {
-            return new Try(t0.get(), null);
+            return new Try<>(t0.get(), null);
         } catch (Throwable t) {
-            return new Try(null, t);
+            return new Try<>(null, t);
         }
     }
 

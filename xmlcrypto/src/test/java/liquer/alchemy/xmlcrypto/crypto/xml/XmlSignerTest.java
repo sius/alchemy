@@ -3,17 +3,20 @@ package liquer.alchemy.xmlcrypto.crypto.xml;
 import liquer.alchemy.xmlcrypto.functional.Func4;
 import liquer.alchemy.xmlcrypto.functional.Try;
 import liquer.alchemy.xmlcrypto.support.IOSupport;
-import org.junit.Assert;
-import org.junit.Test;
+
+
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import java.io.IOException;
 
-public class XmlSignerTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+class XmlSignerTest {
 
     @Test
-    public void testSignXml() throws IOException {
+    void testSignXml() throws IOException {
         final KeyInfo info = new URLKeyInfo(getClass().getResource("/private-pkcs8.pem"));
         final String xml =  IOSupport.toString(getClass().getResource("/library.xml"));
         final String expected =  IOSupport.toString(getClass().getResource("/library-signed.xml"));
@@ -28,11 +31,11 @@ public class XmlSignerTest {
 
         final String actual = xmlSigner.getSignedXml();
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void testSignXmlWithClosure() throws IOException {
+    void testSignXmlWithClosure() throws IOException {
 
         final Func4<XmlSigner, KeyInfo, String, String, String> sign =
             (xmlSigner, info, ref, xml) -> {
@@ -52,11 +55,11 @@ public class XmlSignerTest {
         System.out.println("sign xml: " + (System.currentTimeMillis() - start) + " ms");
         final String expected =  IOSupport.toString(getClass().getResource("/library-signed.xml"));
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void testValidateXml() throws IOException {
+    void testValidateXml() throws IOException {
         final KeyInfo publicKeyInfo = new URLKeyInfo(getClass().getResource("/publickey.cer"));
         final String signedXml = IOSupport.toString(getClass().getResource("/library-signed.xml"));
         final Document doc = Try.of(() -> XmlSupport.toDocument(signedXml)).orElseThrow();
@@ -74,13 +77,13 @@ public class XmlSignerTest {
         if (!result.isValidToken()) {
             final String validationErrors =
                     String.join("\n", result.getErrors());
-            Assert.fail(validationErrors);
+            fail(validationErrors);
         }
-        Assert.assertTrue(result.isValidSignature());
+        assertTrue(result.isValidSignature());
     }
 
     @Test
-    public void testValidateXmlWithClosure() throws IOException {
+    void testValidateXmlWithClosure() throws IOException {
 
         final Func4<XmlSigner, KeyInfo, String, String, ValidationResult> validate =
             (xmlSigner, info, signedXml, xpath) -> {
@@ -106,8 +109,8 @@ public class XmlSignerTest {
         if (!result.isValidToken()) {
             final String validationErrors =
                     String.join("\n", result.getErrors());
-            Assert.fail(validationErrors);
+            fail(validationErrors);
         }
-        Assert.assertTrue(result.isValidSignature());
+        assertTrue(result.isValidSignature());
     }
 }

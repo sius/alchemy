@@ -1,19 +1,20 @@
 package liquer.alchemy.alembic;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BaseNTest {
+class BaseNTest {
 
 	@Test
-	public void b64SpaceDrain() {
+	void b64SpaceDrain() {
 	}
 
 	@Test
-	public void b64Wrap() {
+	void b64Wrap() {
 	}
 
 	@Test
@@ -21,11 +22,11 @@ public class BaseNTest {
 	}
 
 	@Test
-	public void unwrap() {
+	void unwrap() {
 	}
 
 	@Test
-	public void base64Encode() {
+	void base64Encode() {
 		assertEquals("", BaseN.base64Encode("".getBytes()));
 		assertEquals("Zg==", BaseN.base64Encode("f".getBytes()));
 		assertEquals("Zm8=", BaseN.base64Encode("fo".getBytes()));
@@ -36,7 +37,7 @@ public class BaseNTest {
 	}
 
 	@Test
-	public void base64UfsEncode() {
+	void base64UfsEncode() {
 		assertEquals("", BaseN.base64Encode("".getBytes()));
 		assertEquals("Zg==", BaseN.base64Encode("f".getBytes()));
 		assertEquals("Zm8=", BaseN.base64Encode("fo".getBytes()));
@@ -47,7 +48,7 @@ public class BaseNTest {
 	}
 
 	@Test
-	public void base64UrlEncode() {
+	void base64UrlEncode() {
 		assertEquals("", BaseN.base64UrlEncode("".getBytes()));
 		assertEquals("Zg", BaseN.base64UrlEncode("f".getBytes()));
 		assertEquals("Zm8", BaseN.base64UrlEncode("fo".getBytes()));
@@ -58,7 +59,7 @@ public class BaseNTest {
 	}
 
 	@Test
-	public void base64Decode() {
+	void base64Decode() {
 		String[] encoded = { "TQ==", "TQ", "TWE=", "TWE", "TWFu", "c3VyZS4=", "c3VyZS4", "ZWFzdXJlLg==", "ZWFzdXJlLg==", "YXN1cmUu", "YW55IGNhcm5hbCBwbGVhc3VyZS4=", "YW55IGNhcm5hbCBwbGVhc3VyZS4" };
 		String[] expected= { "M"   , "M" , "Ma"  , "Ma" , "Man" , "sure."   , "sure."  , "easure."     , "easure."     , "asure."  , "any carnal pleasure."        , "any carnal pleasure." };
 		for (int i = 0; i < encoded.length; i++) {

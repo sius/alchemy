@@ -1,9 +1,7 @@
 package liquer.alchemy.athanor.json;
 
 import liquer.alchemy.athanor.reflect.Attr;
-import liquer.alchemy.athanor.json.Json;
-import liquer.alchemy.athanor.json.JsonIndentWriter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -12,20 +10,22 @@ import java.text.ParseException;
 import java.util.*;
 import java.util.Map.Entry;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class JsonTest {
+class JsonTest {
 	@Test
-	public void types() {
+	void types() {
 		assertEquals("\"2014-01-07T14:28:14.000+00:00\"", Json.stringify(new Date(1389104894000L)));
 		assertEquals("null", Json.Singleton.NULL.toString());
 		assertEquals("null", Json.stringify(null));
 		assertEquals("\"Überraschung\"", new Json.JStr("Überraschung").toString());
 		assertEquals("\"Überraschung\"", Json.stringify("Überraschung"));
-		assertEquals("\"Ü\"", Json.stringify('Ü'));
-		assertEquals("\"Ü\"", Json.stringify('Ü'));
-		assertEquals("\"Ü\"", Json.stringify('Ü'));
+		assertEquals("\"Ü\"", Json.stringify("Ü"));
+		assertEquals("\"Ü\"", Json.stringify("Ü"));
+		assertEquals("\"Ü\"", Json.stringify("Ü"));
 		assertEquals("true", Json.Singleton.TRUE.toString());
 		assertEquals("true", Json.stringify(true));
 		assertEquals("false", Json.Singleton.FALSE.toString());
@@ -55,7 +55,7 @@ public class JsonTest {
 		assertEquals("-1.0", Json.stringify((byte)255));
 	}
 	@Test
-	public void arrays() {
+	void arrays() {
 		assertEquals("[\"one\",\"two\",\"three\"]", Json.stringify(new String[] {"one", "two", "three"}));
 		assertEquals("[1.0,2.0,3.0]", Json.stringify(new int[] {1, 2, 3}));
 		assertEquals("[1.0,2.0,3.0]", Json.stringify(new Integer[] {1, 2, 3}));
@@ -63,7 +63,7 @@ public class JsonTest {
 		assertEquals("[true,true,false,false,true]", Json.stringify(new boolean[] {true, true, false, false, true}));
 	}
 	@Test
-	public void iterables() {
+	void iterables() {
 		List<String> list = new ArrayList<>();
 		list.add("one");
 		list.add("two");
@@ -128,7 +128,7 @@ public class JsonTest {
 		@Attr public BigInteger negBigInt = new BigInteger("-12345678901234567890123456789012345678901234567890123456789012345678901234567890");
 	}
 	@Test
-	public void number() {
+	void number() {
 		Json.writeTo(Json.obj(new NumberObject()), new JsonIndentWriter(System.out));
 	}
 	public void assertListEquals(List<?> expected, List<?> actual) {

@@ -12,8 +12,8 @@ import liquer.alchemy.crypto.json.jwt.NumericDate;
 import liquer.alchemy.athanor.json.Json;
 import liquer.alchemy.alembic.BaseN;
 import liquer.alchemy.alembic.StringSupport;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
@@ -26,7 +26,7 @@ import java.util.UUID;
 @SuppressWarnings("unchecked")
 public class SimpleURLSigner {
 
-	static final Logger LOG = LogManager.getLogger(SimpleURLSigner.class);
+	static final Logger LOG = LoggerFactory.getLogger(SimpleURLSigner.class);
 	public static final String KEY_FMT = "%1$06d";
 	static final String TOKEN_NAME = "_token";
 
@@ -120,7 +120,7 @@ public class SimpleURLSigner {
 			}
             return expirationTime != null && !now.after(expirationTime);
         } catch (Exception e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 			return false;
 		}
 	}

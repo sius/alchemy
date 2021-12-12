@@ -8,15 +8,17 @@ import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.AssertionFactory;
 import liquer.alchemy.xmlcrypto.support.BaseN;
 import liquer.alchemy.xmlcrypto.support.Clock;
 import liquer.alchemy.xmlcrypto.support.IOSupport;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.zip.GZIPInputStream;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class AssertionReaderTest {
 
@@ -34,13 +36,13 @@ public class AssertionReaderTest {
 
     private static String SAML_TOKEN;
 
-    @BeforeClass
-    public static void beforeAll() {
+    @BeforeAll
+    static void beforeAll() {
         SAML_TOKEN = TOKEN.get();
     }
 
     @Test
-    public void testValidateAssertion() {
+    void testValidateAssertion() {
 
         try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(SAML_TOKEN))) ) {
 
@@ -60,23 +62,23 @@ public class AssertionReaderTest {
                     if (!result.isValidToken()) {
                         final String validationErrors =
                                 String.join("\n", result.getErrors());
-                        Assert.fail(validationErrors);
+                        fail(validationErrors);
                     }
-                    Assert.assertTrue(result.isValidSignature());
+                    assertTrue(result.isValidSignature());
                 } catch (AssertionException e) {
                     e.printStackTrace();
-                    Assert.fail(e.getMessage());
+                    fail(e.getMessage());
                 }
             }).go().stop("done").println("validateAssertion");
 
         } catch (IOException e) {
             e.printStackTrace();
-            Assert.fail(e.getMessage());
+            fail(e.getMessage());
         }
     }
 
     @Test
-    public void testValidateAssertion1() {
+    void testValidateAssertion1() {
 
         try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(SAML_TOKEN))) ) {
 
@@ -94,11 +96,11 @@ public class AssertionReaderTest {
                     if (!result.isValidToken()) {
                         final String validationErrors =
                                 String.join("\n", result.getErrors());
-                        Assert.fail(validationErrors);
+                        fail(validationErrors);
                     }
                 } catch (AssertionException e) {
                     e.printStackTrace();
-                    Assert.fail(e.getMessage());
+                    fail(e.getMessage());
                 }
 
 
@@ -106,12 +108,12 @@ public class AssertionReaderTest {
 
         } catch (IOException e) {
             e.printStackTrace();
-            Assert.fail(e.getMessage());
+            fail(e.getMessage());
         }
     }
 
     @Test
-    public void testValidateAssertionMultipleTimes() {
+    void testValidateAssertionMultipleTimes() {
         final int len = 10;
 
         Clock.set( (t) -> {
@@ -134,12 +136,12 @@ public class AssertionReaderTest {
                     if (!result.isValidToken()) {
                         final String validationErrors =
                                 String.join("\n", result.getErrors());
-                        Assert.fail(validationErrors);
+                        fail(validationErrors);
                     }
 
                 } catch (IOException | AssertionException e) {
                     e.printStackTrace();
-                    Assert.fail(e.getMessage());
+                    fail(e.getMessage());
                 }
             }
 

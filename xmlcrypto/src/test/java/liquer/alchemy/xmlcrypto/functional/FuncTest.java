@@ -1,11 +1,13 @@
 package liquer.alchemy.xmlcrypto.functional;
 
-import org.junit.Assert;
-import org.junit.Test;
 
-public class FuncTest {
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class FuncTest {
     @Test
-    public void testCurryingF9() {
+    void testCurryingF9() {
         Func9<String, Boolean, Short, Integer, Float, Double, Long, String, String, String> concat =
             (a1, a2, a3, a4, a5, a6, a7, a8, a9) -> a1 + a2 + a3 + a4 + a5 + a6 +a7 + a8 + a9;
 
@@ -22,20 +24,20 @@ public class FuncTest {
         Func1<String, String> partial1 = concat.apply("a", true, (short)1, 2, 3.0f, 4.0, 5L, "6");
         String actual = concat.apply("a", true, (short)1, 2, 3.0f, 4.0, 5L, "6", "7");
 
-        Assert.assertEquals(expected, actual);
-        Assert.assertEquals(expected, partial1.apply("7"));
-        Assert.assertEquals(expected, partial2.apply("6", "7"));
-        Assert.assertEquals(expected, partial3.apply(5L, "6", "7"));
-        Assert.assertEquals(expected, partial4.apply(4.0, 5L, "6", "7"));
-        Assert.assertEquals(expected, partial5.apply(3.0f, 4.0, 5L, "6", "7"));
-        Assert.assertEquals(expected, partial6.apply(2, 3.0f, 4.0, 5L, "6", "7"));
-        Assert.assertEquals(expected, partial7.apply((short)1, 2, 3.0f, 4.0, 5L, "6", "7"));
-        Assert.assertEquals(expected, partial8.apply(true, (short)1, 2, 3.0f, 4.0, 5L, "6", "7"));
-        Assert.assertEquals(expected, partial9.apply("a", true, (short)1, 2, 3.0f, 4.0, 5L, "6", "7"));
+        assertEquals(expected, actual);
+        assertEquals(expected, partial1.apply("7"));
+        assertEquals(expected, partial2.apply("6", "7"));
+        assertEquals(expected, partial3.apply(5L, "6", "7"));
+        assertEquals(expected, partial4.apply(4.0, 5L, "6", "7"));
+        assertEquals(expected, partial5.apply(3.0f, 4.0, 5L, "6", "7"));
+        assertEquals(expected, partial6.apply(2, 3.0f, 4.0, 5L, "6", "7"));
+        assertEquals(expected, partial7.apply((short)1, 2, 3.0f, 4.0, 5L, "6", "7"));
+        assertEquals(expected, partial8.apply(true, (short)1, 2, 3.0f, 4.0, 5L, "6", "7"));
+        assertEquals(expected, partial9.apply("a", true, (short)1, 2, 3.0f, 4.0, 5L, "6", "7"));
     }
 
     @Test
-    public void testCurryingF8() {
+    void testCurryingF8() {
         Func8<String, Boolean, Short, Integer, Float, Double, Long, String, String> concat =
             (a1, a2, a3, a4, a5, a6, a7, a8) -> a1 + a2 + a3 + a4 + a5 + a6 +a7 + a8;
 
@@ -51,19 +53,19 @@ public class FuncTest {
         Func1<String, String> partial1 = concat.apply("a", true, (short)1, 2, 3.0f, 4.0, 5L);
         String actual = concat.apply("a", true, (short)1, 2, 3.0f, 4.0, 5L, "6");
 
-        Assert.assertEquals(expected, actual);
-        Assert.assertEquals(expected, partial1.apply("6"));
-        Assert.assertEquals(expected, partial2.apply(5L, "6"));
-        Assert.assertEquals(expected, partial3.apply(4.0, 5L, "6"));
-        Assert.assertEquals(expected, partial4.apply(3.0f, 4.0, 5L, "6"));
-        Assert.assertEquals(expected, partial5.apply(2, 3.0f, 4.0, 5L, "6"));
-        Assert.assertEquals(expected, partial6.apply((short)1, 2, 3.0f, 4.0, 5L, "6"));
-        Assert.assertEquals(expected, partial7.apply(true, (short)1, 2, 3.0f, 4.0, 5L, "6"));
-        Assert.assertEquals(expected, partial8.apply("a", true, (short)1, 2, 3.0f, 4.0, 5L, "6"));
+        assertEquals(expected, actual);
+        assertEquals(expected, partial1.apply("6"));
+        assertEquals(expected, partial2.apply(5L, "6"));
+        assertEquals(expected, partial3.apply(4.0, 5L, "6"));
+        assertEquals(expected, partial4.apply(3.0f, 4.0, 5L, "6"));
+        assertEquals(expected, partial5.apply(2, 3.0f, 4.0, 5L, "6"));
+        assertEquals(expected, partial6.apply((short)1, 2, 3.0f, 4.0, 5L, "6"));
+        assertEquals(expected, partial7.apply(true, (short)1, 2, 3.0f, 4.0, 5L, "6"));
+        assertEquals(expected, partial8.apply("a", true, (short)1, 2, 3.0f, 4.0, 5L, "6"));
     }
 
     @Test
-    public void testCurryingF7() {
+    void testCurryingF7() {
         Func7<String, Boolean, Short, Integer, Float, Double, Long, String> concat =
             (a1, a2, a3, a4, a5, a6, a7) -> a1 + a2 + a3 + a4 + a5 + a6 +a7;
 
@@ -78,18 +80,18 @@ public class FuncTest {
         Func1<Long, String> partial1 = concat.apply("a", true, (short)1, 2, 3.0f, 4.0);
         String actual = concat.apply("a", true, (short)1, 2, 3.0f, 4.0, 5L);
 
-        Assert.assertEquals(expected, actual);
-        Assert.assertEquals(expected, partial1.apply(5L));
-        Assert.assertEquals(expected, partial2.apply(4.0, 5L));
-        Assert.assertEquals(expected, partial3.apply(3.0f, 4.0, 5L));
-        Assert.assertEquals(expected, partial4.apply(2, 3.0f, 4.0, 5L));
-        Assert.assertEquals(expected, partial5.apply((short)1, 2, 3.0f, 4.0, 5L));
-        Assert.assertEquals(expected, partial6.apply(true, (short)1, 2, 3.0f, 4.0, 5L));
-        Assert.assertEquals(expected, partial7.apply("a", true, (short)1, 2, 3.0f, 4.0, 5L));
+        assertEquals(expected, actual);
+        assertEquals(expected, partial1.apply(5L));
+        assertEquals(expected, partial2.apply(4.0, 5L));
+        assertEquals(expected, partial3.apply(3.0f, 4.0, 5L));
+        assertEquals(expected, partial4.apply(2, 3.0f, 4.0, 5L));
+        assertEquals(expected, partial5.apply((short)1, 2, 3.0f, 4.0, 5L));
+        assertEquals(expected, partial6.apply(true, (short)1, 2, 3.0f, 4.0, 5L));
+        assertEquals(expected, partial7.apply("a", true, (short)1, 2, 3.0f, 4.0, 5L));
     }
 
     @Test
-    public void testCurryingF6() {
+    void testCurryingF6() {
         Func6<String, Boolean, Short, Integer, Float, Double, String> concat =
             (a1, a2, a3, a4, a5, a6) -> a1 + a2 + a3 + a4 + a5 + a6;
 
@@ -103,17 +105,17 @@ public class FuncTest {
         Func1<Double, String> partial1 = concat.apply("a", true, (short)1, 2, 3.0f);
         String actual = concat.apply("a", true, (short)1, 2, 3.0f, 4.0);
 
-        Assert.assertEquals(expected, actual);
-        Assert.assertEquals(expected, partial1.apply(4.0));
-        Assert.assertEquals(expected, partial2.apply(3.0f, 4.0));
-        Assert.assertEquals(expected, partial3.apply(2, 3.0f, 4.0));
-        Assert.assertEquals(expected, partial4.apply((short)1, 2, 3.0f, 4.0));
-        Assert.assertEquals(expected, partial5.apply(true, (short)1, 2, 3.0f, 4.0));
-        Assert.assertEquals(expected, partial6.apply("a", true, (short)1, 2, 3.0f, 4.0));
+        assertEquals(expected, actual);
+        assertEquals(expected, partial1.apply(4.0));
+        assertEquals(expected, partial2.apply(3.0f, 4.0));
+        assertEquals(expected, partial3.apply(2, 3.0f, 4.0));
+        assertEquals(expected, partial4.apply((short)1, 2, 3.0f, 4.0));
+        assertEquals(expected, partial5.apply(true, (short)1, 2, 3.0f, 4.0));
+        assertEquals(expected, partial6.apply("a", true, (short)1, 2, 3.0f, 4.0));
     }
 
     @Test
-    public void testCurryingF5() {
+    void testCurryingF5() {
         Func5<String, Boolean, Short, Integer, Float, String> concat =
             (a1, a2, a3, a4, a5) -> a1 + a2 + a3 + a4 + a5;
 
@@ -126,16 +128,16 @@ public class FuncTest {
         Func1<Float, String> partial1 = concat.apply("a", true, (short)1, 2);
         String actual = concat.apply("a", true, (short)1, 2, 3.0f);
 
-        Assert.assertEquals(expected, actual);
-        Assert.assertEquals(expected, partial1.apply(3.0f));
-        Assert.assertEquals(expected, partial2.apply(2, 3.0f));
-        Assert.assertEquals(expected, partial3.apply((short)1, 2, 3.0f));
-        Assert.assertEquals(expected, partial4.apply(true, (short)1, 2, 3.0f));
-        Assert.assertEquals(expected, partial5.apply("a", true, (short)1, 2, 3.0f));
+        assertEquals(expected, actual);
+        assertEquals(expected, partial1.apply(3.0f));
+        assertEquals(expected, partial2.apply(2, 3.0f));
+        assertEquals(expected, partial3.apply((short)1, 2, 3.0f));
+        assertEquals(expected, partial4.apply(true, (short)1, 2, 3.0f));
+        assertEquals(expected, partial5.apply("a", true, (short)1, 2, 3.0f));
     }
 
     @Test
-    public void testCurryingF4() {
+    void testCurryingF4() {
         Func4<String, Boolean, Short, Integer, String> concat =
             (a1, a2, a3, a4) -> a1 + a2 + a3 + a4;
 
@@ -147,15 +149,15 @@ public class FuncTest {
         Func1<Integer, String> partial1 = concat.apply("a", true, (short)1);
         String actual = concat.apply("a", true, (short)1, 2);
 
-        Assert.assertEquals(expected, actual);
-        Assert.assertEquals(expected, partial1.apply(2));
-        Assert.assertEquals(expected, partial2.apply((short)1, 2));
-        Assert.assertEquals(expected, partial3.apply(true, (short)1, 2));
-        Assert.assertEquals(expected, partial4.apply("a", true, (short)1, 2));
+        assertEquals(expected, actual);
+        assertEquals(expected, partial1.apply(2));
+        assertEquals(expected, partial2.apply((short)1, 2));
+        assertEquals(expected, partial3.apply(true, (short)1, 2));
+        assertEquals(expected, partial4.apply("a", true, (short)1, 2));
     }
 
     @Test
-    public void testCurryingF3() {
+    void testCurryingF3() {
         Func3<String, Boolean, Short, String> concat =
             (a1, a2, a3) -> a1 + a2 + a3;
 
@@ -166,14 +168,14 @@ public class FuncTest {
         Func1<Short, String> partial1 = concat.apply("a", true);
         String actual = concat.apply("a", true, (short)1);
 
-        Assert.assertEquals(expected, actual);
-        Assert.assertEquals(expected, partial1.apply((short)1));
-        Assert.assertEquals(expected, partial2.apply(true, (short)1));
-        Assert.assertEquals(expected, partial3.apply("a", true, (short)1));
+        assertEquals(expected, actual);
+        assertEquals(expected, partial1.apply((short)1));
+        assertEquals(expected, partial2.apply(true, (short)1));
+        assertEquals(expected, partial3.apply("a", true, (short)1));
     }
 
     @Test
-    public void testCurryingF2() {
+    void testCurryingF2() {
         Func2<String, Boolean, String> concat =
             (a1, a2) -> a1 + a2;
 
@@ -183,13 +185,13 @@ public class FuncTest {
         Func1<Boolean, String> partial1 = concat.apply("a");
         String actual = concat.apply("a", true);
 
-        Assert.assertEquals(expected, actual);
-        Assert.assertEquals(expected, partial1.apply(true));
-        Assert.assertEquals(expected, partial2.apply("a", true));
+        assertEquals(expected, actual);
+        assertEquals(expected, partial1.apply(true));
+        assertEquals(expected, partial2.apply("a", true));
     }
 
     @Test
-    public void testCurryingF1() {
+    void testCurryingF1() {
         Func1<String, String> concat =
             (a1) -> a1;
 
@@ -198,21 +200,21 @@ public class FuncTest {
         Func1<String, String> partial1 = concat.apply();
         String actual = concat.apply("a");
 
-        Assert.assertEquals(expected, actual);
-        Assert.assertEquals(expected, partial1.apply("a"));
+        assertEquals(expected, actual);
+        assertEquals(expected, partial1.apply("a"));
 
         Func1<String, String> andThenF = partial1.andThen((s) -> s + "b");
         String x = andThenF.apply("a");
     }
 
     @Test
-    public void testCurryingF0() {
+    void testCurryingF0() {
         Func0<String> concat = () -> "a";
 
         final String expected = "a";
 
         String actual = concat.apply();
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 }

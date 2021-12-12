@@ -1,14 +1,14 @@
 package liquer.alchemy.crypto.ec;
 
 import liquer.alchemy.athanor.json.Json;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 
-public class ECDomainParametersTest {
+class ECDomainParametersTest {
 
 	@Test
-	public void log2() {
+	void log2() {
 		int expected = 8;
 
 

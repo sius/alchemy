@@ -2,21 +2,18 @@ package liquer.alchemy.athanor.json;
 
 import liquer.alchemy.athanor.reflect.Athanor;
 import liquer.alchemy.athanor.reflect.Attr;
-import liquer.alchemy.athanor.json.Json;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static junit.framework.TestCase.fail;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class JsonWriteTest {
+class JsonWriteTest {
 
 	@Test
-	public void test() {
+	void test() {
 		Map<String, Object> test = new LinkedHashMap<>();
 		String expected = "Ausschluss \"Test\" Ausschluss \"Test\" Geschenk \"Test\" \"\" \'  Test   \'  \\' \\ / \b \f \n \r \t";
 		test.put("Stichwörter", expected);
@@ -81,8 +78,6 @@ public class JsonWriteTest {
 		} catch (ParseException e) {
 			fail(e.getMessage());
 		}
-		
-		
 	}
 
 }

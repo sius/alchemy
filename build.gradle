@@ -1,37 +1,36 @@
 allprojects {
 
     repositories {
-        jcenter()
         mavenCentral()
     }
 
     apply plugin: 'java'
-    apply plugin: 'maven'
+    //apply plugin: 'maven'
 
     group 'liquer.alchemy'
     version = '1.0.0-SNAPSHOT'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 11
+    targetCompatibility = 11
 
     dependencies {
-        testImplementation 'junit:junit:4.12'
-        // compile 'org.apache.logging.log4j:log4j-api:2.4'
-        // compile 'org.apache.logging.log4j:log4j-core:2.4'
-        compile 'xalan:serializer:2.7.2'
-        compile 'org.slf4j:jul-to-slf4j:1.7.26'
-        compile 'ch.qos.logback:logback-classic:1.2.3'
+        //testImplementation 'junit.jupiter:junit-jupiter-engine:5.8.2'
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+        implementation 'xalan:serializer:2.7.2'
+        implementation 'org.slf4j:jul-to-slf4j:1.7.32'
+        implementation 'ch.qos.logback:logback-classic:1.2.7'
     }
 
     tasks.withType(JavaCompile) {
         options.compilerArgs << '-Xlint:unchecked'
         options.deprecation = true
+        options.encoding = 'UTF-8'
     }
 
-    test {
+    tasks.named('test') {
         useJUnitPlatform()
     }
-
+    /*
     task writeNewPom {
 
         doLast {
@@ -67,7 +66,7 @@ allprojects {
 
             }.writeTo("pom.xml")
         }
-    }
+    } */
 }
 
 

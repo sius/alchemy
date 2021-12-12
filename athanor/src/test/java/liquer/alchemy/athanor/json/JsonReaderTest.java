@@ -2,26 +2,24 @@ package liquer.alchemy.athanor.json;
 
 import liquer.alchemy.athanor.reflect.Athanor;
 import liquer.alchemy.athanor.reflect.Attr;
-import liquer.alchemy.athanor.json.Json;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class JsonReaderTest {
+class JsonReaderTest {
 
 	@Test
-	public void strSeq() {
+	void strSeq() {
 		assertJson(Arrays.asList("Larry", "Moe", "Curley"), "[\"Larry\",\"Moe\",\"Curley\"]");
 	}
 	
 	@Test
-	public void numSeq() {
+	void numSeq() {
 		List<Double> expected = new ArrayList<>();
 		for (int i = 0; i < 10000; i++ ) expected.add((double) i);
 		String actual = expected.stream().map(Object::toString).collect(Collectors.joining(",", "[", "]"));
@@ -29,18 +27,18 @@ public class JsonReaderTest {
 	}
 	
 	@Test
-	public void objSeq() {
+	void objSeq() {
 		assertJson(Arrays.<Object>asList("Larry", "Moe","Curley", "", 3.14, true, false, null), "[\"Larry\",\"Moe\",\"Curley\",\"\",3.14,true,false,null]");
 	}
-	
+
 	@Test
-	public void escapedSeq() {
+	void escapedSeq() {
 		assertJson(Arrays.asList("\"", "\\", "/", "\b", "\f", "\n", "\r", "\t"), "[\"\\\"\",\"\\\\\",\"\\/\",\"\\b\",\"\\f\",\"\\n\",\"\\r\",\"\\t\"]");
-		assertJson(Arrays.asList("©","© Test test."), "[\"\u00A9\",\"\u00A9 Test terst.\"]");
+		assertJson(Arrays.asList("©","© Test test."), "[\"\u00A9\",\"\u00A9 Test test.\"]");
 	}
 	
 	@Test
-	public void nestedSeq() {
+	void nestedSeq() {
 		String[][] expected = new String[][] {
 			{ "Pferd", "Schaf", "Hund" },
 			{ "rot", "gelb", "blau" },
@@ -69,7 +67,7 @@ public class JsonReaderTest {
 		}
 	}
 	@Test
-	public void animalSeq() {
+	void animalSeq() {
 		List<Animal> animals = new ArrayList<>();
 		animals.add(new Animal("dog", 4));
 		animals.add(new Animal("cat", 4));
@@ -86,7 +84,7 @@ public class JsonReaderTest {
 	}
 
 	@Test
-	public void parseAnimalSeq() {
+	void parseAnimalSeq() {
 		List<Animal> animals = new ArrayList<>();
 		animals.add(new Animal("dog", 4));
 		animals.add(new Animal("cat", 4));
@@ -111,12 +109,12 @@ public class JsonReaderTest {
 		}
 	}
 	@Test
-	public void emptySeq() {
+	void emptySeq() {
 		assertJson(new ArrayList<String>(), "[]");
 	}
 	
 	@Test
-	public void emptyObj() {
+	void emptyObj() {
 		try {
 			assertEquals(new HashMap<String, Json>(), Json.parseStrict("{}"));
 		} catch (ParseException e) {

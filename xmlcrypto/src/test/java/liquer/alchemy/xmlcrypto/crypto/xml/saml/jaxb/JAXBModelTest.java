@@ -1,15 +1,15 @@
 package liquer.alchemy.xmlcrypto.crypto.xml.saml.jaxb;
 
+import jakarta.xml.bind.*;
 import liquer.alchemy.xmlcrypto.crypto.xml.URLKeyInfo;
 import liquer.alchemy.xmlcrypto.crypto.xml.XmlSignerOptions;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.AssertionReaderTest;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.AssertionFactory;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.jaxb.model.AssertionType;
 import liquer.alchemy.xmlcrypto.support.BaseN;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-import javax.xml.bind.*;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -35,13 +35,13 @@ public class JAXBModelTest {
 
     private static String SAML_TOKEN;
 
-    @BeforeClass
-    public static void beforeAll() {
+    @BeforeAll
+    static void beforeAll() {
         SAML_TOKEN = TOKEN.get();
     }
 
     @Test
-    public void testReadAssertion() {
+    void testReadAssertion() {
         try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(SAML_TOKEN)))) {
 
             JAXBContext jaxbContext = JAXBContext.newInstance(AssertionType.class);
@@ -62,7 +62,7 @@ public class JAXBModelTest {
     }
 
     @Test
-    public void testWriteAssertion() {
+    void testWriteAssertion() {
         try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(BaseN.base64Decode(SAML_TOKEN)))) {
 
             JAXBContext jaxbContext = JAXBContext.newInstance(AssertionType.class );

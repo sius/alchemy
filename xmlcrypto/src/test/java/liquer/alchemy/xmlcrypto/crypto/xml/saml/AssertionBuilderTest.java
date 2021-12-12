@@ -8,8 +8,7 @@ import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.AssertionException;
 import liquer.alchemy.xmlcrypto.crypto.xml.saml.core.AssertionFactory;
 import liquer.alchemy.xmlcrypto.support.Clock;
 import liquer.alchemy.xmlcrypto.support.Timer;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,10 +16,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class AssertionBuilderTest {
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+class AssertionBuilderTest {
 
     @Test
-    public void testCreateBase64GZippedAssertion_RSAWithSHA1() {
+    void testCreateBase64GZippedAssertion_RSAWithSHA1() {
         final int n = 10;
 
         Clock.set( (t) -> {
@@ -46,7 +48,7 @@ public class AssertionBuilderTest {
     }
 
     @Test
-    public void testCreateBase64GZippedAssertion_RSAWithSHA512() {
+    void testCreateBase64GZippedAssertion_RSAWithSHA512() {
         final int n = 10;
 
         Clock.set( (t) -> {
@@ -74,7 +76,7 @@ public class AssertionBuilderTest {
     }
 
     @Test
-    public void testCreateAndValidate_RSAWithSHA1() {
+    void testCreateAndValidate_RSAWithSHA1() {
         Clock.set( (t) -> {
             String signedXml = AssertionFactory.newBuilder()
                 .id("a123") // try an invalid NCName, e.g. "123"
@@ -102,13 +104,13 @@ public class AssertionBuilderTest {
                 if (!result.isValidToken()) {
                     final String validationErrors =
                             String.join("\n", result.getErrors());
-                    Assert.fail(validationErrors);
+                    fail(validationErrors);
                 }
 
-                Assert.assertTrue(result.isValidToken());
+                assertTrue(result.isValidToken());
             } catch (AssertionException e) {
                 e.printStackTrace();
-                Assert.fail(e.getMessage());
+                fail(e.getMessage());
             }
 
         }).go().stop("done").println("createAndValidate_RSAWithSHA1");
@@ -145,13 +147,13 @@ public class AssertionBuilderTest {
                 if (!result.isValidToken()) {
                     final String validationErrors =
                             String.join("\n", result.getErrors());
-                    Assert.fail(validationErrors);
+                    fail(validationErrors);
                 }
 
-                Assert.assertTrue(result.isValidToken());
+                assertTrue(result.isValidToken());
             } catch (AssertionException e) {
                 e.printStackTrace();
-                Assert.fail(e.getMessage());
+                fail(e.getMessage());
             }
         }).go().stop("done").println("createAndValidate_RSAWithSHA256");
     }
@@ -187,13 +189,13 @@ public class AssertionBuilderTest {
                 if (!result.isValidToken()) {
                     final String validationErrors =
                             String.join("\n", result.getErrors());
-                    Assert.fail(validationErrors);
+                    fail(validationErrors);
                 }
 
-                Assert.assertTrue(result.isValidToken());
+                assertTrue(result.isValidToken());
             } catch (AssertionException e) {
                 e.printStackTrace();
-                Assert.fail(e.getMessage());
+                fail(e.getMessage());
             }
 
         }).go().stop("done").println("createAndValidate_RSAWithSHA512");

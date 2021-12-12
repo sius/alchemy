@@ -31,7 +31,7 @@ public final class MethodDrain implements IDrain{
 	}
 	@Override
 	public void setValue(Object instance, Object value) throws IllegalAccessException, InvocationTargetException {
-		boolean accessible = method.isAccessible();
+		boolean accessible = method.trySetAccessible();
 		if (!accessible)
 			method.setAccessible(true);
 		method.invoke(instance, value);

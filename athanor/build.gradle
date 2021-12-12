@@ -1,4 +1,4 @@
 dependencies {
-    compile project (':alkahest')
-    compile project (':alembic')
+    implementation project (':alkahest')
+    implementation project (':alembic')
 }

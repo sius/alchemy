@@ -6,7 +6,7 @@ import liquer.alchemy.crypto.Signature;
 import liquer.alchemy.crypto.json.jwk.Jwk;
 import liquer.alchemy.athanor.json.Json;
 import liquer.alchemy.alembic.BaseN;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -21,28 +21,28 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JwtTest {
 
 	@Test
-	public void signAndVerifyHS256() throws NoSuchAlgorithmException, InvalidKeyException, FileNotFoundException {
+	void signAndVerifyHS256() throws NoSuchAlgorithmException, InvalidKeyException, FileNotFoundException {
 		signAndVerify(Signature.HS256);
 	}
 
 	@Test
-	public void signAndVerifyHS384() throws NoSuchAlgorithmException, InvalidKeyException, FileNotFoundException {
+	void signAndVerifyHS384() throws NoSuchAlgorithmException, InvalidKeyException, FileNotFoundException {
 		signAndVerify(Signature.HS384);
 	}
 
 	@Test
-	public void signAndVerifyHS512() throws NoSuchAlgorithmException, InvalidKeyException, FileNotFoundException {
+	void signAndVerifyHS512() throws NoSuchAlgorithmException, InvalidKeyException, FileNotFoundException {
 		signAndVerify(Signature.HS512);
 	}
 
 	@Test
-	public void signAndVerifyRS256() throws NoSuchAlgorithmException, FileNotFoundException {
+	void signAndVerifyRS256() throws NoSuchAlgorithmException, FileNotFoundException {
 		KeyRing keyRing = new KeyRing(Signature.RS256, 2048, 2);
 		String alchemy_keyring = System.getProperty("user.home") + "/.alchemy_keyring";
 		Json.writeTo(keyRing, new FileOutputStream(alchemy_keyring), 2);

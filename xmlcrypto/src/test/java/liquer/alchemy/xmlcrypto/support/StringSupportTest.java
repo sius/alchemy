@@ -1,58 +1,61 @@
 package liquer.alchemy.xmlcrypto.support;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StringSupportTest {
 
     @Test
-    public void testIsNullOrEmpty() {
-        Assert.assertTrue(StringSupport.isNullOrEmpty(null));
-        Assert.assertTrue(StringSupport.isNullOrEmpty(""));
-        Assert.assertFalse(StringSupport.isNullOrEmpty("  "));
-        Assert.assertFalse(StringSupport.isNullOrEmpty("a"));
+    void testIsNullOrEmpty() {
+        assertTrue(StringSupport.isNullOrEmpty(null));
+        assertTrue(StringSupport.isNullOrEmpty(""));
+        assertFalse(StringSupport.isNullOrEmpty("  "));
+        assertFalse(StringSupport.isNullOrEmpty("a"));
 
         final Object o = new Object();
-        Assert.assertFalse(StringSupport.isNullOrEmpty(o));
+        assertFalse(StringSupport.isNullOrEmpty(o));
     }
 
     @Test
-    public void testIsNullEmptyOrBlank() {
-        Assert.assertTrue(StringSupport.isNullEmptyOrBlank(null));
-        Assert.assertTrue(StringSupport.isNullEmptyOrBlank(""));
-        Assert.assertTrue(StringSupport.isNullEmptyOrBlank("  "));
-        Assert.assertFalse(StringSupport.isNullEmptyOrBlank("a"));
+    void testIsNullEmptyOrBlank() {
+        assertTrue(StringSupport.isNullEmptyOrBlank(null));
+        assertTrue(StringSupport.isNullEmptyOrBlank(""));
+        assertTrue(StringSupport.isNullEmptyOrBlank("  "));
+        assertFalse(StringSupport.isNullEmptyOrBlank("a"));
 
         final Object o = new Object();
-        Assert.assertFalse(StringSupport.isNullEmptyOrBlank(o));
+        assertFalse(StringSupport.isNullEmptyOrBlank(o));
     }
 
     @Test
-    public void testNotNullOrEmpty() {
-        Assert.assertFalse(StringSupport.notNullOrEmpty(null));
-        Assert.assertFalse(StringSupport.notNullOrEmpty(""));
-        Assert.assertTrue(StringSupport.notNullOrEmpty("  "));
-        Assert.assertTrue(StringSupport.notNullOrEmpty("a"));
+    void testNotNullOrEmpty() {
+        assertFalse(StringSupport.notNullOrEmpty(null));
+        assertFalse(StringSupport.notNullOrEmpty(""));
+        assertTrue(StringSupport.notNullOrEmpty("  "));
+        assertTrue(StringSupport.notNullOrEmpty("a"));
 
         final Object o = new Object();
-        Assert.assertTrue(StringSupport.notNullOrEmpty(o));
+        assertTrue(StringSupport.notNullOrEmpty(o));
     }
 
     @Test
-    public void testNotNullEmptyOrBlank() {
-        Assert.assertFalse(StringSupport.notNullEmptyOrBlank(null));
-        Assert.assertFalse(StringSupport.notNullEmptyOrBlank(""));
-        Assert.assertFalse(StringSupport.notNullEmptyOrBlank("  "));
-        Assert.assertTrue(StringSupport.notNullEmptyOrBlank("a"));
+    void testNotNullEmptyOrBlank() {
+        assertFalse(StringSupport.notNullEmptyOrBlank(null));
+        assertFalse(StringSupport.notNullEmptyOrBlank(""));
+        assertFalse(StringSupport.notNullEmptyOrBlank("  "));
+        assertTrue(StringSupport.notNullEmptyOrBlank("a"));
 
         final Object o = new Object();
-        Assert.assertTrue(StringSupport.notNullEmptyOrBlank(o));
+        assertTrue(StringSupport.notNullEmptyOrBlank(o));
     }
 
     @Test
-    public void stringify() {
+    void stringify() {
         String actual = StringSupport.stringify(123);
-        Assert.assertEquals("123", actual);
-        Assert.assertEquals("", StringSupport.stringify(null));
+        assertEquals("123", actual);
+        assertEquals("", StringSupport.stringify(null));
     }
 }

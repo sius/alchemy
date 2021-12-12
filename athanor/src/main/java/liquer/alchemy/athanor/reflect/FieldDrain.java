@@ -28,7 +28,7 @@ public final class FieldDrain implements IDrain {
 	}
 	@Override
 	public void setValue(Object instance, Object value) throws IllegalAccessException{
-		boolean accessible = field.isAccessible();
+		boolean accessible = field.trySetAccessible();
 		if (!accessible)
 			field.setAccessible(true);
 		field.set(instance, value);

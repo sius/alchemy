@@ -1,7 +1,7 @@
 package liquer.alchemy.alembic;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -15,8 +15,8 @@ import java.util.Date;
  * Shows implementation details.
  */
 public final class BinarySupport {
-	
-	private final static Logger LOG = LogManager.getLogger(BinarySupport.class);
+
+	private final static Logger LOG = LoggerFactory.getLogger(BinarySupport.class);
 	
 	private BinarySupport() { }
 	
@@ -288,12 +288,12 @@ public final class BinarySupport {
 				dataOutputStream.flush();
 				bytes = byteArrayOutputStream.toByteArray();
 			} catch (IOException e) {
-				LOG.error(e);
+				LOG.error(e.getMessage(), e);
 			} finally {
 				try {
 					dataOutputStream.close();
 				} catch (IOException e) {
-					LOG.error(e);
+					LOG.error(e.getMessage(), e);
 				}
 			}
 		}
@@ -324,12 +324,12 @@ public final class BinarySupport {
 				dataOutputStream.flush();
 				bytes = byteArrayOutputStream.toByteArray();
 			} catch (IOException e) {
-				LOG.error(e);
+				LOG.error(e.getMessage(), e);
 			} finally {
 				try {
 					dataOutputStream.close();
 				} catch (IOException e) {
-					LOG.error(e);
+					LOG.error(e.getMessage(), e);
 				}
 			}
 		}

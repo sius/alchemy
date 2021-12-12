@@ -40,8 +40,8 @@ package liquer.alchemy.crypto.pwd;
  */
 
 import liquer.alchemy.alembic.StringSupport;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -61,7 +61,7 @@ import java.util.Formatter;
  */
 public class CPbkdf2 {
 
-	private final static Logger LOG = LogManager.getLogger(CPbkdf2.class);
+	private final static Logger LOG = LoggerFactory.getLogger(CPbkdf2.class);
 	public static final String PBKDF_2_WITH_HMAC_SHA_1 = "PBKDF2WithHmacSHA1";
 	/* START RFC 2898 IMPLEMENTATION */
 
@@ -89,7 +89,7 @@ public class CPbkdf2 {
 				}
 			}
 		} catch (Exception e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 		}
 		byte[] baDerived = new byte[dkLen];
 		System.arraycopy(baos.toByteArray(), 0, baDerived, 0, baDerived.length);
@@ -173,7 +173,7 @@ public class CPbkdf2 {
 			SecretKey s = f.generateSecret(ks);
 			baDerived = s.getEncoded();
 		} catch (Exception e) {
-			LOG.error(e);
+			LOG.error(e.getMessage(), e);
 		}
 		return baDerived;
 	}

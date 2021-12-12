@@ -36,7 +36,7 @@ public final class FieldSource implements ISource {
 
 	@Override
 	public Object getValue(Object instance) {
-		boolean accessible = field.isAccessible();
+		boolean accessible = field.trySetAccessible();
 		if (!accessible)
 			field.setAccessible(true);
 		try {

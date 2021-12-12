@@ -1,6 +1,6 @@
 package liquer.alchemy.xmlcrypto.crypto;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.Provider;
 import java.security.Security;
@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 @SuppressWarnings("unchecked")
-public class ListAlgorithmsTest {
+class ListAlgorithmsTest {
 
     static {
         Security.setProperty("crypto.policy", "unlimited");
@@ -43,7 +43,7 @@ public class ListAlgorithmsTest {
      * message digests and signatures.
      */
     @Test
-    public void testListAlgorithms() {
+    void testListAlgorithms() {
         Provider[]	providers = Security.getProviders();
         Set	ciphers = new HashSet();
         Set keyAgreements = new HashSet();

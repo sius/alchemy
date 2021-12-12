@@ -1,17 +1,13 @@
 package liquer.alchemy.athanor.json;
 
-import liquer.alchemy.athanor.json.Json;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-public class JsonAssignPrimitives {
+class JsonAssignPrimitives {
 
 	@Test
-	public void assignPrimitiveBoolean() {
+	void assignPrimitiveBoolean() {
 		boolean actual0 = Json.assign(boolean.class, false);
 		assertFalse(actual0);
 		boolean actual1 = Json.assign(boolean.class, true);
@@ -25,7 +21,7 @@ public class JsonAssignPrimitives {
 	}
 	
 	@Test
-	public void assignBoolean() {
+	void assignBoolean() {
 		Boolean actual0 = Json.assign(Boolean.class, false);
 		assertFalse(actual0);
 		Boolean actual1 = Json.assign(Boolean.class, true);
@@ -39,7 +35,7 @@ public class JsonAssignPrimitives {
 	}
 	
 	@Test
-	public void assignInt() {
+	void assignInt() {
 		int actual0 = Json.assign(int.class, 1);
 		assertEquals(1, actual0);
 		int actual1 = Json.assign(int.class, 1, 2);
@@ -53,7 +49,7 @@ public class JsonAssignPrimitives {
 	}
 	
 	@Test
-	public void assignLong() {
+	void assignLong() {
 		long actual0 = Json.assign(long.class, 1L);
 		assertEquals(1L, actual0);
 		long actual1 = Json.assign(long.class, 1L, 2L);
